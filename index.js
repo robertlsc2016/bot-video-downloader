@@ -6,8 +6,8 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const client = new Client({
     puppeteer: {
         args: ['--disable-setuid-sandbox'],
-        executablePath: '/usr/bin/chromium-browser',
-        headless: false, // Defina como true se desejar executar o Chromium no modo headless
+        //executablePath: '/usr/bin/chromium-browser',
+        headless: true, // Defina como true se desejar executar o Chromium no modo headless
         //executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     },
     authStrategy: new LocalAuth({
