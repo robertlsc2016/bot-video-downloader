@@ -2,7 +2,7 @@ FROM node:18
 
 COPY package*.json ./
 
-RUN apt-get update && apt-get install -y chromium-browser
+RUN sudo apt-get install chromium-browser
 
 RUN npm install
 
