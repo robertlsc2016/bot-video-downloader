@@ -1,15 +1,21 @@
-FROM node:18
+#FROM debian:latest
+FROM node:19.5.0
+# RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+WORKDIR /app
 
-COPY package*.json ./
-
-RUN sudo apt-get install chromium-browser
-
-RUN npm install
 
 COPY . .
 
-RUN npm run build
+COPY package*.json ./
+
+RUN  apt-get install –y chromium-browser
+
+# RUN apk add chromium-browser
+
+RUN npm install
+
+RUN npm run start
 
 EXPOSE 10000
 
-CMD ["npm", "run", "start:prod", "chromium-browser", "--no-sandbox"]
+CMD [ "node", "index.js", "npm", "chromium-browser", "--no-sandbox" ]
