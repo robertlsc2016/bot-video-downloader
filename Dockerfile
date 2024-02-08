@@ -1,11 +1,8 @@
 FROM node:18
 
-RUN npm i -g @nestjs/cli
-
 COPY package*.json ./
 
-RUN apt-get update -y && \
-    apt-get install -y chromium-browser
+RUN apt-get update && apt-get install -y chromium-browser
 
 RUN npm install
 
