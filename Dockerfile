@@ -1,5 +1,5 @@
 #FROM debian:latest
-FROM node:19.5.0
+FROM node
 # RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 WORKDIR /app
 
@@ -8,7 +8,10 @@ COPY . .
 
 COPY package*.json ./
 
-RUN  apt-get install –y chromium-browser
+RUN  apt-get install chromium-browser
+
+# RUN apt-get update -y
+# RUN apt update && apt install -y chromium-browser 
 
 # RUN apk add chromium-browser
 
