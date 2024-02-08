@@ -19,7 +19,7 @@ const client = new Client({
 const regexURLYoutube = /(https?:\/\/(www\.)?youtu(be\.com\/watch\?v=|be\/|com\/shorts\/)|[^\s]+)/i;
 
 client.on('qr', (qr) => {
-    qrcode.generate(qr, { small: true });
+    console.log(qr)
 });
 
 client.on('ready', () => {
