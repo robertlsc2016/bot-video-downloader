@@ -1,5 +1,5 @@
 #FROM debian:latest
-FROM node
+FROM node:latest
 # RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 WORKDIR /app
 
@@ -19,6 +19,6 @@ RUN npm install
 
 RUN npm run start
 
-EXPOSE 10000
+EXPOSE 3000
 
-CMD [ "node", "index.js", "npm", "chromium-browser", "--no-sandbox" ]
+CMD [ "node", "index.js", "npm", "chromium-browser", "--no-sandbox", "dist/server/server.js" ]
