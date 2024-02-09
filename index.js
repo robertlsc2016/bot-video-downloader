@@ -1,16 +1,21 @@
 const fs = require('fs');
 const ytdl = require('ytdl-core');
 const qrcode = require('qrcode-terminal');
+const os = require('os')
 
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+
+
+const OS = os.platform() == "win32" ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' : '/usr/bin/google-chrome-stable'
+console.log(OS)
 
 const client = new Client({
     puppeteer: {
         args: ['--disable-setuid-sandbox', '--disable-gpu', '--no-sandbox'],
-        //executablePath: '/usr/bin/chromium-browser',
-        executablePath: '/usr/bin/google-chrome',
+        //executablePath: '/usr/bin/google-chrome-stable',
         headless: true, // Defina como true se desejar executar o Chromium no modo headless
         //executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+        executablePath: OS
     },
     authStrategy: new LocalAuth({
         dataPath: 'auth'
