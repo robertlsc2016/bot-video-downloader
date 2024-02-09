@@ -29,6 +29,7 @@ FROM node:latest
 
 WORKDIR /app
 COPY . /app
+EXPOSE 8080
 
 RUN apt-get update \
   && apt-get install -y wget gnupg \
