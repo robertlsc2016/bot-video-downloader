@@ -29,7 +29,7 @@ const OS =
 const inputPathRoot = path.join(".\\", "videos\\facebook-video.mp4"); // Caminho do vídeo de entrada
 const outputPathRoot = path.join(".\\", "videos\\clear-facebook-video.mp4"); // Caminho do vídeo de saída
 
-const webversion = "2.2412.54v2"
+const webversion = "2.2412.54v2";
 // const webversion = "2.2413.51-beta-alt";
 
 const client = new Client({
@@ -52,7 +52,7 @@ const client = new Client({
   webVersionCache: {
     type: "remote",
     // path: `./html/${webversion}.html`,
-    remotePath: `https://raw.githubusercontent.com/guigo613/alternative-wa-version/main/html/${webversion}.html`
+    remotePath: `https://raw.githubusercontent.com/guigo613/alternative-wa-version/main/html/${webversion}.html`,
   },
   restartOnAuthFail: true,
 });
@@ -100,7 +100,7 @@ client.on("message", async (message) => {
 
 const downloadVDFacebook = async (url, message) => {
   try {
-    console.log("estrou aq");
+    console.log("entrou no facebook");
     const filePath = "facebook-video.mp4";
 
     await getFbVideoInfo(url).then(async (result) => {
@@ -108,7 +108,7 @@ const downloadVDFacebook = async (url, message) => {
 
       await axios({
         method: "get",
-        url: result.hd,
+        url: result.sd,
         responseType: "stream",
       }).then(async (response) => {
         const writer = fs.createWriteStream(`.\\videos\\${filePath}`);
@@ -116,7 +116,8 @@ const downloadVDFacebook = async (url, message) => {
 
         writer.on("finish", async () => {
           try {
-            await cleanVideo(`.\\videos\\${filePath}`, message);
+            sendVideo(message, filePath, true);
+            // await cleanVideo(`.\\videos\\${filePath}`, message);
           } catch (error) {
             console.error("Erro ao limpar o vídeo ou enviar o vídeo:", error);
           }
@@ -135,12 +136,12 @@ const downloadVDYoutube = async (message, cleanLink) => {
     const writableStream = fs.createWriteStream(`.\\videos\\${filePath}`);
     const videoInfo = await ytdl.getBasicInfo(cleanLink);
     const videoReadable = ytdl(cleanLink, { quality: "lowest" });
-    console.log(videoReadable);
+
     videoReadable.pipe(writableStream);
 
     writableStream.on("finish", async () => {
       try {
-        sendVideo(message, filePath);
+        sendVideo(message, filePath, false);
       } catch (err) {
         console.error("Ocorreu um erro:", err);
       }
@@ -154,44 +155,46 @@ const downloadVDYoutube = async (message, cleanLink) => {
   }
 };
 
-const sendVideo = async (message, filePath) => {
+const sendVideo = async (message, filePath, isDocument) => {
   const media = MessageMedia.fromFilePath(`.\\videos\\${filePath}`);
 
   try {
     client.sendMessage(message.from, media, {
-      caption: "Ta ai o vídeo do link que tu mandou, corno",
-      sendMediaAsDocument: false,
+      caption: isDocument
+        ? "cara... seguinte, por limitações tecnicas só da mandar o video assim, contente-se"
+        : "vou tentar baixar esse video ai, lgbt",
+      sendMediaAsDocument: isDocument,
     });
   } catch (err) {
     console.log(err);
   }
 };
 
-async function cleanVideo(inputPathRoot, message) {
-  ffmpeg(inputPathRoot)
-    .outputOptions([
-      "-c:v copy", // Copia o vídeo sem reencodar
-      "-c:a copy", // Copia o áudio sem reencodar
-    ])
-    .on("start", function (commandLine) {
-      console.log("Iniciado o processamento com comando: " + commandLine);
-    })
-    .on("progress", function (progress) {
-      console.log("Processando: " + progress.percent + "% concluído");
-    })
-    .on("end", function async() {
-      console.log("Processamento finalizado com sucesso!");
+// async function cleanVideo(inputPathRoot, message) {
+//   ffmpeg(inputPathRoot)
+//     .outputOptions([
+//       "-c:v copy", // Copia o vídeo sem reencodar
+//       "-c:a copy", // Copia o áudio sem reencodar
+//     ])
+//     .on("start", function (commandLine) {
+//       console.log("Iniciado o processamento com comando: " + commandLine);
+//     })
+//     .on("progress", function (progress) {
+//       console.log("Processando: " + progress.percent + "% concluído");
+//     })
+//     .on("end", function async() {
+//       console.log("Processamento finalizado com sucesso!");
 
-      try {
-        sendVideo(message, "clear-facebook-video.mp4");
-      } catch (err) {
-        console.log(err);
-      }
-    })
-    .on("error", function (err, stdout, stderr) {
-      console.log("Erro durante o processamento: " + err.message);
-    })
-    .save(outputPathRoot);
-}
+//       try {
+//         sendVideo(message, "clear-facebook-video.mp4");
+//       } catch (err) {
+//         console.log(err);
+//       }
+//     })
+//     .on("error", function (err, stdout, stderr) {
+//       console.log("Erro durante o processamento: " + err.message);
+//     })
+//     .save(outputPathRoot);
+// }
 
 client.initialize();
