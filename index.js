@@ -2,12 +2,16 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { exec } = require("child_process");
+const { TwitterDL } = require("twitter-downloader");
 
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 // const ffmpeg = require("fluent-ffmpeg");
+
+
+const localVariable = undefined
 
 const ytdl = require("ytdl-core");
 const getFbVideoInfo = require("fb-downloader-scrapper");
@@ -59,6 +63,7 @@ const client = new Client({
 
 const regexURL = /(https?:\/\/[^\s]+)/;
 const facebookRegex = /https:\/\/www\.facebook\.com\/[^\s]+/g;
+const twitterRegex = /https?:\/\/(?:www\.)?x\.com/;
 
 const urlsYT = [
   "youtube.com",
@@ -76,23 +81,45 @@ client.on("ready", () => {
   console.log("Client is ready!");
 });
 
+// client.on("message_create", async (message) => {
+//   console.log('mensagem propria')
+//   const bruteMessageWithLink = message.body;
+//   console.log(bruteMessageWithLink);
+
+//   if (bruteMessageWithLink.match(twitterRegex)) {
+//     const url = bruteMessageWithLink.match(twitterRegex);
+//     client.sendMessage(localVariable || message.from, "vou tentar baixar esse video ai, lgbt");
+
+//     console.log(url[0]);
+//     downloadTwitter(bruteMessageWithLink, message);
+//   }
+// });
+
 client.on("message", async (message) => {
   const bruteMessageWithLink = message.body;
   console.log(bruteMessageWithLink);
 
   if (bruteMessageWithLink.match(facebookRegex)) {
     const url = bruteMessageWithLink.match(facebookRegex);
-    client.sendMessage(message.from, "vou tentar baixar esse video ai, lgbt");
+    client.sendMessage(localVariable || message.from, "vou tentar baixar esse video ai, lgbt");
 
     console.log(url[0]);
     downloadVDFacebook(url[0], message);
+  }
+
+  if (bruteMessageWithLink.match(twitterRegex)) {
+    const url = bruteMessageWithLink.match(twitterRegex);
+    client.sendMessage(localVariable || message.from, "vou tentar baixar esse video ai, lgbt");
+
+    console.log(url[0]);
+    downloadTwitter(url[0], message);
   }
 
   if (
     bruteMessageWithLink.match(regexURL) &&
     urlsYT.filter((yt) => bruteMessageWithLink.includes(yt))[0]
   ) {
-    client.sendMessage(message.from, "vou tentar baixar esse video ai, lgbt");
+    client.sendMessage(localVariable || message.from, "vou tentar baixar esse video ai, lgbt");
     const cleanLink = bruteMessageWithLink.match(regexURL)[0];
     downloadVDYoutube(message, cleanLink);
   }
@@ -155,11 +182,44 @@ const downloadVDYoutube = async (message, cleanLink) => {
   }
 };
 
+const downloadTwitter = async (url, message) => {
+  console.log("entrou no baixador do twitter");
+  console.log(url)
+  TwitterDL(url, {
+    //   authorization?: ", // undefined == use default authorization
+    //   cookie?: "YOUR_COOKIE" // to display sensitive / nsfw content (no default cookies)
+  })
+    .then(async (result) => {
+      await axios({
+        method: "get",
+        url: result.result.media[0].videos[1].url,
+        responseType: "stream",
+      }).then(async (response) => {
+        console.log(result)
+        const filePath = "x-video.mp4";
+
+        const writer = fs.createWriteStream(`.\\videos\\${filePath}`);
+        await response.data.pipe(writer);
+
+        writer.on("finish", async () => {
+          sendVideo(message, filePath, false);
+
+          console.log("videos baixado");
+        });
+
+        console.log(response);
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
 const sendVideo = async (message, filePath, isDocument) => {
   const media = MessageMedia.fromFilePath(`.\\videos\\${filePath}`);
 
   try {
-    client.sendMessage(message.from, media, {
+    client.sendMessage(localVariable || message.from, media, {
       caption: isDocument
         ? "cara... seguinte, por limitações tecnicas só da mandar o video assim, contente-se"
         : "vou tentar baixar esse video ai, lgbt",
@@ -169,32 +229,5 @@ const sendVideo = async (message, filePath, isDocument) => {
     console.log(err);
   }
 };
-
-// async function cleanVideo(inputPathRoot, message) {
-//   ffmpeg(inputPathRoot)
-//     .outputOptions([
-//       "-c:v copy", // Copia o vídeo sem reencodar
-//       "-c:a copy", // Copia o áudio sem reencodar
-//     ])
-//     .on("start", function (commandLine) {
-//       console.log("Iniciado o processamento com comando: " + commandLine);
-//     })
-//     .on("progress", function (progress) {
-//       console.log("Processando: " + progress.percent + "% concluído");
-//     })
-//     .on("end", function async() {
-//       console.log("Processamento finalizado com sucesso!");
-
-//       try {
-//         sendVideo(message, "clear-facebook-video.mp4");
-//       } catch (err) {
-//         console.log(err);
-//       }
-//     })
-//     .on("error", function (err, stdout, stderr) {
-//       console.log("Erro durante o processamento: " + err.message);
-//     })
-//     .save(outputPathRoot);
-// }
 
 client.initialize();
