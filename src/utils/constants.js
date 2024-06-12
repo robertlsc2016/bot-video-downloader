@@ -14,7 +14,7 @@ const urlsYT = [
 const inputPathRoot = path.join("..\\", "videos\\facebook-video.mp4"); // Caminho do vídeo de entrada
 const outputPathRoot = path.join("..\\", "videos\\clear-facebook-video.mp4"); // Caminho do vídeo de saída
 
-const localVariable = "556596060121@c.us";
+const localVariable = undefined;
 
 module.exports = {
   inputPathRoot,

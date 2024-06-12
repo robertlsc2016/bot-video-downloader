@@ -5,31 +5,52 @@ const { sendVideo } = require("../send-video.module");
 const client = runClient();
 
 const downloadVDYoutube = async (message, cleanLink) => {
-  console.log("entrou no youtube");
-
   const filePath = "youtube-video.mp4";
 
   try {
-    const videvalid = await ytdl.getBasicInfo(cleanLink);
-    const videoReadable = ytdl(cleanLink, { quality: "lowest" });
-    const writableStream = fs.createWriteStream(`.\\videos\\${filePath}`);
+    const isValid = await validateMimeType(cleanLink);
+    if (isValid) {
+      const videoReadable = ytdl(cleanLink, { quality: "lowest" }).on(
+        "end",
+        () => {
+          console.log("terminei de baixar mano");
+        }
+      );
 
-    videoReadable.pipe(writableStream);
+      const writableStream = fs.createWriteStream(`.\\videos\\${filePath}`);
+      videoReadable.pipe(writableStream);
 
-    writableStream.on("error", (err) => {
-      console.error("Erro ao salvar o vídeo:", err);
-    });
-
-    writableStream.on("finish", async () => {
-      sendVideo(message, filePath, false);
-    });
+      writableStream
+        .on("error", (err) => {
+          throw new Error("erro ao salvar o video");
+        })
+        .on("finish", async () => {
+          return sendVideo(message, filePath, false);
+        });
+    } else {
+      throw new Error("mimetype não valido");
+    }
   } catch (err) {
-    console.log("erro ao baixar video do youtube: ", err);
-    client.sendMessage(
+    console.log(err);
+    return client.sendMessage(
       localVariable || message.from,
       "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :("
     );
   }
+};
+
+const validateMimeType = async (url) => {
+  const infos = await ytdl.getBasicInfo(url);
+  
+  if (!infos.formats) {
+    throw new Error("o video não tem o formato valido");
+  }
+
+  if (infos.formats[1].mimeType.indexOf("video/mp4") == -1) {
+    throw new Error("mimetype não valido");
+  }
+
+  return true;
 };
 
 module.exports = { downloadVDYoutube };

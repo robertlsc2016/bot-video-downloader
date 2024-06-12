@@ -21,13 +21,12 @@ const runMessageOrchestrator = () => {
   });
 
   client.on("ready", () => {
+    client.sendMessage(localVariable, "o pai ta online!");
     console.log("Client is ready!");
   });
 
   client.on("message", async (message) => {
-    // console.log("caiu aqui");
     const bruteMessageWithLink = message.body;
-    // console.log(bruteMessageWithLink);
 
     if (bruteMessageWithLink.match(facebookRegex)) {
       const url = bruteMessageWithLink.match(facebookRegex);
