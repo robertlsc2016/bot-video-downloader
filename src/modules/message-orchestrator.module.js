@@ -10,6 +10,8 @@ const { downloadVDFacebook } = require("./platforms/facebook-download.module");
 const { downloadTwitter } = require("./platforms/twitter-download.module");
 const { downloadVDYoutube } = require("./platforms/youtube-download.module");
 
+const { qrcode } = require("../dependencies");
+
 const client = runClient();
 
 const runMessageOrchestrator = () => {
