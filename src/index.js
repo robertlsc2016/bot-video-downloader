@@ -1,7 +1,7 @@
-const { runClient } = require("./config/config");
+const { initializeClient } = require("./settings/settings");
 const {
   runMessageOrchestrator,
 } = require("./modules/message-orchestrator.module");
 
-runClient();
+initializeClient();
 runMessageOrchestrator()

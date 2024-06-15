@@ -1,18 +1,15 @@
-const { os, Client, LocalAuth, qrcode } = require("../dependencies");
+const { Client, LocalAuth } = require("whatsapp-web.js");
+const qrcode = require("qrcode-terminal");
+const { browserPath } = require("../settings/necessary-settings");
+const { os } = require("os");
 
 const webversion = "2.2412.54v2";
-
-const OS =
-  os.platform() == "win32"
-    ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-    : "/usr/bin/google-chrome-stable";
 
 const client = new Client({
   puppeteer: {
     args: ["--no-sandbox", "--disable-gpu"],
     headless: true,
-    executablePath:
-      "C:\\Users\\Robert Luiz\\AppData\\Local\\Programs\\Opera\\opera.exe",
+    executablePath: browserPath,
   },
   authStrategy: new LocalAuth({
     dataPath: "auth",
@@ -25,12 +22,8 @@ const client = new Client({
   restartOnAuthFail: true,
 });
 
-
-
-const runClient = () => {
-  return client;
+const initializeClient = () => {
+  client.initialize();
 };
 
-client.initialize();
-
-module.exports = { runClient, client };
+module.exports = { initializeClient, client };

@@ -1,45 +1,39 @@
-const { getFbVideoInfo, axios, fs } = require("../../dependencies");
-const { runClient } = require("../../config/config");
-const { localVariable } = require("../../utils/constants");
+const fs = require("fs");
+const path = require("path");
+const getFbVideoInfo = require("fb-downloader-scrapper");
+const axios = require("axios");
+
+const { runClient, client } = require("../../settings/settings");
 const { sendVideo } = require("../send-video.module");
+const { downloadVideo } = require("../../utils/downloadVideo");
+const {
+  genericSendMessageOrchestrator,
+} = require("../generic-sendMessage-orchestrator.module");
+const {
+  videosFolderPath,
+  platformsNameDownload,
+} = require("../../utils/constants");
 
-const client = runClient();
-
-const downloadVDFacebook = async (url, message) => {
+module.exports.downloadVDFacebook = async function (from, url) {
   try {
     console.log("entrou no facebook");
-    const filePath = "facebook-video.mp4";
+    const filePath = path.join(
+      videosFolderPath,
+      platformsNameDownload.facebook
+    );
 
-    await getFbVideoInfo(url).then(async (result) => {
-      await axios({
-        method: "get",
-        url: result.sd,
-        responseType: "stream",
-      }).then(async (response) => {
-        const writer = fs.createWriteStream(`.\\videos\\${filePath}`);
-        await response.data.pipe(writer);
+    const getFacebookURL = await getFbVideoInfo(url).catch((err) => {
+      throw new Error(err);
+    });
 
-        writer.on("finish", async () => {
-          try {
-            sendVideo(message, filePath, true);
-          } catch (error) {
-            console.error("Erro ao limpar o vídeo ou enviar o vídeo:", error);
-
-            client.sendMessage(
-              localVariable || message.from,
-              "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :("
-            );
-          }
-        });
-      });
+    await downloadVideo(getFacebookURL.sd, filePath);
+    await genericSendMessageOrchestrator({
+      from: from,
+      filePath: filePath,
+      type: "media",
+      isDocument: true,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo:", error);
-    client.sendMessage(
-      localVariable || message.from,
-      "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :("
-    );
   }
 };
-
-module.exports = { downloadVDFacebook };

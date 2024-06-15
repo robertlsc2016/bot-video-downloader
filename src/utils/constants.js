@@ -1,8 +1,20 @@
-const { path } = require("../dependencies");
+const path = require("path");
 
 const regexURL = /(https?:\/\/[^\s]+)/;
 const facebookRegex = /https:\/\/www\.facebook\.com\/[^\s]+/g;
 const twitterRegex = /https?:\/\/(?:www\.)?x\.com/;
+
+const platformsNameDownload = {
+  facebook: "facebook-video.mp4",
+  youtube: "youtube-video.mp4",
+};
+
+const videosFolderPath = path.join(
+  __dirname,
+  "..",
+  "..",
+  "videos",
+);
 
 const urlsYT = [
   "youtube.com",
@@ -11,17 +23,22 @@ const urlsYT = [
   "youtu.be",
 ];
 
-const inputPathRoot = path.join("..\\", "videos\\facebook-video.mp4"); // Caminho do vídeo de entrada
-const outputPathRoot = path.join("..\\", "videos\\clear-facebook-video.mp4"); // Caminho do vídeo de saída
-
-const localVariable = undefined;
+const failureDownloadMessage =
+  "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :(";
+const technicalLimitationsMessage =
+  "cara... seguinte, por limitações tecnicas só da mandar o video assim, contente-se";
+const attemptToDownload = "vou tentar baixar esse video ai, lgbt";
+const successDownloadMessage = "Segura o video ai! (Fala mal do BOT agora comédia)"
 
 module.exports = {
-  inputPathRoot,
-  outputPathRoot,
+  platformsNameDownload,
+  videosFolderPath,
+  technicalLimitationsMessage,
+  successDownloadMessage,
+  failureDownloadMessage,
+  attemptToDownload,
   regexURL,
   facebookRegex,
   twitterRegex,
   urlsYT,
-  localVariable,
 };

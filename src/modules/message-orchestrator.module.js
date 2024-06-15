@@ -1,67 +1,77 @@
-const { runClient } = require("../config/config");
+const { downloadVDFacebook } = require("./platforms/facebook-download.module");
+const { downloadVDTwitter } = require("./platforms/twitter-download.module");
+const { downloadVDYoutube } = require("./platforms/youtube-download.module");
+
+const qrcode = require("qrcode-terminal");
+const { MessageMedia } = require("whatsapp-web.js");
+
+const { client } = require("../settings/settings");
+
 const {
   urlsYT,
   regexURL,
-  localVariable,
   facebookRegex,
   twitterRegex,
+  technicalLimitationsMessage,
+  attemptToDownload,
+  failureDownloadMessage,
 } = require("../utils/constants");
-const { downloadVDFacebook } = require("./platforms/facebook-download.module");
-const { downloadTwitter } = require("./platforms/twitter-download.module");
-const { downloadVDYoutube } = require("./platforms/youtube-download.module");
 
-const { qrcode } = require("../dependencies");
+const { ShippingAllowed } = require("../settings/necessary-settings");
+const {
+  genericSendMessageOrchestrator,
+} = require("./generic-sendMessage-orchestrator.module");
 
-const client = runClient();
-
-const runMessageOrchestrator = () => {
+module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
     console.log(qr);
   });
 
   client.on("ready", () => {
-    client.sendMessage(localVariable, "o pai ta online!");
+    client.sendMessage("5596060121@c.us", "o pai ta online!");
     console.log("Client is ready!");
   });
 
   client.on("message", async (message) => {
+    console.log(message.body);
     const bruteMessageWithLink = message.body;
 
     if (bruteMessageWithLink.match(facebookRegex)) {
       const url = bruteMessageWithLink.match(facebookRegex);
-      client.sendMessage(
-        localVariable || message.from,
-        "vou tentar baixar esse video ai, lgbt"
-      );
+      await genericSendMessageOrchestrator({
+        from: message.from,
+        type: "text",
+        msg: attemptToDownload,
+      });
 
       console.log(url[0]);
-      downloadVDFacebook(url[0], message);
+      downloadVDFacebook(message.from, url[0]);
     }
 
     if (bruteMessageWithLink.match(twitterRegex)) {
       const url = bruteMessageWithLink.match(twitterRegex);
-      client.sendMessage(
-        localVariable || message.from,
-        "vou tentar baixar esse video ai, lgbt"
-      );
 
-      // console.log("o link que vai pro downloadTwitter: ", url );
-      downloadTwitter(bruteMessageWithLink, message);
+      await genericSendMessageOrchestrator({
+        from: message.from,
+        type: "text",
+        msg: attemptToDownload,
+      });
+
+      downloadVDTwitter(bruteMessageWithLink, message.from);
     }
 
     if (
       bruteMessageWithLink.match(regexURL) &&
       urlsYT.filter((yt) => bruteMessageWithLink.includes(yt))[0]
     ) {
-      client.sendMessage(
-        localVariable || message.from,
-        "vou tentar baixar esse video ai, lgbt"
-      );
+      await genericSendMessageOrchestrator({
+        from: message.from,
+        type: "text",
+        msg: attemptToDownload,
+      });
       const cleanLink = bruteMessageWithLink.match(regexURL)[0];
-      downloadVDYoutube(message, cleanLink);
+      downloadVDYoutube(message.from, cleanLink);
     }
   });
 };
-
-module.exports = { runMessageOrchestrator };

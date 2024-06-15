@@ -3,3 +3,6 @@ auth
 .wwebjs_cache
 videos
 auth
+.env
+dev.env
+prod.env
