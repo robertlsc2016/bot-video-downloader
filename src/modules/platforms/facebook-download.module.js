@@ -3,8 +3,6 @@ const path = require("path");
 const getFbVideoInfo = require("fb-downloader-scrapper");
 const axios = require("axios");
 
-const { runClient, client } = require("../../settings/settings");
-const { sendVideo } = require("../send-video.module");
 const { downloadVideo } = require("../../utils/downloadVideo");
 const {
   genericSendMessageOrchestrator,
@@ -26,7 +24,9 @@ module.exports.downloadVDFacebook = async function (from, url) {
       throw new Error(err);
     });
 
-    await downloadVideo(getFacebookURL.sd, filePath);
+    await downloadVideo({
+      url: getFacebookURL.sd,
+    });
     await genericSendMessageOrchestrator({
       from: from,
       filePath: filePath,

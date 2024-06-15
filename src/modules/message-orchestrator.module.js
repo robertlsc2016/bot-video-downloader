@@ -15,12 +15,18 @@ const {
   technicalLimitationsMessage,
   attemptToDownload,
   failureDownloadMessage,
+  instagramRegex,
+  tiktokRegex,
 } = require("../utils/constants");
 
 const { ShippingAllowed } = require("../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
 } = require("./generic-sendMessage-orchestrator.module");
+const {
+  downloadVDInstagram,
+} = require("./platforms/instagram-download.module");
+const { downloadVDTiktok } = require("./platforms/tiktok-download.module");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -36,6 +42,33 @@ module.exports.runMessageOrchestrator = function () {
   client.on("message", async (message) => {
     console.log(message.body);
     const bruteMessageWithLink = message.body;
+
+    if (bruteMessageWithLink.match(tiktokRegex)) {
+      const url = bruteMessageWithLink.match(tiktokRegex);
+      await genericSendMessageOrchestrator({
+        from: message.from,
+        type: "text",
+        msg: attemptToDownload,
+      });
+
+      console.log(url[0]);
+      downloadVDTiktok({ from: message.from, url: bruteMessageWithLink });
+    }
+
+    if (bruteMessageWithLink.match(instagramRegex)) {
+      const url = bruteMessageWithLink.match(instagramRegex);
+      await genericSendMessageOrchestrator({
+        from: message.from,
+        type: "text",
+        msg: attemptToDownload,
+      });
+
+      console.log(url[0]);
+      downloadVDInstagram({
+        from: message.from,
+        url: url[0],
+      });
+    }
 
     if (bruteMessageWithLink.match(facebookRegex)) {
       const url = bruteMessageWithLink.match(facebookRegex);
