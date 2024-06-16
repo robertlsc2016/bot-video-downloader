@@ -44,8 +44,10 @@ const downloadVDYoutube = async (from, cleanLink) => {
     }
   } catch (err) {
     console.log(err);
+
+    
     return client.sendMessage(
-      message.from,
+      from,
       "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :("
     );
   }

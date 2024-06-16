@@ -18,10 +18,11 @@ module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
       platformsNameDownload.instagram
     );
 
-    const getURLDownload = await instagramDl(url);
-    // if (getURLDownload.results_number == 0) throw new Error("o link não retornou nada");
+    const URLDownload = await getXURL({ url: url });
 
-    const URLDownload = getURLDownload[0].download_link;
+    if (URLDownload == false) {
+      throw new Error("a url de download esta com problemas");
+    }
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
     await genericSendMessageOrchestrator({
@@ -37,5 +38,24 @@ module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
       type: "text",
       msg: failureDownloadMessage,
     });
+  }
+};
+
+const getXURL = async ({ url: rawURL }) => {
+  try {
+    const XURL = await instagramDl(rawURL);
+    const condition = XURL[0].download_link;
+
+    if (condition) {
+      return XURL[0].download_link;
+    }
+
+    if (condition == false) {
+      throw new Error(
+        "problema no retorno do link da api getFbVideoInfo. Talvez o link de entrada esteja incorreto ou inválido"
+      );
+    }
+  } catch (error) {
+    return false;
   }
 };

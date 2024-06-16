@@ -3,24 +3,20 @@ const { downloadVideo } = require("../../utils/downloadVideo");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
-const { failureDownloadMessage } = require("../../utils/constants");
+const {
+  failureDownloadMessage,
+  videosFolderPath,
+  platformsNameDownload,
+} = require("../../utils/constants");
 const getTwitterMedia = require("get-twitter-media");
 
-module.exports.downloadVDTwitter = async function (url, from) {
+module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
   try {
-    const filePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "..",
-      "videos",
-      "x-video.mp4"
-    );
+    const filePath = path.join(videosFolderPath, platformsNameDownload.x);
+    const URLDownload = await getXURL({ url: url });
 
-    const getURLDownload = await getTwitterMedia(url);
-    if (!getURLDownload.media[0]) throw new Error();
-
-    const URLDownload = getURLDownload.media[0].url;
+    if (URLDownload == false)
+      throw new Error("a url de download esta com problemas");
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
     await genericSendMessageOrchestrator({
@@ -29,11 +25,31 @@ module.exports.downloadVDTwitter = async function (url, from) {
       type: "media",
     });
   } catch (error) {
-    console.error("Erro ao baixar o vídeo x:", error);
     await genericSendMessageOrchestrator({
       from: from,
       type: "text",
       msg: failureDownloadMessage,
     });
+  }
+};
+
+const getXURL = async ({ url: rawURL }) => {
+  try {
+    const XURL = await getTwitterMedia(rawURL);
+    const condition = XURL.media && XURL.media[0].url;
+
+    if (condition) {
+      return XURL.media[0].url;
+    }
+
+    if (XURL.found == false) {
+      throw new Error(
+        "problema no retorno do link da api getTwitterMedia. Talvez o link de entrada esteja incorreto ou inválido"
+      );
+    }
+
+    console.log(XURL);
+  } catch (error) {
+    return false;
   }
 };

@@ -1,6 +1,7 @@
 node_modules
 auth
 .wwebjs_cache
+videos/*
 auth
 .env
 dev.env

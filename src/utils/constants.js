@@ -4,21 +4,17 @@ const regexURL = /(https?:\/\/[^\s]+)/;
 const facebookRegex = /https:\/\/www\.facebook\.com\/[^\s]+/g;
 const twitterRegex = /https?:\/\/(?:www\.)?x\.com/;
 const instagramRegex = /https:\/\/www\.instagram\.com\/[^\s]+/g;
-const tiktokRegex =/tiktok\.com/
+const tiktokRegex = /tiktok\.com/;
 
 const platformsNameDownload = {
   facebook: "facebook-video.mp4",
   youtube: "youtube-video.mp4",
   instagram: "instagram-video.mp4",
-  tiktok: "tiktok-video.mp4"
+  tiktok: "tiktok-video.mp4",
+  x: "x-video.mp4",
 };
 
-const videosFolderPath = path.join(
-  __dirname,
-  "..",
-  "..",
-  "videos",
-);
+const videosFolderPath = path.join(__dirname, "..", "..", "videos");
 
 const urlsYT = [
   "youtube.com",
@@ -32,7 +28,8 @@ const failureDownloadMessage =
 const technicalLimitationsMessage =
   "cara... seguinte, por limitações tecnicas só da mandar o video assim, contente-se";
 const attemptToDownload = "vou tentar baixar esse video ai, lgbt";
-const successDownloadMessage = "Segura o video ai! (Fala mal do BOT agora comédia)"
+const successDownloadMessage =
+  "Segura o video ai! (Fala mal do BOT agora comédia)";
 
 module.exports = {
   tiktokRegex,

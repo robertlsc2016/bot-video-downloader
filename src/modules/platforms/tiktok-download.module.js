@@ -13,22 +13,17 @@ const TikChan = require("tikchan");
 
 module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
   try {
-    console.log("url que ta chegando:", url)
     const filePath = path.join(videosFolderPath, platformsNameDownload.tiktok);
+    const URLDownload = await getXURL({ url: url });
 
-    const getURLDownload = await TikChan.download(url);
-    console.log(getURLDownload);
-    if (getURLDownload.no_wm == false)
-      throw new Error("retornou undefined no no_wm");
-
-    const URLDownload = getURLDownload.no_wm;
+    if (URLDownload == false) throw new Error("a url de download esta com problemas");
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
     await genericSendMessageOrchestrator({
       from: from,
       filePath: filePath,
       type: "media",
-      isDocument: true
+      isDocument: true,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo tiktok:", error);
@@ -37,5 +32,27 @@ module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
       type: "text",
       msg: failureDownloadMessage,
     });
+  }
+};
+
+const getXURL = async ({ url: rawURL }) => {
+  try {
+    const URL = await TikChan.download(rawURL);
+    const condition = URL.no_wm;
+    console.log(condition);
+
+    if (condition) {
+      console.log("entrou no condition");
+      console.log(URL.no_wm);
+      return URL.no_wm;
+    }
+
+    if (condition == false) {
+      throw new Error(
+        "problema no retorno do link da api TikChan. Talvez o link de entrada esteja incorreto ou inválido"
+      );
+    }
+  } catch (error) {
+    return false;
   }
 };

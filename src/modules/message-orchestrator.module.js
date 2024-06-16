@@ -62,8 +62,6 @@ module.exports.runMessageOrchestrator = function () {
         type: "text",
         msg: attemptToDownload,
       });
-
-      console.log(url[0]);
       downloadVDInstagram({
         from: message.from,
         url: url[0],
@@ -78,8 +76,7 @@ module.exports.runMessageOrchestrator = function () {
         msg: attemptToDownload,
       });
 
-      console.log(url[0]);
-      downloadVDFacebook(message.from, url[0]);
+      downloadVDFacebook({ from: message.from, url: url[0] });
     }
 
     if (bruteMessageWithLink.match(twitterRegex)) {
@@ -91,7 +88,7 @@ module.exports.runMessageOrchestrator = function () {
         msg: attemptToDownload,
       });
 
-      downloadVDTwitter(bruteMessageWithLink, message.from);
+      downloadVDTwitter({ from: message.from, url: bruteMessageWithLink });
     }
 
     if (
