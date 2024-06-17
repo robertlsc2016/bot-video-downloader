@@ -19,7 +19,10 @@ const {
   tiktokRegex,
 } = require("../utils/constants");
 
-const { ShippingAllowed } = require("../settings/necessary-settings");
+const {
+  ShippingAllowed,
+  stringToGroup,
+} = require("../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
 } = require("./generic-sendMessage-orchestrator.module");
@@ -40,68 +43,74 @@ module.exports.runMessageOrchestrator = function () {
   });
 
   client.on("message", async (message) => {
-    console.log(message.body);
-    const bruteMessageWithLink = message.body;
+    try {
+      if (message.from !== stringToGroup)
+        throw new Error("o envio não foi configurado para esse destinatário");
 
-    if (bruteMessageWithLink.match(tiktokRegex)) {
-      const url = bruteMessageWithLink.match(tiktokRegex);
-      await genericSendMessageOrchestrator({
-        from: message.from,
-        type: "text",
-        msg: attemptToDownload,
-      });
+      const bruteMessageWithLink = message.body;
 
-      console.log(url[0]);
-      downloadVDTiktok({ from: message.from, url: bruteMessageWithLink });
-    }
+      if (bruteMessageWithLink.match(tiktokRegex)) {
+        const url = bruteMessageWithLink.match(tiktokRegex);
+        await genericSendMessageOrchestrator({
+          from: message.from,
+          type: "text",
+          msg: attemptToDownload,
+        });
 
-    if (bruteMessageWithLink.match(instagramRegex)) {
-      const url = bruteMessageWithLink.match(instagramRegex);
-      await genericSendMessageOrchestrator({
-        from: message.from,
-        type: "text",
-        msg: attemptToDownload,
-      });
-      downloadVDInstagram({
-        from: message.from,
-        url: url[0],
-      });
-    }
+        console.log(url[0]);
+        downloadVDTiktok({ from: message.from, url: bruteMessageWithLink });
+      }
 
-    if (bruteMessageWithLink.match(facebookRegex)) {
-      const url = bruteMessageWithLink.match(facebookRegex);
-      await genericSendMessageOrchestrator({
-        from: message.from,
-        type: "text",
-        msg: attemptToDownload,
-      });
+      if (bruteMessageWithLink.match(instagramRegex)) {
+        const url = bruteMessageWithLink.match(instagramRegex);
+        await genericSendMessageOrchestrator({
+          from: message.from,
+          type: "text",
+          msg: attemptToDownload,
+        });
+        downloadVDInstagram({
+          from: message.from,
+          url: url[0],
+        });
+      }
 
-      downloadVDFacebook({ from: message.from, url: url[0] });
-    }
+      if (bruteMessageWithLink.match(facebookRegex)) {
+        const url = bruteMessageWithLink.match(facebookRegex);
+        await genericSendMessageOrchestrator({
+          from: message.from,
+          type: "text",
+          msg: attemptToDownload,
+        });
 
-    if (bruteMessageWithLink.match(twitterRegex)) {
-      const url = bruteMessageWithLink.match(twitterRegex);
+        downloadVDFacebook({ from: message.from, url: url[0] });
+      }
 
-      await genericSendMessageOrchestrator({
-        from: message.from,
-        type: "text",
-        msg: attemptToDownload,
-      });
+      if (bruteMessageWithLink.match(twitterRegex)) {
+        const url = bruteMessageWithLink.match(twitterRegex);
 
-      downloadVDTwitter({ from: message.from, url: bruteMessageWithLink });
-    }
+        await genericSendMessageOrchestrator({
+          from: message.from,
+          type: "text",
+          msg: attemptToDownload,
+        });
 
-    if (
-      bruteMessageWithLink.match(regexURL) &&
-      urlsYT.filter((yt) => bruteMessageWithLink.includes(yt))[0]
-    ) {
-      await genericSendMessageOrchestrator({
-        from: message.from,
-        type: "text",
-        msg: attemptToDownload,
-      });
-      const cleanLink = bruteMessageWithLink.match(regexURL)[0];
-      downloadVDYoutube(message.from, cleanLink);
+        downloadVDTwitter({ from: message.from, url: bruteMessageWithLink });
+      }
+
+      if (
+        bruteMessageWithLink.match(regexURL) &&
+        urlsYT.filter((yt) => bruteMessageWithLink.includes(yt))[0]
+      ) {
+        await genericSendMessageOrchestrator({
+          from: message.from,
+          type: "text",
+          msg: attemptToDownload,
+        });
+        const cleanLink = bruteMessageWithLink.match(regexURL)[0];
+        downloadVDYoutube(message.from, cleanLink);
+      }
+    } catch(error) {
+      console.error(error)
     }
   });
 };
