@@ -5,3 +5,4 @@ auth
 .env
 dev.env
 prod.env
+*mp4

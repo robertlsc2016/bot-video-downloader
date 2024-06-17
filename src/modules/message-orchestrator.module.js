@@ -38,7 +38,6 @@ module.exports.runMessageOrchestrator = function () {
   });
 
   client.on("ready", () => {
-    client.sendMessage("5596060121@c.us", "o pai ta online!");
     console.log("Client is ready!");
   });
 
