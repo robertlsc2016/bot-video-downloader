@@ -23,6 +23,11 @@ const urlsYT = [
   "youtu.be",
 ];
 
+const bot_actions = {
+  coin_flip_string: "/bot cara ou coroa",
+  bot_help: "/bot help"
+};
+
 const failureDownloadMessage =
   "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :(";
 const technicalLimitationsMessage =
@@ -44,4 +49,5 @@ module.exports = {
   twitterRegex,
   instagramRegex,
   urlsYT,
+  bot_actions
 };

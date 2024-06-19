@@ -12,17 +12,14 @@ const {
   regexURL,
   facebookRegex,
   twitterRegex,
-  technicalLimitationsMessage,
   attemptToDownload,
-  failureDownloadMessage,
   instagramRegex,
   tiktokRegex,
+  coin_flip_string,
+  bot_actions,
 } = require("../utils/constants");
 
-const {
-  ShippingAllowed,
-  stringToGroup,
-} = require("../settings/necessary-settings");
+const { stringToGroup } = require("../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
 } = require("./generic-sendMessage-orchestrator.module");
@@ -30,6 +27,8 @@ const {
   downloadVDInstagram,
 } = require("./platforms/instagram-download.module");
 const { downloadVDTiktok } = require("./platforms/tiktok-download.module");
+const { headsOrTails } = require("./bots-actions/coin_flip");
+const { bothelp } = require("./bots-actions/bot-help");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -48,6 +47,14 @@ module.exports.runMessageOrchestrator = function () {
 
       const bruteMessageWithLink = message.body;
 
+      if (bruteMessageWithLink.includes(bot_actions.bot_help)) {
+        bothelp({ from: message.from });
+      }
+
+      if (bruteMessageWithLink.includes(bot_actions.coin_flip_string)) {
+        headsOrTails({ from: message.from });
+      }
+
       if (bruteMessageWithLink.match(tiktokRegex)) {
         const url = bruteMessageWithLink.match(tiktokRegex);
         await genericSendMessageOrchestrator({
@@ -56,7 +63,6 @@ module.exports.runMessageOrchestrator = function () {
           msg: attemptToDownload,
         });
 
-        console.log(url[0]);
         downloadVDTiktok({ from: message.from, url: bruteMessageWithLink });
       }
 
@@ -108,8 +114,8 @@ module.exports.runMessageOrchestrator = function () {
         const cleanLink = bruteMessageWithLink.match(regexURL)[0];
         downloadVDYoutube(message.from, cleanLink);
       }
-    } catch(error) {
-      console.error(error)
+    } catch (error) {
+      console.error(error);
     }
   });
 };
