@@ -7,3 +7,5 @@ services:
     restart: always
     environment:
       - TZ=America/Cuiaba
+    volumes:
+      - ./auth:/auth
