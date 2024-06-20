@@ -6,3 +6,4 @@ auth
 dev.env
 prod.env
 *mp4
+*png

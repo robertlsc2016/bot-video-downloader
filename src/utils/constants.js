@@ -15,6 +15,7 @@ const platformsNameDownload = {
 };
 
 const videosFolderPath = path.join(__dirname, "..", "..", "videos");
+const imagesFolderPath = path.join("..", "..", "images");
 
 const urlsYT = [
   "youtube.com",
@@ -25,7 +26,8 @@ const urlsYT = [
 
 const bot_actions = {
   coin_flip_string: "/bot cara ou coroa",
-  bot_help: "/bot help"
+  bot_help: "/bot help",
+  bot_sticker: "/bot sticker",
 };
 
 const failureDownloadMessage =
@@ -49,5 +51,6 @@ module.exports = {
   twitterRegex,
   instagramRegex,
   urlsYT,
-  bot_actions
+  imagesFolderPath,
+  bot_actions,
 };

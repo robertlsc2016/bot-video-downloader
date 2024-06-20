@@ -13,6 +13,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
   msg = false,
   filePath = false,
   isDocument = false,
+  content = false,
 }) {
   if (shippingAllowed == false) return;
 
@@ -34,5 +35,14 @@ module.exports.genericSendMessageOrchestrator = async function ({
         await client.sendMessage(from, failureDownloadMessage);
       }
       break;
+    case "sticker":
+      try {
+        await client.sendMessage(from, content, {
+          sendMediaAsSticker: true,
+        });
+      } catch (err) {
+        console.error(err);
+        await client.sendMessage(from, failureDownloadMessage);
+      }
   }
 };
