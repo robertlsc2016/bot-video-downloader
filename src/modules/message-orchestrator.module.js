@@ -43,15 +43,17 @@ module.exports.runMessageOrchestrator = function () {
 
   client.on("message", async (message) => {
     try {
-      // if (message.from !== stringToGroup)
-      //   throw new Error("o envio não foi configurado para esse destinatário");
+      if (message.from !== stringToGroup)
+        throw new Error("o envio não foi configurado para esse destinatário");
 
       const bruteMessageWithLink = message.body;
 
-      console.log(message)
+      console.log(message);
 
-
-      if (message?._data?.type == "image" && message?._data?.caption.includes(bot_actions.bot_sticker)) {
+      if (
+        message?._data?.type == "image" &&
+        message?._data?.caption.includes(bot_actions.bot_sticker)
+      ) {
         turnInSticker({ message: message });
       }
 
