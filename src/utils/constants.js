@@ -41,7 +41,11 @@ const attemptToDownload = "vou tentar baixar esse video ai";
 const successDownloadMessage =
   "Segura o video ai!";
 
+const readyMessage = "to online, galera 🤖"
+
+
 module.exports = {
+  readyMessage,
   tiktokRegex,
   platformsNameDownload,
   videosFolderPath: videosFolderPathBruteCodecs,

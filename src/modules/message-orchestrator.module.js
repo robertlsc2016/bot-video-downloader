@@ -3,7 +3,6 @@ const { downloadVDTwitter } = require("./platforms/twitter-download.module");
 const { downloadVDYoutube } = require("./platforms/youtube-download.module");
 
 const qrcode = require("qrcode-terminal");
-const { MessageMedia, Chat } = require("whatsapp-web.js");
 
 const { client } = require("../settings/settings");
 
@@ -15,8 +14,8 @@ const {
   attemptToDownload,
   instagramRegex,
   tiktokRegex,
-  coin_flip_string,
   bot_actions,
+  readyMessage,
 } = require("../utils/constants");
 
 const { stringToGroup } = require("../settings/necessary-settings");
@@ -38,8 +37,13 @@ module.exports.runMessageOrchestrator = function () {
     console.log(qr);
   });
 
-  client.on("ready", () => {
+  client.on("ready", async () => {
     console.log("Client is ready!");
+    await genericSendMessageOrchestrator({
+      from: stringToGroup,
+      type: "text",
+      msg: readyMessage,
+    });
   });
 
   client.on("message_create", async (message) => {
