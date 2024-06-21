@@ -14,7 +14,9 @@ const platformsNameDownload = {
   x: "x-video.mp4",
 };
 
-const videosFolderPath = path.join(__dirname, "..", "..", "videos");
+const videosFolderPathBruteCodecs = path.join(__dirname, "..", "..", "videos", "brute-codecs");
+const videosFolderPathAjustedCodecs = path.join(__dirname, "..", "..", "videos", "ajusted-codecs");
+
 const imagesFolderPath = path.join("..", "..", "images");
 
 const urlsYT = [
@@ -42,7 +44,7 @@ const successDownloadMessage =
 module.exports = {
   tiktokRegex,
   platformsNameDownload,
-  videosFolderPath,
+  videosFolderPath: videosFolderPathBruteCodecs,
   technicalLimitationsMessage,
   successDownloadMessage,
   failureDownloadMessage,
@@ -54,4 +56,5 @@ module.exports = {
   urlsYT,
   imagesFolderPath,
   bot_actions,
+  videosFolderPathAjustedCodecs
 };

@@ -7,23 +7,37 @@ const {
   failureDownloadMessage,
   platformsNameDownload,
   videosFolderPath,
+  videosFolderPathAjustedCodecs,
 } = require("../../utils/constants");
 
 const TikChan = require("tikchan");
+const { convertVideo } = require("../../utils/codec-adjuster");
 
 module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
   try {
     const filePath = path.join(videosFolderPath, platformsNameDownload.tiktok);
+    const outputPath = path.join(
+      videosFolderPathAjustedCodecs,
+      platformsNameDownload.tiktok
+    );
+
     const URLDownload = await getXURL({ url: url });
 
-    if (URLDownload == false) throw new Error("a url de download esta com problemas");
+    if (URLDownload == false)
+      throw new Error("a url de download esta com problemas");
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
+
+    await convertVideo({
+      input: filePath,
+      platform: platformsNameDownload.tiktok,
+    });
+
     await genericSendMessageOrchestrator({
       from: from,
-      filePath: filePath,
+      filePath: outputPath,
       type: "media",
-      isDocument: true,
+      isDocument: false,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo tiktok:", error);

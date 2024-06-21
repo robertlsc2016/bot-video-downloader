@@ -7,14 +7,21 @@ const {
   failureDownloadMessage,
   videosFolderPath,
   platformsNameDownload,
+  videosFolderPathAjustedCodecs,
 } = require("../../utils/constants");
 const instagramDl = require("@sasmeee/igdl");
 const { downloadVideo } = require("../../utils/downloadVideo");
+const { convertVideo } = require("../../utils/codec-adjuster");
 
 module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
   try {
     const filePath = path.join(
       videosFolderPath,
+      platformsNameDownload.instagram
+    );
+
+    const outputPath = path.join(
+      videosFolderPathAjustedCodecs,
       platformsNameDownload.instagram
     );
 
@@ -25,11 +32,16 @@ module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
     }
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
+    await convertVideo({
+      input: filePath,
+      platform: platformsNameDownload.instagram,
+    });
+
     await genericSendMessageOrchestrator({
       from: from,
-      filePath: filePath,
+      filePath: outputPath,
       type: "media",
-      isDocument: true,
+      isDocument: false,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo do instagram:", error);

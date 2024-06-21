@@ -7,7 +7,10 @@ const {
 const {
   videosFolderPath,
   platformsNameDownload,
+  failureDownloadMessage,
+  videosFolderPathAjustedCodecs,
 } = require("../../utils/constants");
+const { convertVideo } = require("../../utils/codec-adjuster");
 
 module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
   try {
@@ -16,19 +19,30 @@ module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
       platformsNameDownload.facebook
     );
 
+    const outputPath = path.join(
+      videosFolderPathAjustedCodecs,
+      platformsNameDownload.facebook
+    );
+
     const getFacebookURL = await getXURL({ url: url });
-    if (getFacebookURL == false) throw new Error("a url de download esta com problemas");
-    
+    if (getFacebookURL == false)
+      throw new Error("a url de download esta com problemas");
+
     await downloadVideo({
       url: getFacebookURL.sd,
       filePath: filePath,
     });
 
+    await convertVideo({
+      input: filePath,
+      platform: platformsNameDownload.facebook,
+    });
+
     await genericSendMessageOrchestrator({
       from: from,
-      filePath: filePath,
+      filePath: outputPath,
       type: "media",
-      isDocument: true,
+      isDocument: false,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo facebook:", error);

@@ -42,9 +42,19 @@ module.exports.runMessageOrchestrator = function () {
     console.log("Client is ready!");
   });
 
+  client.on("message_create", async (message) => {
+    if (message._data.id.fromMe && message.to == stringToGroup) {
+      await messageSteps({ from: stringToGroup, message: message });
+    }
+  });
+
   client.on("message", async (message) => {
+    await messageSteps({ from: message.from, message: message });
+  });
+
+  const messageSteps = async ({ from: from, message: message }) => {
     try {
-      if (message.from !== stringToGroup)
+      if (from !== stringToGroup)
         throw new Error("o envio não foi configurado para esse destinatário");
 
       const bruteMessageWithLink = message.body;
@@ -61,33 +71,33 @@ module.exports.runMessageOrchestrator = function () {
       }
 
       if (bruteMessageWithLink.includes(bot_actions.bot_help)) {
-        bothelp({ from: message.from });
+        bothelp({ from: from });
       }
 
       if (bruteMessageWithLink.includes(bot_actions.coin_flip_string)) {
-        headsOrTails({ from: message.from });
+        headsOrTails({ from: from });
       }
 
       if (bruteMessageWithLink.match(tiktokRegex)) {
         const url = bruteMessageWithLink.match(tiktokRegex);
         await genericSendMessageOrchestrator({
-          from: message.from,
+          from: from,
           type: "text",
           msg: attemptToDownload,
         });
 
-        downloadVDTiktok({ from: message.from, url: bruteMessageWithLink });
+        downloadVDTiktok({ from: from, url: bruteMessageWithLink });
       }
 
       if (bruteMessageWithLink.match(instagramRegex)) {
         const url = bruteMessageWithLink.match(instagramRegex);
         await genericSendMessageOrchestrator({
-          from: message.from,
+          from: from,
           type: "text",
           msg: attemptToDownload,
         });
         downloadVDInstagram({
-          from: message.from,
+          from: from,
           url: url[0],
         });
       }
@@ -95,24 +105,24 @@ module.exports.runMessageOrchestrator = function () {
       if (bruteMessageWithLink.match(facebookRegex)) {
         const url = bruteMessageWithLink.match(facebookRegex);
         await genericSendMessageOrchestrator({
-          from: message.from,
+          from: from,
           type: "text",
           msg: attemptToDownload,
         });
 
-        downloadVDFacebook({ from: message.from, url: url[0] });
+        downloadVDFacebook({ from: from, url: url[0] });
       }
 
       if (bruteMessageWithLink.match(twitterRegex)) {
         const url = bruteMessageWithLink.match(twitterRegex);
 
         await genericSendMessageOrchestrator({
-          from: message.from,
+          from: from,
           type: "text",
           msg: attemptToDownload,
         });
 
-        downloadVDTwitter({ from: message.from, url: bruteMessageWithLink });
+        downloadVDTwitter({ from: from, url: bruteMessageWithLink });
       }
 
       if (
@@ -120,15 +130,15 @@ module.exports.runMessageOrchestrator = function () {
         urlsYT.filter((yt) => bruteMessageWithLink.includes(yt))[0]
       ) {
         await genericSendMessageOrchestrator({
-          from: message.from,
+          from: from,
           type: "text",
           msg: attemptToDownload,
         });
         const cleanLink = bruteMessageWithLink.match(regexURL)[0];
-        downloadVDYoutube(message.from, cleanLink);
+        downloadVDYoutube(from, cleanLink);
       }
     } catch (error) {
       console.error(error);
     }
-  });
+  };
 };
