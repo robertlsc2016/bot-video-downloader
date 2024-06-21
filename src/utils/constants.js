@@ -28,15 +28,16 @@ const bot_actions = {
   coin_flip_string: "/bot cara ou coroa",
   bot_help: "/bot help",
   bot_sticker: "/bot sticker",
+  who_is: "/bot quem é"
 };
 
 const failureDownloadMessage =
   "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :(";
 const technicalLimitationsMessage =
   "cara... seguinte, por limitações tecnicas só da mandar o video assim, contente-se";
-const attemptToDownload = "vou tentar baixar esse video ai, lgbt";
+const attemptToDownload = "vou tentar baixar esse video ai";
 const successDownloadMessage =
-  "Segura o video ai! (Fala mal do BOT agora comédia)";
+  "Segura o video ai!";
 
 module.exports = {
   tiktokRegex,

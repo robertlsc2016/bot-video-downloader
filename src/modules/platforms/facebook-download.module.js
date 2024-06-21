@@ -46,7 +46,6 @@ const getXURL = async ({ url: rawURL }) => {
     const condition = XURL.url;
 
     if (condition) {
-      console.log(XURL.url);
       return XURL;
     }
 

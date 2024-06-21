@@ -3,7 +3,7 @@ const { downloadVDTwitter } = require("./platforms/twitter-download.module");
 const { downloadVDYoutube } = require("./platforms/youtube-download.module");
 
 const qrcode = require("qrcode-terminal");
-const { MessageMedia } = require("whatsapp-web.js");
+const { MessageMedia, Chat } = require("whatsapp-web.js");
 
 const { client } = require("../settings/settings");
 
@@ -30,6 +30,7 @@ const { downloadVDTiktok } = require("./platforms/tiktok-download.module");
 const { headsOrTails } = require("./bots-actions/coin_flip");
 const { bothelp } = require("./bots-actions/bot-help");
 const { turnInSticker } = require("./bots-actions/turn-in-sticker");
+const { whoIs } = require("./bots-actions/whois-is");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -48,13 +49,15 @@ module.exports.runMessageOrchestrator = function () {
 
       const bruteMessageWithLink = message.body;
 
-      console.log(message);
-
       if (
         message?._data?.type == "image" &&
         message?._data?.caption.includes(bot_actions.bot_sticker)
       ) {
         turnInSticker({ message: message });
+      }
+
+      if (bruteMessageWithLink.includes(bot_actions.who_is)) {
+        whoIs();
       }
 
       if (bruteMessageWithLink.includes(bot_actions.bot_help)) {

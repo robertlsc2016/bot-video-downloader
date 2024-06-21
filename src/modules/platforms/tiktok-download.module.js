@@ -39,11 +39,8 @@ const getXURL = async ({ url: rawURL }) => {
   try {
     const URL = await TikChan.download(rawURL);
     const condition = URL.no_wm;
-    console.log(condition);
 
     if (condition) {
-      console.log("entrou no condition");
-      console.log(URL.no_wm);
       return URL.no_wm;
     }
 

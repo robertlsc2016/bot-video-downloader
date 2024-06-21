@@ -21,8 +21,6 @@ const downloadVDYoutube = async (from, cleanLink) => {
   try {
     const isValid = await validateMimeType(cleanLink);
     if (isValid) {
-      console.log("o link é vlaido? ", isValid);
-      console.log(filePath);
       const videoReadable = ytdl(cleanLink, { quality: "lowest" });
 
       const writableStream = fs.createWriteStream(filePath);
@@ -42,10 +40,7 @@ const downloadVDYoutube = async (from, cleanLink) => {
     } else {
       throw new Error("mimetype não valido");
     }
-  } catch (err) {
-    console.log(err);
-
-    
+  } catch (err) {    
     return client.sendMessage(
       from,
       "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :("

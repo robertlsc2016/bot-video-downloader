@@ -48,7 +48,6 @@ const getXURL = async ({ url: rawURL }) => {
       );
     }
 
-    console.log(XURL);
   } catch (error) {
     return false;
   }
