@@ -1,3 +1,4 @@
+const { stringToGroup } = require("../../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
@@ -8,7 +9,7 @@ module.exports.turnInSticker = async function ({ message }) {
   const image = new MessageMedia("image/jpeg", mediafile.data, "image.jpg");
 
   await genericSendMessageOrchestrator({
-    from: message.from,
+    from: stringToGroup,
     content: image,
     type: "sticker",
   });
