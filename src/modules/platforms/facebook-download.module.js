@@ -9,13 +9,14 @@ const {
   platformsNameDownload,
   failureDownloadMessage,
   videosFolderPathAjustedCodecs,
+  videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
 const { convertVideo } = require("../../utils/codec-adjuster");
 
 module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
   try {
     const filePath = path.join(
-      videosFolderPath,
+      videosFolderPathBruteCodecs,
       platformsNameDownload.facebook
     );
 

@@ -8,6 +8,7 @@ const {
   platformsNameDownload,
   videosFolderPath,
   videosFolderPathAjustedCodecs,
+  videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
 
 const TikChan = require("tikchan");
@@ -15,7 +16,11 @@ const { convertVideo } = require("../../utils/codec-adjuster");
 
 module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
   try {
-    const filePath = path.join(videosFolderPath, platformsNameDownload.tiktok);
+    const filePath = path.join(
+      videosFolderPathBruteCodecs,
+      platformsNameDownload.tiktok
+    );
+
     const outputPath = path.join(
       videosFolderPathAjustedCodecs,
       platformsNameDownload.tiktok

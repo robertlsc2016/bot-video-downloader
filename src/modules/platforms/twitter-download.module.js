@@ -5,14 +5,17 @@ const {
 } = require("../generic-sendMessage-orchestrator.module");
 const {
   failureDownloadMessage,
-  videosFolderPath,
   platformsNameDownload,
+  videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
 const getTwitterMedia = require("get-twitter-media");
 
 module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
   try {
-    const filePath = path.join(videosFolderPath, platformsNameDownload.x);
+    const filePath = path.join(
+      videosFolderPathBruteCodecs,
+      platformsNameDownload.x
+    );
     const URLDownload = await getXURL({ url: url });
 
     if (URLDownload == false)
@@ -47,7 +50,6 @@ const getXURL = async ({ url: rawURL }) => {
         "problema no retorno do link da api getTwitterMedia. Talvez o link de entrada esteja incorreto ou inválido"
       );
     }
-
   } catch (error) {
     return false;
   }

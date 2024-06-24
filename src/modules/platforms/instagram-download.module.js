@@ -8,6 +8,7 @@ const {
   videosFolderPath,
   platformsNameDownload,
   videosFolderPathAjustedCodecs,
+  videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
 const instagramDl = require("@sasmeee/igdl");
 const { downloadVideo } = require("../../utils/downloadVideo");
@@ -16,7 +17,7 @@ const { convertVideo } = require("../../utils/codec-adjuster");
 module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
   try {
     const filePath = path.join(
-      videosFolderPath,
+      videosFolderPathBruteCodecs,
       platformsNameDownload.instagram
     );
 

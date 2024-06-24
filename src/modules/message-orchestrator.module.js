@@ -16,6 +16,7 @@ const {
   tiktokRegex,
   bot_actions,
   readyMessage,
+  platformsNameURL,
 } = require("../utils/constants");
 
 const { stringToGroup } = require("../settings/necessary-settings");
@@ -61,88 +62,72 @@ module.exports.runMessageOrchestrator = function () {
       if (from !== stringToGroup)
         throw new Error("o envio não foi configurado para esse destinatário");
 
-      const bruteMessageWithLink = message.body;
+      let url = null;
+
+      if (message?.links[0]?.link) {
+        url = message.links[0].link;
+      }
+
+      const messageBody = message.body;
 
       if (
         message?._data?.type == "image" &&
-        message?._data?.caption.includes(bot_actions.bot_sticker)
+        message?._data?.caption?.includes(bot_actions.bot_sticker)
       ) {
         turnInSticker({ message: message });
       }
 
-      if (bruteMessageWithLink.includes(bot_actions.who_is)) {
+      if (messageBody?.includes(bot_actions.who_is)) {
         whoIs();
       }
 
-      if (bruteMessageWithLink.includes(bot_actions.bot_help)) {
+      if (messageBody?.includes(bot_actions.bot_help)) {
         bothelp({ from: from });
       }
 
-      if (bruteMessageWithLink.includes(bot_actions.coin_flip_string)) {
+      if (messageBody?.includes(bot_actions.coin_flip_string)) {
         headsOrTails({ from: from });
       }
 
-      if (bruteMessageWithLink.match(tiktokRegex)) {
-        const url = bruteMessageWithLink.match(tiktokRegex);
-        await genericSendMessageOrchestrator({
-          from: from,
-          type: "text",
-          msg: attemptToDownload,
-        });
+      if (url) {
+        if (url.includes(platformsNameURL.tiktok)) {
+          await sendMessageAttemptToDownload({ to: from });
+          return await downloadVDTiktok({ from: from, url: url });
+        }
 
-        downloadVDTiktok({ from: from, url: bruteMessageWithLink });
-      }
+        if (url.includes(platformsNameURL.instagram)) {
+          await sendMessageAttemptToDownload({ to: from });
+          return await downloadVDInstagram({
+            from: from,
+            url: url,
+          });
+        }
 
-      if (bruteMessageWithLink.match(instagramRegex)) {
-        const url = bruteMessageWithLink.match(instagramRegex);
-        await genericSendMessageOrchestrator({
-          from: from,
-          type: "text",
-          msg: attemptToDownload,
-        });
-        downloadVDInstagram({
-          from: from,
-          url: url[0],
-        });
-      }
+        if (url.includes(platformsNameURL.facebook)) {
+          await sendMessageAttemptToDownload({ to: from });
+          return await downloadVDFacebook({ from: from, url: url });
+        }
 
-      if (bruteMessageWithLink.match(facebookRegex)) {
-        const url = bruteMessageWithLink.match(facebookRegex);
-        await genericSendMessageOrchestrator({
-          from: from,
-          type: "text",
-          msg: attemptToDownload,
-        });
+        if (url.includes(platformsNameURL.x)) {
+          await sendMessageAttemptToDownload({ to: from });
+          return await downloadVDTwitter({ from: from, url: url });
+        }
 
-        downloadVDFacebook({ from: from, url: url[0] });
-      }
-
-      if (bruteMessageWithLink.match(twitterRegex)) {
-        const url = bruteMessageWithLink.match(twitterRegex);
-
-        await genericSendMessageOrchestrator({
-          from: from,
-          type: "text",
-          msg: attemptToDownload,
-        });
-
-        downloadVDTwitter({ from: from, url: bruteMessageWithLink });
-      }
-
-      if (
-        bruteMessageWithLink.match(regexURL) &&
-        urlsYT.filter((yt) => bruteMessageWithLink.includes(yt))[0]
-      ) {
-        await genericSendMessageOrchestrator({
-          from: from,
-          type: "text",
-          msg: attemptToDownload,
-        });
-        const cleanLink = bruteMessageWithLink.match(regexURL)[0];
-        downloadVDYoutube(from, cleanLink);
+        if (platformsNameURL.youtube.filter((yt) => url.includes(yt))) {
+          await sendMessageAttemptToDownload({ to: from });
+          return await downloadVDYoutube({ url: url });
+        }
       }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const sendMessageAttemptToDownload = async ({ to: to }) => {
+    await genericSendMessageOrchestrator({
+      from: to,
+      type: "text",
+      msg: attemptToDownload,
+    });
   };
 };

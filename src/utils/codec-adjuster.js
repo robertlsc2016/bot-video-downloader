@@ -21,7 +21,6 @@ module.exports.convertVideo = async function ({
         .outputOptions("-preset", "fast") // Ajuste a predefinição para velocidade
         .outputOptions("-movflags", "faststart") // Habilita início rápido para streaming
         .on("end", () => {
-          console.log("Conversão concluída com sucesso");
           resolve();
         })
         .on("error", (err) => {

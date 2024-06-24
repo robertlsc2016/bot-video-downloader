@@ -14,10 +14,35 @@ const platformsNameDownload = {
   x: "x-video.mp4",
 };
 
-const videosFolderPathBruteCodecs = path.join(__dirname, "..", "..", "videos", "brute-codecs");
-const videosFolderPathAjustedCodecs = path.join(__dirname, "..", "..", "videos", "ajusted-codecs");
+const videosFolderPathBruteCodecs = path.join(
+  __dirname,
+  "..",
+  "..",
+  "videos",
+  "brute-codecs"
+);
+const videosFolderPathAjustedCodecs = path.join(
+  __dirname,
+  "..",
+  "..",
+  "videos",
+  "ajusted-codecs"
+);
 
 const imagesFolderPath = path.join("..", "..", "images");
+
+const platformsNameURL = {
+  facebook: "facebook.com",
+  instagram: "instagram.com",
+  x: "x.com",
+  tiktok: "tiktok.com",
+  youtube: [
+    "youtube.com",
+    "youtube.com/shorts",
+    "youtube.com/watch",
+    "youtu.be",
+  ],
+};
 
 const urlsYT = [
   "youtube.com",
@@ -30,7 +55,7 @@ const bot_actions = {
   coin_flip_string: "/bot cara ou coroa",
   bot_help: "/bot help",
   bot_sticker: "/bot sticker",
-  who_is: "/bot quem é"
+  who_is: "/bot quem é",
 };
 
 const failureDownloadMessage =
@@ -38,17 +63,15 @@ const failureDownloadMessage =
 const technicalLimitationsMessage =
   "cara... seguinte, por limitações tecnicas só da mandar o video assim, contente-se";
 const attemptToDownload = "vou tentar baixar esse video ai";
-const successDownloadMessage =
-  "Segura o video ai!";
+const successDownloadMessage = "Segura o video ai!";
 
-const readyMessage = "to online, galera 🤖"
-
+const readyMessage = "to online, galera 🤖";
 
 module.exports = {
   readyMessage,
   tiktokRegex,
   platformsNameDownload,
-  videosFolderPath: videosFolderPathBruteCodecs,
+  videosFolderPathBruteCodecs,
   technicalLimitationsMessage,
   successDownloadMessage,
   failureDownloadMessage,
@@ -60,5 +83,6 @@ module.exports = {
   urlsYT,
   imagesFolderPath,
   bot_actions,
-  videosFolderPathAjustedCodecs
+  videosFolderPathAjustedCodecs,
+  platformsNameURL,
 };
