@@ -113,7 +113,7 @@ module.exports.runMessageOrchestrator = function () {
           return await downloadVDTwitter({ from: from, url: url });
         }
 
-        if (platformsNameURL.youtube.filter((yt) => url.includes(yt))) {
+        if (platformsNameURL.youtube.filter((yt) => url.includes(yt)).length > 0) {
           await sendMessageAttemptToDownload({ to: from });
           return await downloadVDYoutube({ url: url });
         }
