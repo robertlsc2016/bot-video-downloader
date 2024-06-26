@@ -2,3 +2,5 @@ dist/
 node_modules/
 auth/
 .wwebjs_cache/
+*mp4
+*png
