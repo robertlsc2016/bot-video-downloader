@@ -11,4 +11,4 @@ services:
       SHIPPING_ALLOWED: ${SHIPPING_ALLOWED}
       STRING_TO_GROUP_WWEBJS: ${STRING_TO_GROUP_WWEBJS}
     volumes:
-      - ./auth:/auth
+      - ./auth:/app/auth
