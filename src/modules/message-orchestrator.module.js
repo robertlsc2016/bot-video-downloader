@@ -63,30 +63,33 @@ module.exports.runMessageOrchestrator = function () {
         throw new Error("o envio não foi configurado para esse destinatário");
 
       let url = null;
+      const messageBody = message.body;
 
       if (message?.links[0]?.link) {
         url = message.links[0].link;
       }
 
-      const messageBody = message.body;
-
       if (
-        message?._data?.type == "image" &&
-        message?._data?.caption?.includes(bot_actions.bot_sticker)
+        !(message._data.id.fromMe && messageBody.includes("funcionalidades"))
       ) {
-        turnInSticker({ message: message });
-      }
+        if (
+          message?._data?.type == "image" &&
+          message?._data?.caption?.includes(bot_actions.bot_sticker)
+        ) {
+          turnInSticker({ message: message });
+        }
 
-      if (messageBody?.includes(bot_actions.who_is)) {
-        whoIs();
-      }
+        if (messageBody?.includes(bot_actions.who_is)) {
+          whoIs();
+        }
 
-      if (messageBody?.includes(bot_actions.bot_help)) {
-        bothelp({ from: from });
-      }
+        if (messageBody?.includes(bot_actions.bot_help)) {
+          bothelp({ from: from });
+        }
 
-      if (messageBody?.includes(bot_actions.coin_flip_string)) {
-        headsOrTails({ from: from });
+        if (messageBody?.includes(bot_actions.coin_flip_string)) {
+          headsOrTails({ from: from });
+        }
       }
 
       if (url) {
@@ -113,7 +116,9 @@ module.exports.runMessageOrchestrator = function () {
           return await downloadVDTwitter({ from: from, url: url });
         }
 
-        if (platformsNameURL.youtube.filter((yt) => url.includes(yt)).length > 0) {
+        if (
+          platformsNameURL.youtube.filter((yt) => url.includes(yt)).length > 0
+        ) {
           await sendMessageAttemptToDownload({ to: from });
           return await downloadVDYoutube({ url: url });
         }

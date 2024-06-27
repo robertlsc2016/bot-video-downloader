@@ -1,4 +1,5 @@
 const path = require("path");
+const { prefixBot } = require("../settings/necessary-settings");
 
 const regexURL = /(https?:\/\/[^\s]+)/;
 const facebookRegex = /https:\/\/www\.facebook\.com\/[^\s]+/g;
@@ -52,10 +53,10 @@ const urlsYT = [
 ];
 
 const bot_actions = {
-  coin_flip_string: "/bot cara ou coroa",
-  bot_help: "/bot help",
-  bot_sticker: "/bot sticker",
-  who_is: "/bot quem é",
+  coin_flip_string: `${prefixBot} cara ou coroa`,
+  bot_help: `${prefixBot} help`,
+  bot_sticker: `${prefixBot} sticker`,
+  who_is: `${prefixBot} quem é`,
 };
 
 const failureDownloadMessage =
