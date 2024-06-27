@@ -57,6 +57,7 @@ const bot_actions = {
   bot_help: `${prefixBot} help`,
   bot_sticker: `${prefixBot} sticker`,
   who_is: `${prefixBot} quem é`,
+  is_true: `${prefixBot} é verdade`,
 };
 
 module.exports = {

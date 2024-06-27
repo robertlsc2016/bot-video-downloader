@@ -25,6 +25,7 @@ const { bothelp } = require("./bots-actions/bot-help");
 const { turnInSticker } = require("./bots-actions/turn-in-sticker");
 const { whoIs } = require("./bots-actions/whois-is");
 const { structuredMessages } = require("../utils/structured-messages");
+const { IsTrue } = require("./bots-actions/is-true");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -75,6 +76,10 @@ module.exports.runMessageOrchestrator = function () {
 
         if (messageBody?.includes(bot_actions.who_is)) {
           whoIs();
+        }
+
+        if (messageBody?.includes(bot_actions.is_true)) {
+          IsTrue({ msg: messageBody });
         }
 
         if (messageBody?.includes(bot_actions.bot_help)) {
