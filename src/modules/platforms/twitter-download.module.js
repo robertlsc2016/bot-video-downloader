@@ -29,9 +29,8 @@ module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
     });
   } catch (error) {
     await genericSendMessageOrchestrator({
-      from: from,
       type: "text",
-      msg: failureDownloadMessage,
+      situation: "failureDownload",
     });
   }
 };

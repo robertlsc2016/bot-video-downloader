@@ -25,4 +25,7 @@ module.exports.whoIs = async function () {
       mentions: [`${randomParticipant.id.user}@${randomParticipant.id.server}`],
     }
   );
+  await client.sendMessage(
+    stringToGroup, "bot nunca erra 😎"
+  );
 };

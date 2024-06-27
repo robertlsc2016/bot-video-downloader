@@ -1,11 +1,18 @@
 const { MessageMedia } = require("whatsapp-web.js");
 const { client } = require("../settings/settings");
-const { shippingAllowed } = require("../settings/necessary-settings");
 const {
-  technicalLimitationsMessage,
+  shippingAllowed,
+  stringToGroup,
+} = require("../settings/necessary-settings");
+
+const { structuredMessages } = require("../utils/structured-messages");
+const {
   successDownloadMessage,
   failureDownloadMessage,
-} = require("../utils/constants");
+  technicalLimitationsMessage,
+  attemptToDownloadMessage,
+  YTVideoDurationExceeded,
+} = structuredMessages;
 
 module.exports.genericSendMessageOrchestrator = async function ({
   from,
@@ -14,17 +21,39 @@ module.exports.genericSendMessageOrchestrator = async function ({
   filePath = false,
   isDocument = false,
   content = false,
+  situation,
 }) {
   if (shippingAllowed == false) return;
 
   switch (type) {
     case "text":
-      await client.sendMessage(from, msg);
+      switch (situation) {
+        case "successDownload":
+          await sendTextMessage({
+            msg: successDownloadMessage,
+          });
+
+        case "failureDownload":
+          await sendTextMessage({ msg: failureDownloadMessage });
+          break;
+
+        case "technicalLimitations":
+          await sendTextMessage({ msg: technicalLimitationsMessage });
+          break;
+
+        case "attemptToDownload":
+          await sendTextMessage({ msg: attemptToDownloadMessage });
+          break;
+        case "YTVideoDurationExceeded":
+          await sendTextMessage({ msg: YTVideoDurationExceeded });
+          break;
+      }
+      await sendTextMessage({ msg: msg });
       break;
     case "media":
       const media = MessageMedia.fromFilePath(filePath);
       try {
-        await client.sendMessage(from, media, {
+        await client.sendMessage(stringToGroup, media, {
           caption: isDocument
             ? technicalLimitationsMessage
             : successDownloadMessage,
@@ -32,17 +61,21 @@ module.exports.genericSendMessageOrchestrator = async function ({
         });
       } catch (err) {
         console.error(err);
-        await client.sendMessage(from, failureDownloadMessage);
+        await client.sendMessage(stringToGroup, failureDownloadMessage);
       }
       break;
     case "sticker":
       try {
-        await client.sendMessage(from, content, {
+        await client.sendMessage(stringToGroup, content, {
           sendMediaAsSticker: true,
         });
       } catch (err) {
         console.error(err);
-        await client.sendMessage(from, failureDownloadMessage);
+        await client.sendMessage(stringToGroup, failureDownloadMessage);
       }
   }
+};
+
+const sendTextMessage = async ({ msg: msg }) => {
+  await client.sendMessage(stringToGroup, msg);
 };

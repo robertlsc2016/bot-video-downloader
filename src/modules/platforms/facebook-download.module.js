@@ -47,10 +47,10 @@ module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo facebook:", error);
+
     await genericSendMessageOrchestrator({
-      from: from,
       type: "text",
-      msg: failureDownloadMessage,
+      situation: "failureDownload",
     });
   }
 };

@@ -7,15 +7,8 @@ const qrcode = require("qrcode-terminal");
 const { client } = require("../settings/settings");
 
 const {
-  urlsYT,
-  regexURL,
-  facebookRegex,
-  twitterRegex,
   attemptToDownload,
-  instagramRegex,
-  tiktokRegex,
   bot_actions,
-  readyMessage,
   platformsNameURL,
 } = require("../utils/constants");
 
@@ -31,6 +24,7 @@ const { headsOrTails } = require("./bots-actions/coin_flip");
 const { bothelp } = require("./bots-actions/bot-help");
 const { turnInSticker } = require("./bots-actions/turn-in-sticker");
 const { whoIs } = require("./bots-actions/whois-is");
+const { structuredMessages } = require("../utils/structured-messages");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -43,7 +37,7 @@ module.exports.runMessageOrchestrator = function () {
     await genericSendMessageOrchestrator({
       from: stringToGroup,
       type: "text",
-      msg: readyMessage,
+      msg: structuredMessages.readyMessage,
     });
   });
 
@@ -70,7 +64,7 @@ module.exports.runMessageOrchestrator = function () {
       }
 
       if (
-        !(message._data.id.fromMe && messageBody.includes("funcionalidades"))
+        !(message._data.id.fromMe && messageBody?.includes("funcionalidades"))
       ) {
         if (
           message?._data?.type == "image" &&
@@ -94,12 +88,12 @@ module.exports.runMessageOrchestrator = function () {
 
       if (url) {
         if (url.includes(platformsNameURL.tiktok)) {
-          await sendMessageAttemptToDownload({ to: from });
+          await sendMessageAttemptToDownload();
           return await downloadVDTiktok({ from: from, url: url });
         }
 
         if (url.includes(platformsNameURL.instagram)) {
-          await sendMessageAttemptToDownload({ to: from });
+          await sendMessageAttemptToDownload();
           return await downloadVDInstagram({
             from: from,
             url: url,
@@ -107,19 +101,19 @@ module.exports.runMessageOrchestrator = function () {
         }
 
         if (url.includes(platformsNameURL.facebook)) {
-          await sendMessageAttemptToDownload({ to: from });
+          await sendMessageAttemptToDownload();
           return await downloadVDFacebook({ from: from, url: url });
         }
 
         if (url.includes(platformsNameURL.x)) {
-          await sendMessageAttemptToDownload({ to: from });
+          await sendMessageAttemptToDownload();
           return await downloadVDTwitter({ from: from, url: url });
         }
 
         if (
           platformsNameURL.youtube.filter((yt) => url.includes(yt)).length > 0
         ) {
-          await sendMessageAttemptToDownload({ to: from });
+          await sendMessageAttemptToDownload();
           return await downloadVDYoutube({ url: url });
         }
       }
@@ -128,11 +122,10 @@ module.exports.runMessageOrchestrator = function () {
     }
   };
 
-  const sendMessageAttemptToDownload = async ({ to: to }) => {
+  const sendMessageAttemptToDownload = async () => {
     await genericSendMessageOrchestrator({
-      from: to,
       type: "text",
-      msg: attemptToDownload,
+      situation: "attemptToDownload",
     });
   };
 };

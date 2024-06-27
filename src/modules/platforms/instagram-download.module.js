@@ -47,9 +47,8 @@ module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
   } catch (error) {
     console.error("Erro ao baixar o vídeo do instagram:", error);
     await genericSendMessageOrchestrator({
-      from: from,
       type: "text",
-      msg: failureDownloadMessage,
+      situation: "failureDownload",
     });
   }
 };

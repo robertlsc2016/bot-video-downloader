@@ -59,24 +59,10 @@ const bot_actions = {
   who_is: `${prefixBot} quem é`,
 };
 
-const failureDownloadMessage =
-  "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :(";
-const technicalLimitationsMessage =
-  "cara... seguinte, por limitações tecnicas só da mandar o video assim, contente-se";
-const attemptToDownload = "vou tentar baixar esse video ai";
-const successDownloadMessage = "Segura o video ai!";
-
-const readyMessage = "to online, galera 🤖";
-
 module.exports = {
-  readyMessage,
   tiktokRegex,
   platformsNameDownload,
   videosFolderPathBruteCodecs,
-  technicalLimitationsMessage,
-  successDownloadMessage,
-  failureDownloadMessage,
-  attemptToDownload,
   regexURL,
   facebookRegex,
   twitterRegex,
