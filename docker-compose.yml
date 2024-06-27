@@ -6,6 +6,9 @@ services:
     container_name: bot-video-downloader
     restart: always
     environment:
-      - TZ=America/Cuiaba
+      TZ: America/Cuiaba
+      PATH_BROWSER: ${PATH_BROWSER}
+      SHIPPING_ALLOWED: ${SHIPPING_ALLOWED}
+      STRING_TO_GROUP_WWEBJS: ${STRING_TO_GROUP_WWEBJS}
     volumes:
       - ./auth:/auth
