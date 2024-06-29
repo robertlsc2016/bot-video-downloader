@@ -30,6 +30,8 @@ const videosFolderPathAjustedCodecs = path.join(
   "ajusted-codecs"
 );
 
+const audiosPathFolder = path.join(__dirname, "..", "..", "audios");
+
 const imagesFolderPath = path.join("..", "..", "images");
 
 const platformsNameURL = {
@@ -73,4 +75,5 @@ module.exports = {
   bot_actions,
   videosFolderPathAjustedCodecs,
   platformsNameURL,
+  audiosPathFolder,
 };

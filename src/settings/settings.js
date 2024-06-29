@@ -3,7 +3,7 @@ const qrcode = require("qrcode-terminal");
 const { browserPath } = require("../settings/necessary-settings");
 const { os } = require("os");
 
-const webversion = "2.2412.54v2";
+const webversion = "2.2413.51-beta-alt";
 
 const client = new Client({
   puppeteer: {

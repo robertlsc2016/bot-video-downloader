@@ -26,6 +26,7 @@ const { turnInSticker } = require("./bots-actions/turn-in-sticker");
 const { whoIs } = require("./bots-actions/whois-is");
 const { structuredMessages } = require("../utils/structured-messages");
 const { IsTrue } = require("./bots-actions/is-true");
+const { textToSpeech } = require("./bots-actions/text-to-speech");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -88,6 +89,14 @@ module.exports.runMessageOrchestrator = function () {
 
         if (messageBody?.includes(bot_actions.coin_flip_string)) {
           headsOrTails({ from: from });
+        }
+
+        if ((message.type = "chat" && messageBody.length > 250)) {
+          await genericSendMessageOrchestrator({
+            type: "text",
+            msg: structuredMessages.preMsgAttempTextToAudio,
+          });
+          await textToSpeech({ msg: messageBody });
         }
       }
 

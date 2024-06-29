@@ -7,4 +7,5 @@ dev.env
 prod.env
 *mp4
 *png
+*mp3
 env-presets

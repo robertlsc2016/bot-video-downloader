@@ -24,6 +24,9 @@ const structuredMessages = {
   doubtMessage: process.env.doubtMessage || "Realmente isso eu não sei",
   acusationMessage:
     process.env.acusationMessage || "Na verdade isso é uma verdade sobre você",
+
+  preMsgAttempTextToAudio: process.env.preMsgAttempTextToAudio || "Vou tentar transformar essa mensagem em um áudio",
+  mgsErrorTextToAudio: "Infelizmente, não foi possível transformar seu texto em áudio"
 };
 
 module.exports = {
