@@ -27,6 +27,7 @@ const { whoIs } = require("./bots-actions/whois-is");
 const { structuredMessages } = require("../utils/structured-messages");
 const { IsTrue } = require("./bots-actions/is-true");
 const { textToSpeech } = require("./bots-actions/text-to-speech");
+const { botChatGpt } = require("./bots-actions/bot-chatgpt");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -73,6 +74,10 @@ module.exports.runMessageOrchestrator = function () {
           message?._data?.caption?.includes(bot_actions.bot_sticker)
         ) {
           turnInSticker({ message: message });
+        }
+
+        if (messageBody?.includes(bot_actions.question_chatgpt)) {
+          botChatGpt({msg: messageBody});
         }
 
         if (messageBody?.includes(bot_actions.who_is)) {

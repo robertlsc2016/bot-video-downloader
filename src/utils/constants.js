@@ -60,6 +60,7 @@ const bot_actions = {
   bot_sticker: `${prefixBot} sticker`,
   who_is: `${prefixBot} quem é`,
   is_true: `${prefixBot} é verdade`,
+  question_chatgpt: `${prefixBot} pergunta`,
 };
 
 module.exports = {
