@@ -12,7 +12,7 @@ const {
   platformsNameURL,
 } = require("../utils/constants");
 
-const { stringToGroup } = require("../settings/necessary-settings");
+const { stringToGroup, prefixBot } = require("../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
 } = require("./generic-sendMessage-orchestrator.module");
@@ -76,10 +76,19 @@ module.exports.runMessageOrchestrator = function () {
           turnInSticker({ message: message });
         }
 
-        if (messageBody?.includes(bot_actions.question_chatgpt)) {
-          botChatGpt({msg: messageBody});
-        }
+        const containsPreQuestion = bot_actions.pre_questions_chatgpt_bot.some(
+          (pre_question) => messageBody.includes(`${prefixBot} ${pre_question}`)
+        );
 
+        if (containsPreQuestion) {
+          for (let pre_question of bot_actions.pre_questions_chatgpt_bot) {
+            if (messageBody.includes(`${prefixBot} ${pre_question}`)) {
+              botChatGpt({ msg: messageBody });
+              break;
+            }
+          }
+        }
+ 
         if (messageBody?.includes(bot_actions.who_is)) {
           whoIs();
         }
@@ -96,7 +105,10 @@ module.exports.runMessageOrchestrator = function () {
           headsOrTails({ from: from });
         }
 
-        if ((message.type = "chat" && messageBody.length > 250)) {
+        if (
+          (message.type =
+            "chat" && messageBody.length > 250 && !message._data.id.fromMe)
+        ) {
           await genericSendMessageOrchestrator({
             type: "text",
             msg: structuredMessages.preMsgAttempTextToAudio,
