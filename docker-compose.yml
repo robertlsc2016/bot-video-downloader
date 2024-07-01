@@ -10,5 +10,17 @@ services:
       PATH_BROWSER: ${PATH_BROWSER}
       SHIPPING_ALLOWED: ${SHIPPING_ALLOWED}
       STRING_TO_GROUP_WWEBJS: ${STRING_TO_GROUP_WWEBJS}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      INSTRUCTION_GPT: ${INSTRUCTION_GPT}
+      PREFIX_BOT: ${PREFIX_BOT}
+      MAX_DURATION_TY_MS: ${MAX_DURATION_TY_MS}
+      YTVideoDurationExceeded: ${YTVideoDurationExceeded}
+      emptyMessageIstrue: ${emptyMessageIstrue}
+      extremePositiveMessage: ${extremePositiveMessage}
+      positiveMessage: ${positiveMessage}
+      negativeMessage: ${negativeMessage}
+      doubtMessage: ${doubtMessage}
+      acusationMessage: ${acusationMessage}
+      preMsgAttempTextToAudio: ${preMsgAttempTextToAudio}
     volumes:
       - ./auth:/app/auth
