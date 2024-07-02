@@ -24,3 +24,4 @@ services:
       preMsgAttempTextToAudio: ${preMsgAttempTextToAudio}
     volumes:
       - ./auth:/app/auth
+      - .data:/app/data
