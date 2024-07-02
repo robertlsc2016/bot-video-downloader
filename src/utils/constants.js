@@ -60,6 +60,7 @@ const bot_actions = {
   bot_sticker: `${prefixBot} sticker`,
   who_is: `${prefixBot} quem é`,
   is_true: `${prefixBot} é verdade`,
+  statistics: `${prefixBot} estatisticas`,
   pre_questions_chatgpt_bot:  ["onde", "quando", "como", "que", "pergunta", "qual", "de que", "de qual", "?"]
 };
 

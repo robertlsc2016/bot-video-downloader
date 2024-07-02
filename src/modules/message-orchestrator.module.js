@@ -28,6 +28,10 @@ const { structuredMessages } = require("../utils/structured-messages");
 const { IsTrue } = require("./bots-actions/is-true");
 const { textToSpeech } = require("./bots-actions/text-to-speech");
 const { botChatGpt } = require("./bots-actions/bot-chatgpt");
+const {
+  botStatitics,
+  showStatistics,
+} = require("./bots-actions/bot-statistics");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -88,13 +92,24 @@ module.exports.runMessageOrchestrator = function () {
             }
           }
         }
- 
+
         if (messageBody?.includes(bot_actions.who_is)) {
           whoIs();
         }
 
         if (messageBody?.includes(bot_actions.is_true)) {
           IsTrue({ msg: messageBody });
+        }
+
+        if (message.type) {
+          if (message.type == "chat" && messageBody.length > 5) {
+            botStatitics({ msg: message });
+          }
+          botStatitics({ msg: message });
+        }
+
+        if (messageBody?.includes(bot_actions.statistics)) {
+          showStatistics();
         }
 
         if (messageBody?.includes(bot_actions.bot_help)) {
