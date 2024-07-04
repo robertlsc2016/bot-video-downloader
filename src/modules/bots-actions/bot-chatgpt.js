@@ -2,6 +2,7 @@ const OpenAI = require("openai");
 const {
   instructionChatGPT,
   prefixBot,
+  openIaApiKey,
 } = require("../../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
@@ -9,7 +10,7 @@ const {
 require("dotenv").config();
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: openIaApiKey,
 });
 
 module.exports.botChatGpt = async ({ msg: msg }) => {

@@ -12,7 +12,11 @@ const {
   platformsNameURL,
 } = require("../utils/constants");
 
-const { stringToGroup, prefixBot } = require("../settings/necessary-settings");
+const {
+  stringToGroup,
+  prefixBot,
+  openIaApiKey,
+} = require("../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
 } = require("./generic-sendMessage-orchestrator.module");
@@ -84,7 +88,7 @@ module.exports.runMessageOrchestrator = function () {
           (pre_question) => messageBody.includes(`${prefixBot} ${pre_question}`)
         );
 
-        if (containsPreQuestion) {
+        if (containsPreQuestion && openIaApiKey) {
           for (let pre_question of bot_actions.pre_questions_chatgpt_bot) {
             if (messageBody.includes(`${prefixBot} ${pre_question}`)) {
               botChatGpt({ msg: messageBody });
