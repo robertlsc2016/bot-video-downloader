@@ -16,6 +16,7 @@ const {
   stringToGroup,
   prefixBot,
   openIaApiKey,
+  activeStatistics,
 } = require("../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
@@ -105,7 +106,7 @@ module.exports.runMessageOrchestrator = function () {
           IsTrue({ msg: messageBody });
         }
 
-        if (message.type) {
+        if (message.type && activeStatistics) {
           if (message.type == "chat" && messageBody.length > 5) {
             botStatitics({ msg: message });
           }
