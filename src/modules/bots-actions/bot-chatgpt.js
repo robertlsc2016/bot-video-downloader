@@ -3,6 +3,7 @@ const {
   instructionChatGPT,
   prefixBot,
   openIaApiKey,
+  instructionChatGPTSeriousness,
 } = require("../../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
@@ -13,13 +14,14 @@ const openai = new OpenAI({
   apiKey: openIaApiKey,
 });
 
-module.exports.botChatGpt = async ({ msg: msg }) => {
-  const instruction = instructionChatGPT;
+module.exports.botChatGpt = async ({ msg: msg, seriousness: seriousness }) => {
+  const instruction =
+    seriousness == "high" ? instructionChatGPTSeriousness : instructionChatGPT;
   const clearMessage = msg.replace(`${prefixBot} pergunta`, "");
   const assistant = await openai.beta.assistants.create({
     name: "bot-video-downloader",
     instructions: instruction,
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o",
   });
 
   const thread = await openai.beta.threads.create();

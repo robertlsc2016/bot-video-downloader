@@ -3,7 +3,9 @@ const { client } = require("../../settings/settings");
 const fs = require("fs");
 const path = require("path");
 
-const ytdl = require("ytdl-core");
+// const ytdl = require("ytdl-core");
+const ytdl = require("@distube/ytdl-core");
+
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
@@ -19,7 +21,6 @@ const {
 } = require("../../settings/necessary-settings");
 const { convertVideo } = require("../../utils/codec-adjuster");
 const { structuredMessages } = require("../../utils/structured-messages");
-const { error } = require("console");
 
 const downloadVDYoutube = async ({ url: url }) => {
   const filePath = path.join(
@@ -61,12 +62,12 @@ const downloadVDYoutube = async ({ url: url }) => {
 
         .on("finish", async () => {
           try {
-            await convertVideo({
-              input: filePath,
-              platform: platformsNameDownload.youtube,
-            });
+            // await convertVideo({
+            //   input: filePath,
+            //   platform: platformsNameDownload.youtube,
+            // });
             await genericSendMessageOrchestrator({
-              filePath: outputPath,
+              filePath: filePath,
               type: "media",
               isDocument: false,
             });

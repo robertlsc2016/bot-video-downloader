@@ -33,14 +33,14 @@ module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
 
-    await convertVideo({
-      input: filePath,
-      platform: platformsNameDownload.tiktok,
-    });
+    // await convertVideo({
+    //   input: filePath,
+    //   platform: platformsNameDownload.tiktok,
+    // });
 
     await genericSendMessageOrchestrator({
       from: from,
-      filePath: outputPath,
+      filePath: filePath,
       type: "media",
       isDocument: false,
     });

@@ -28,7 +28,7 @@ const { downloadVDTiktok } = require("./platforms/tiktok-download.module");
 const { headsOrTails } = require("./bots-actions/coin_flip");
 const { bothelp } = require("./bots-actions/bot-help");
 const { turnInSticker } = require("./bots-actions/turn-in-sticker");
-const { whoIs } = require("./bots-actions/whois-is");
+const { whoIs } = require("./bots-actions/who-is");
 const { structuredMessages } = require("../utils/structured-messages");
 const { IsTrue } = require("./bots-actions/is-true");
 const { textToSpeech } = require("./bots-actions/text-to-speech");
@@ -37,6 +37,15 @@ const {
   botStatitics,
   showStatistics,
 } = require("./bots-actions/bot-statistics");
+const {
+  BOTWHOIS,
+  BOTISTRUE,
+  BOTTURNINSTICKER,
+  BOTSTATISTICSISACTIVE,
+  BOTCOINFLIP,
+  BOTTEXTTOSPEECH,
+  BOTCHATGPTISACTIVE,
+} = require("../settings/feature-enabler");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -79,6 +88,7 @@ module.exports.runMessageOrchestrator = function () {
         !(message._data.id.fromMe && messageBody?.includes("funcionalidades"))
       ) {
         if (
+          BOTTURNINSTICKER == "true" &&
           message?._data?.type == "image" &&
           message?._data?.caption?.includes(bot_actions.bot_sticker)
         ) {
@@ -89,20 +99,27 @@ module.exports.runMessageOrchestrator = function () {
           (pre_question) => messageBody.includes(`${prefixBot} ${pre_question}`)
         );
 
-        if (containsPreQuestion && openIaApiKey) {
+        if (
+          BOTCHATGPTISACTIVE == "true" &&
+          messageBody.includes(bot_actions.pre_questions_chatgpt_bot_really)
+        ) {
+          return await botChatGpt({ msg: messageBody, seriousness: "high" });
+        }
+
+        if (BOTCHATGPTISACTIVE == "true" && containsPreQuestion) {
           for (let pre_question of bot_actions.pre_questions_chatgpt_bot) {
             if (messageBody.includes(`${prefixBot} ${pre_question}`)) {
-              botChatGpt({ msg: messageBody });
+              return await botChatGpt({ msg: messageBody, seriousness: "low" });
               break;
             }
           }
         }
 
-        if (messageBody?.includes(bot_actions.who_is)) {
+        if (BOTWHOIS == "true" && messageBody?.includes(bot_actions.who_is)) {
           whoIs();
         }
 
-        if (messageBody?.includes(bot_actions.is_true)) {
+        if (BOTISTRUE == "true" && messageBody?.includes(bot_actions.is_true)) {
           IsTrue({ msg: messageBody });
         }
 
@@ -113,7 +130,10 @@ module.exports.runMessageOrchestrator = function () {
           botStatitics({ msg: message });
         }
 
-        if (messageBody?.includes(bot_actions.statistics)) {
+        if (
+          BOTSTATISTICSISACTIVE == "true" &&
+          messageBody?.includes(bot_actions.statistics)
+        ) {
           showStatistics();
         }
 
@@ -121,11 +141,15 @@ module.exports.runMessageOrchestrator = function () {
           bothelp({ from: from });
         }
 
-        if (messageBody?.includes(bot_actions.coin_flip_string)) {
+        if (
+          BOTCOINFLIP == "true" &&
+          messageBody?.includes(bot_actions.coin_flip_string)
+        ) {
           headsOrTails({ from: from });
         }
 
         if (
+          BOTTEXTTOSPEECH == "true" &&
           (message.type =
             "chat" && messageBody.length > 250 && !message._data.id.fromMe)
         ) {
