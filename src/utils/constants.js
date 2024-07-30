@@ -62,7 +62,7 @@ const bot_actions = {
   is_true: `${prefixBot} é verdade`,
   statistics: `${prefixBot} estatisticas`,
   pre_questions_chatgpt_bot_really: `${prefixBot} ??`,
-  pre_questions_chatgpt_bot:  ["onde", "quando", "como", "que", "pergunta", "qual", "de que", "de qual", "?"]
+  pre_questions_chatgpt_bot:  `${prefixBot} ?`,
 };
 
 module.exports = {

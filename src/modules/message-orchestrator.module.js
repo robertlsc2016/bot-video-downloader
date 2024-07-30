@@ -95,10 +95,6 @@ module.exports.runMessageOrchestrator = function () {
           turnInSticker({ message: message });
         }
 
-        const containsPreQuestion = bot_actions.pre_questions_chatgpt_bot.some(
-          (pre_question) => messageBody.includes(`${prefixBot} ${pre_question}`)
-        );
-
         if (
           BOTCHATGPTISACTIVE == "true" &&
           messageBody.includes(bot_actions.pre_questions_chatgpt_bot_really)
@@ -106,13 +102,11 @@ module.exports.runMessageOrchestrator = function () {
           return await botChatGpt({ msg: messageBody, seriousness: "high" });
         }
 
-        if (BOTCHATGPTISACTIVE == "true" && containsPreQuestion) {
-          for (let pre_question of bot_actions.pre_questions_chatgpt_bot) {
-            if (messageBody.includes(`${prefixBot} ${pre_question}`)) {
-              return await botChatGpt({ msg: messageBody, seriousness: "low" });
-              break;
-            }
-          }
+        if (
+          BOTCHATGPTISACTIVE == "true" &&
+          messageBody.includes(bot_actions.pre_questions_chatgpt_bot)
+        ) {
+          return await botChatGpt({ msg: messageBody, seriousness: "low" });
         }
 
         if (BOTWHOIS == "true" && messageBody?.includes(bot_actions.who_is)) {

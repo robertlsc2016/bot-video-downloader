@@ -7,13 +7,21 @@ services:
     restart: always
     environment:
       TZ: America/Cuiaba
-      PATH_BROWSER: ${PATH_BROWSER}
       SHIPPING_ALLOWED: ${SHIPPING_ALLOWED}
       STRING_TO_GROUP_WWEBJS: ${STRING_TO_GROUP_WWEBJS}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       INSTRUCTION_GPT: ${INSTRUCTION_GPT}
+      INSTRUCTION_GPT_SERIOUSNESS: ${INSTRUCTION_GPT_SERIOUSNESS}
       PREFIX_BOT: ${PREFIX_BOT}
       MAX_DURATION_TY_MS: ${MAX_DURATION_TY_MS}
+      BOTCHATGPTISACTIVE: ${BOTCHATGPTISACTIVE}
+      BOTSTATISTICSISACTIVE: ${BOTSTATISTICSISACTIVE}
+      BOTCOINFLIP: ${BOTCOINFLIP}
+      BOTISTRUE: ${BOTISTRUE}
+      BOTTEXTTOSPEECH: ${BOTTEXTTOSPEECH}
+      BOTTURNINSTICKER: ${BOTTURNINSTICKER}
+      BOTWHOIS: ${BOTWHOIS}
+      activeStatistics: ${activeStatistics}
       YTVideoDurationExceeded: ${YTVideoDurationExceeded}
       emptyMessageIstrue: ${emptyMessageIstrue}
       extremePositiveMessage: ${extremePositiveMessage}
