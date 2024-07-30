@@ -27,7 +27,9 @@ module.exports.bothelp = async function ({ from: from }) {
     } ]\n6. Posso converter uma mensagem grande em áudio. Ela precisa ter mais de 250 caracteres [ Working: ${
       BOTTEXTTOSPEECH == "true" ? "Sim🟢" : "Não🔴"
     } ]\n7. Eu também sou uma inteligência Artifical, basta digitar *${prefixBot}* *${bot_actions.pre_questions_chatgpt_bot.join(
-      `* ou *${prefixBot} || Caso seja um questionamento sério, use o comando *${prefixBot} ??*`
-    )}* [ Working: ${BOTCHATGPTISACTIVE == "true" ? "Sim🟢" : "Não🔴"} ]\n8. Forneço as estatísticas do número de interações de cada participante do grupo, basta digitar *${prefixBot} estatisticas*`,
+      `* ou *${prefixBot} `
+    )}* || Caso seja um questionamento sério, use o comando *${prefixBot} ??* [ Working: ${
+      BOTCHATGPTISACTIVE == "true" ? "Sim🟢" : "Não🔴"
+    } ]\n8. Forneço as estatísticas do número de interações de cada participante do grupo, basta digitar *${prefixBot} estatisticas*`,
   });
 };
