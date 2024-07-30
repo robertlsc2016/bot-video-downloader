@@ -9,3 +9,4 @@ prod.env
 *png
 *mp3
 env-presets
+data/statistics.json
