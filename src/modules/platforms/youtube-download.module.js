@@ -62,12 +62,12 @@ const downloadVDYoutube = async ({ url: url }) => {
 
         .on("finish", async () => {
           try {
-            // await convertVideo({
-            //   input: filePath,
-            //   platform: platformsNameDownload.youtube,
-            // });
+            await convertVideo({
+              input: filePath,
+              platform: platformsNameDownload.youtube,
+            });
             await genericSendMessageOrchestrator({
-              filePath: filePath,
+              filePath: outputPath,
               type: "media",
               isDocument: false,
             });

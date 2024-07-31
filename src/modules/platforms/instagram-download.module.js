@@ -33,14 +33,14 @@ module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
     }
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
-    // await convertVideo({
-    //   input: filePath,
-    //   platform: platformsNameDownload.instagram,
-    // });
+    await convertVideo({
+      input: filePath,
+      platform: platformsNameDownload.instagram,
+    });
 
     await genericSendMessageOrchestrator({
       from: from,
-      filePath: filePath,
+      filePath: outputPath,
       type: "media",
       isDocument: false,
     });

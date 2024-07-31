@@ -34,14 +34,14 @@ module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
       filePath: filePath,
     });
 
-    // await convertVideo({
-    //   input: filePath,
-    //   platform: platformsNameDownload.facebook,
-    // });
+    await convertVideo({
+      input: filePath,
+      platform: platformsNameDownload.facebook,
+    });
 
     await genericSendMessageOrchestrator({
       from: from,
-      filePath: filePath,
+      filePath: outputPath,
       type: "media",
       isDocument: false,
     });
