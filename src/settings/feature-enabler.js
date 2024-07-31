@@ -7,6 +7,7 @@ const BOTISTRUE = process.env.BOTISTRUE || true;
 const BOTTEXTTOSPEECH = process.env.BOTTEXTTOSPEECH || true;
 const BOTTURNINSTICKER = process.env.BOTTURNINSTICKER || true;
 const BOTWHOIS = process.env.BOTWHOIS || true;
+const ISDOCUMENT = process.env.ISDOCUMENT || true;
 
 module.exports = {
   BOTCHATGPTISACTIVE,
@@ -16,4 +17,5 @@ module.exports = {
   BOTTEXTTOSPEECH,
   BOTTURNINSTICKER,
   BOTWHOIS,
+  ISDOCUMENT
 };

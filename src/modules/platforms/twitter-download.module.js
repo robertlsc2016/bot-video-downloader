@@ -9,6 +9,7 @@ const {
   videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
 const getTwitterMedia = require("get-twitter-media");
+const { ISDOCUMENT } = require("../../settings/feature-enabler");
 
 module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
   try {
@@ -26,6 +27,7 @@ module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
       from: from,
       filePath: filePath,
       type: "media",
+      isDocument: ISDOCUMENT,
     });
   } catch (error) {
     await genericSendMessageOrchestrator({

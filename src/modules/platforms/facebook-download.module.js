@@ -12,6 +12,7 @@ const {
   videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
 const { convertVideo } = require("../../utils/codec-adjuster");
+const { ISDOCUMENT } = require("../../settings/feature-enabler");
 
 module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
   try {
@@ -43,7 +44,7 @@ module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
       from: from,
       filePath: outputPath,
       type: "media",
-      isDocument: false,
+      isDocument: ISDOCUMENT,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo facebook:", error);

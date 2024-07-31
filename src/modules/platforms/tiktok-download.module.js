@@ -13,6 +13,7 @@ const {
 
 const TikChan = require("tikchan");
 const { convertVideo } = require("../../utils/codec-adjuster");
+const { ISDOCUMENT } = require("../../settings/feature-enabler");
 
 module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
   try {
@@ -42,7 +43,7 @@ module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
       from: from,
       filePath: outputPath,
       type: "media",
-      isDocument: false,
+      isDocument: ISDOCUMENT,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo tiktok:", error);

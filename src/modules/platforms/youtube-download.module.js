@@ -69,7 +69,7 @@ const downloadVDYoutube = async ({ url: url }) => {
             await genericSendMessageOrchestrator({
               filePath: outputPath,
               type: "media",
-              isDocument: false,
+              isDocument: ISDOCUMENT,
             });
           } catch {
             throw new Error("erro ao enviar vídeo");
