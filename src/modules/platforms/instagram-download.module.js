@@ -34,16 +34,15 @@ module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
     }
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
-    await convertVideo({
-      input: filePath,
-      platform: platformsNameDownload.instagram,
-    });
+    // await convertVideo({
+    //   input: filePath,
+    //   platform: platformsNameDownload.instagram,
+    // });
 
     await genericSendMessageOrchestrator({
-      from: from,
-      filePath: outputPath,
+      filePath: filePath,
       type: "media",
-      isDocument: ISDOCUMENT,
+      isDocument: false,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo do instagram:", error);

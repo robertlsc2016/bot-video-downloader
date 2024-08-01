@@ -35,16 +35,15 @@ module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
       filePath: filePath,
     });
 
-    await convertVideo({
-      input: filePath,
-      platform: platformsNameDownload.facebook,
-    });
+    // await convertVideo({
+    //   input: filePath,
+    //   platform: platformsNameDownload.facebook,
+    // });
 
     await genericSendMessageOrchestrator({
-      from: from,
-      filePath: outputPath,
+      filePath: filePath,
       type: "media",
-      isDocument: ISDOCUMENT,
+      isDocument: false,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo facebook:", error);

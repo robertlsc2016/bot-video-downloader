@@ -24,10 +24,9 @@ module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
     await genericSendMessageOrchestrator({
-      from: from,
       filePath: filePath,
       type: "media",
-      isDocument: ISDOCUMENT,
+      isDocument: false,
     });
   } catch (error) {
     await genericSendMessageOrchestrator({

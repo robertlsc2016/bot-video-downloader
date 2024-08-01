@@ -33,17 +33,15 @@ module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
       throw new Error("a url de download esta com problemas");
 
     await downloadVideo({ url: URLDownload, filePath: filePath });
-
-    await convertVideo({
-      input: filePath,
-      platform: platformsNameDownload.tiktok,
-    });
+    // await convertVideo({
+    //   input: filePath,
+    //   platform: platformsNameDownload.tiktok,
+    // });
 
     await genericSendMessageOrchestrator({
-      from: from,
-      filePath: outputPath,
+      filePath: filePath,
       type: "media",
-      isDocument: ISDOCUMENT,
+      isDocument: false,
     });
   } catch (error) {
     console.error("Erro ao baixar o vídeo tiktok:", error);
