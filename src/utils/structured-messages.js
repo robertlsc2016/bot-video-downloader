@@ -8,6 +8,7 @@ const structuredMessages = {
     "Por limitações tecnicas, só conseguirei mandar o vídeo no formato documento",
   attemptToDownloadMessage: "Tentarei baixar esse vídeo, um momento",
   successDownloadMessage: "Olha seu vídeo ai!",
+  successDownloadPhotoMessage: "Sua foto!",
   YTVideoDurationExceededMessage:
     process.env.videoTimeExceeded ||
     "A duração desse vídeo é maior que 5 minutos, o meu máximo é de vídeo até 5 minutos",

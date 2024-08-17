@@ -10,16 +10,24 @@ const {
   videosFolderPathAjustedCodecs,
   videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
-const instagramDl = require("@sasmeee/igdl");
+
+const instagramGetUrl = require("instagram-url-direct");
+
 const { downloadVideo } = require("../../utils/downloadVideo");
 const { convertVideo } = require("../../utils/codec-adjuster");
 const { ISDOCUMENT } = require("../../settings/feature-enabler");
 
-module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
+module.exports.downloadInstagram = async function ({ url: url, type: type }) {
+
   try {
     const filePath = path.join(
       videosFolderPathBruteCodecs,
       platformsNameDownload.instagram
+    );
+
+    const filePathPhoto = path.join(
+      videosFolderPathBruteCodecs,
+      platformsNameDownload.instagramPhoto
     );
 
     const outputPath = path.join(
@@ -27,21 +35,24 @@ module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
       platformsNameDownload.instagram
     );
 
-    const URLDownload = await getXURL({ url: url });
+    const URLDownload = await getInstagramURL({ url: url });
 
     if (URLDownload == false) {
       throw new Error("a url de download esta com problemas");
     }
 
-    await downloadVideo({ url: URLDownload, filePath: filePath });
+    await downloadVideo({
+      url: URLDownload,
+      filePath: type == "photo" ? filePathPhoto : filePath,
+    });
     // await convertVideo({
     //   input: filePath,
     //   platform: platformsNameDownload.instagram,
     // });
 
     await genericSendMessageOrchestrator({
-      filePath: filePath,
-      type: "media",
+      filePath: type == "photo" ? filePathPhoto : filePath,
+      type: "media", 
       isDocument: false,
     });
   } catch (error) {
@@ -53,21 +64,19 @@ module.exports.downloadVDInstagram = async function ({ from: from, url: url }) {
   }
 };
 
-const getXURL = async ({ url: rawURL }) => {
+const getInstagramURL = async ({ url: rawURL }) => {
   try {
-    const XURL = await instagramDl(rawURL);
-    const condition = XURL[0].download_link;
+    const { results_number, url_list } = await instagramGetUrl(rawURL);
 
-    if (condition) {
-      return XURL[0].download_link;
+    if (results_number > 0) {
+      return url_list[0];
     }
 
-    if (condition == false) {
-      throw new Error(
-        "problema no retorno do link da api getFbVideoInfo. Talvez o link de entrada esteja incorreto ou inválido"
-      );
-    }
+    throw new Error(
+      "Problema no retorno do link da API getFbVideoInfo. Talvez o link de entrada esteja incorreto ou inválido."
+    );
   } catch (error) {
+    console.error(error.message); // Log do erro para depuração
     return false;
   }
 };

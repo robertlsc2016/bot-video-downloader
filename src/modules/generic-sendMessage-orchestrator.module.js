@@ -7,6 +7,7 @@ const {
 
 const { structuredMessages } = require("../utils/structured-messages");
 const {
+  successDownloadPhotoMessage,
   successDownloadMessage,
   failureDownloadMessage,
   technicalLimitationsMessage,
@@ -54,11 +55,17 @@ module.exports.genericSendMessageOrchestrator = async function ({
       const media = MessageMedia.fromFilePath(filePath);
       try {
         await client.sendMessage(stringToGroup, media, {
-          caption: isDocument
-            ? technicalLimitationsMessage
-            : successDownloadMessage,
           sendMediaAsDocument: isDocument,
         });
+
+        await client.sendMessage(
+          stringToGroup,
+          isDocument
+            ? technicalLimitationsMessage
+            : filePath.includes(".jpg")
+            ? successDownloadPhotoMessage
+            : successDownloadMessage
+        );
       } catch (err) {
         console.error(err);
         await client.sendMessage(stringToGroup, failureDownloadMessage);

@@ -23,6 +23,7 @@ const {
 } = require("./generic-sendMessage-orchestrator.module");
 const {
   downloadVDInstagram,
+  downloadInstagram,
 } = require("./platforms/instagram-download.module");
 const { downloadVDTiktok } = require("./platforms/tiktok-download.module");
 const { headsOrTails } = require("./bots-actions/coin_flip");
@@ -163,9 +164,9 @@ module.exports.runMessageOrchestrator = function () {
 
         if (url.includes(platformsNameURL.instagram)) {
           await sendMessageAttemptToDownload();
-          return await downloadVDInstagram({
-            from: from,
+          return await downloadInstagram({
             url: url,
+            type: url.includes("/p/") ? "photo" : "video",
           });
         }
 

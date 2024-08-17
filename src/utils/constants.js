@@ -11,6 +11,7 @@ const platformsNameDownload = {
   facebook: "facebook-video.mp4",
   youtube: "youtube-video.mp4",
   instagram: "instagram-video.mp4",
+  instagramPhoto: "instagram-photo.jpg",
   tiktok: "tiktok-video.mp4",
   x: "x-video.mp4",
 };
