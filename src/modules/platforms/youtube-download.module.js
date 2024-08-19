@@ -79,7 +79,7 @@ const downloadVDYoutube = async ({ url: url }) => {
   } catch (error) {
     await genericSendMessageOrchestrator({
       type: "text",
-      msg: error.message,
+      msg: "Não foi possível baixar o vídeo, sinto muito :(",
     });
   }
 };

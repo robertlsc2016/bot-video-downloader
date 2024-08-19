@@ -5,7 +5,7 @@
     "start": "node src/index.js"
   },
   "dependencies": {
-    "@distube/ytdl-core": "^4.13.7",
+    "@distube/ytdl-core": "^4.14.4",
     "@sasmeee/igdl": "^1.0.0",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
