@@ -86,7 +86,11 @@ module.exports.runMessageOrchestrator = function () {
       }
 
       if (
-        !(message._data.id.fromMe && messageBody?.includes("funcionalidades"))
+        !(
+          (message._data.id.fromMe &&
+            messageBody?.includes("funcionalidades")) ||
+          messageBody?.includes("[Bot]")
+        )
       ) {
         if (
           BOTTURNINSTICKER == "true" &&
@@ -97,7 +101,7 @@ module.exports.runMessageOrchestrator = function () {
         }
 
         if (
-          BOTCHATGPTISACTIVE == "true" &&
+          (BOTCHATGPTISACTIVE == "true" || BOTCHATGPTISACTIVE) &&
           messageBody.includes(bot_actions.pre_questions_chatgpt_bot_really)
         ) {
           return await botChatGpt({ msg: messageBody, seriousness: "high" });
@@ -110,7 +114,10 @@ module.exports.runMessageOrchestrator = function () {
           return await botChatGpt({ msg: messageBody, seriousness: "low" });
         }
 
-        if (BOTWHOIS == "true" && messageBody?.includes(bot_actions.who_is)) {
+        if (
+          (BOTWHOIS == "true" || BOTWHOIS) &&
+          messageBody?.includes(bot_actions.who_is)
+        ) {
           whoIs();
         }
 
