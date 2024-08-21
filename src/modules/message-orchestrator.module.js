@@ -82,11 +82,9 @@ module.exports.runMessageOrchestrator = function () {
     }
 
     if (shippingAllowed == 1) {
-      console.log('o envio está permitido')
       try {
         if (from !== stringToGroup) {
-          console.error(message._data.id, message._data.body);
-          throw new Error("o envio não foi configurado para esse destinatário");
+          throw new Error(`o envio não foi configurado para esse destinatário: ${message._data.id}`);
         }
 
         let url = null;
@@ -153,7 +151,6 @@ module.exports.runMessageOrchestrator = function () {
           }
 
           if (messageBody?.includes(bot_actions.bot_help)) {
-            console.log('entrou no help')
             bothelp({ from: from });
           }
 

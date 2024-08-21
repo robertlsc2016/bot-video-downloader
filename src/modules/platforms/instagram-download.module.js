@@ -45,10 +45,6 @@ module.exports.downloadInstagram = async function ({ url: url, type: type }) {
       url: URLDownload,
       filePath: type == "photo" ? filePathPhoto : filePath,
     });
-    // await convertVideo({
-    //   input: filePath,
-    //   platform: platformsNameDownload.instagram,
-    // });
 
     await genericSendMessageOrchestrator({
       filePath: type == "photo" ? filePathPhoto : filePath,
