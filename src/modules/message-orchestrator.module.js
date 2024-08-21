@@ -74,17 +74,19 @@ module.exports.runMessageOrchestrator = function () {
   const messageSteps = async ({ from: from, message: message }) => {
     const messageBody = message.body;
 
-    if (
-      messageBody.includes(`${prefixBot} turn off`) &&
-      ADMINSBOT.includes(message._data.author)
-    ) {
-      rootBotActions({ action: "turnoff" });
-    }
+    // if (
+    //   messageBody.includes(`${prefixBot} turn off`) &&
+    //   ADMINSBOT.includes(message._data.author)
+    // ) {
+    //   rootBotActions({ action: "turnoff" });
+    // }
 
     if (shippingAllowed == 1) {
       try {
         if (from !== stringToGroup) {
-          throw new Error(`o envio não foi configurado para esse destinatário: ${message._data.id}`);
+          throw new Error(
+            `o envio não foi configurado para esse destinatário: ${message._data.id}`
+          );
         }
 
         let url = null;
@@ -177,11 +179,14 @@ module.exports.runMessageOrchestrator = function () {
         if (url) {
           if (url.includes(platformsNameURL.tiktok)) {
             await sendMessageAttemptToDownload();
-            return await downloadVDTiktok({ from: from, url: url });
+            return await downloadVDTiktok({ url: url });
           }
 
           if (url.includes(platformsNameURL.instagram)) {
+            console.log("entrou insta")
             await sendMessageAttemptToDownload();
+            console.log("saiu sendMessageAttemptToDownload")
+
             return await downloadInstagram({
               url: url,
               type: url.includes("/p/") ? "photo" : "video",
@@ -190,12 +195,12 @@ module.exports.runMessageOrchestrator = function () {
 
           if (url.includes(platformsNameURL.facebook)) {
             await sendMessageAttemptToDownload();
-            return await downloadVDFacebook({ from: from, url: url });
+            return await downloadVDFacebook({ url: url });
           }
 
           if (url.includes(platformsNameURL.x)) {
             await sendMessageAttemptToDownload();
-            return await downloadVDTwitter({ from: from, url: url });
+            return await downloadVDTwitter({ url: url });
           }
 
           if (

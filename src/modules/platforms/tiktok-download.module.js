@@ -15,15 +15,10 @@ const TikChan = require("tikchan");
 const { convertVideo } = require("../../utils/codec-adjuster");
 const { ISDOCUMENT } = require("../../settings/feature-enabler");
 
-module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
+module.exports.downloadVDTiktok = async function ({ url }) {
   try {
-    const filePath = path.join(
+    const filePathVideo = path.join(
       videosFolderPathBruteCodecs,
-      platformsNameDownload.tiktok
-    );
-
-    const outputPath = path.join(
-      videosFolderPathAjustedCodecs,
       platformsNameDownload.tiktok
     );
 
@@ -32,14 +27,10 @@ module.exports.downloadVDTiktok = async function ({ from: from, url: url }) {
     if (URLDownload == false)
       throw new Error("a url de download esta com problemas");
 
-    await downloadVideo({ url: URLDownload, filePath: filePath });
-    // await convertVideo({
-    //   input: filePath,
-    //   platform: platformsNameDownload.tiktok,
-    // });
+    await downloadVideo({ url: URLDownload, filePath: filePathVideo });
 
     await genericSendMessageOrchestrator({
-      filePath: filePath,
+      filePath: filePathVideo,
       type: "media",
       isDocument: false,
     });

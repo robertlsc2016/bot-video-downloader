@@ -30,11 +30,6 @@ module.exports.downloadInstagram = async function ({ url: url, type: type }) {
       platformsNameDownload.instagramPhoto
     );
 
-    const outputPath = path.join(
-      videosFolderPathAjustedCodecs,
-      platformsNameDownload.instagram
-    );
-
     const URLDownload = await getInstagramURL({ url: url });
 
     if (URLDownload == false) {

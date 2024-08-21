@@ -16,7 +16,6 @@ const {
 } = structuredMessages;
 
 module.exports.genericSendMessageOrchestrator = async function ({
-  from,
   type,
   msg = false,
   filePath = false,
@@ -25,7 +24,6 @@ module.exports.genericSendMessageOrchestrator = async function ({
   situation,
 }) {
   if (shippingAllowed == 0) return;
-
   switch (type) {
     case "text":
       switch (situation) {
@@ -55,6 +53,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
           await sendTextMessage({ msg: `[Bot]\n ${msg}` });
           break;
       }
+      break;
     case "media":
       const media = MessageMedia.fromFilePath(filePath);
       try {
