@@ -183,9 +183,7 @@ module.exports.runMessageOrchestrator = function () {
           }
 
           if (url.includes(platformsNameURL.instagram)) {
-            console.log("entrou insta")
             await sendMessageAttemptToDownload();
-            console.log("saiu sendMessageAttemptToDownload")
 
             return await downloadInstagram({
               url: url,
