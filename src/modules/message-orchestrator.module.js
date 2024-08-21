@@ -17,6 +17,7 @@ const {
   prefixBot,
   openIaApiKey,
   activeStatistics,
+  shippingAllowed,
 } = require("../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
@@ -46,7 +47,9 @@ const {
   BOTCOINFLIP,
   BOTTEXTTOSPEECH,
   BOTCHATGPTISACTIVE,
+  ADMINSBOT,
 } = require("../settings/feature-enabler");
+const { rootBotActions } = require("./bots-actions/root-bot-actions");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -56,11 +59,7 @@ module.exports.runMessageOrchestrator = function () {
 
   client.on("ready", async () => {
     console.log("Client is ready!");
-    await genericSendMessageOrchestrator({
-      from: stringToGroup,
-      type: "text",
-      msg: structuredMessages.readyMessage,
-    });
+    await client.sendMessage(stringToGroup, structuredMessages.readyMessage);
   });
 
   client.on("message_create", async (message) => {
@@ -68,134 +67,147 @@ module.exports.runMessageOrchestrator = function () {
       await messageSteps({ from: stringToGroup, message: message });
     }
   });
-
   client.on("message", async (message) => {
     await messageSteps({ from: message.from, message: message });
   });
 
   const messageSteps = async ({ from: from, message: message }) => {
-    try {
-      if (from !== stringToGroup)
-        throw new Error("o envio não foi configurado para esse destinatário");
+    const messageBody = message.body;
 
-      let url = null;
-      const messageBody = message.body;
+    if (
+      messageBody.includes(`${prefixBot} turn off`) &&
+      ADMINSBOT.includes(message._data.author)
+    ) {
+      rootBotActions({ action: "turnoff" });
+    }
 
-      if (message?.links[0]?.link) {
-        url = message.links[0].link;
-      }
+    if (shippingAllowed == 1) {
+      try {
+        if (from !== stringToGroup) {
+          throw new Error(`o envio não foi configurado para esse destinatário: ${message._data.id}`);
+        }
 
-      if (
-        !(
-          (message._data.id.fromMe &&
-            messageBody?.includes("funcionalidades")) ||
-          messageBody?.includes("[Bot]")
-        )
-      ) {
-        if (
-          BOTTURNINSTICKER == "true" &&
-          message?._data?.type == "image" &&
-          message?._data?.caption?.includes(bot_actions.bot_sticker)
-        ) {
-          turnInSticker({ message: message });
+        let url = null;
+
+        if (message?.links[0]?.link) {
+          url = message.links[0].link;
         }
 
         if (
-          (BOTCHATGPTISACTIVE == "true" || BOTCHATGPTISACTIVE) &&
-          messageBody.includes(bot_actions.pre_questions_chatgpt_bot_really)
+          !(
+            (message._data.id.fromMe &&
+              messageBody?.includes("funcionalidades")) ||
+            messageBody?.includes("[Bot]")
+          )
         ) {
-          return await botChatGpt({ msg: messageBody, seriousness: "high" });
-        }
+          if (
+            BOTTURNINSTICKER == "true" &&
+            message?._data?.type == "image" &&
+            message?._data?.caption?.includes(bot_actions.bot_sticker)
+          ) {
+            turnInSticker({ message: message });
+          }
 
-        if (
-          BOTCHATGPTISACTIVE == "true" &&
-          messageBody.includes(bot_actions.pre_questions_chatgpt_bot)
-        ) {
-          return await botChatGpt({ msg: messageBody, seriousness: "low" });
-        }
+          if (
+            (BOTCHATGPTISACTIVE == "true" || BOTCHATGPTISACTIVE) &&
+            messageBody.includes(bot_actions.pre_questions_chatgpt_bot_really)
+          ) {
+            return await botChatGpt({ msg: messageBody, seriousness: "high" });
+          }
 
-        if (
-          (BOTWHOIS == "true" || BOTWHOIS) &&
-          messageBody?.includes(bot_actions.who_is)
-        ) {
-          whoIs();
-        }
+          if (
+            BOTCHATGPTISACTIVE == "true" &&
+            messageBody.includes(bot_actions.pre_questions_chatgpt_bot)
+          ) {
+            return await botChatGpt({ msg: messageBody, seriousness: "low" });
+          }
 
-        if (BOTISTRUE == "true" && messageBody?.includes(bot_actions.is_true)) {
-          IsTrue({ msg: messageBody });
-        }
+          if (
+            (BOTWHOIS == "true" || BOTWHOIS) &&
+            messageBody?.includes(bot_actions.who_is)
+          ) {
+            whoIs();
+          }
 
-        if (message.type && activeStatistics) {
-          if (message.type == "chat" && messageBody.length > 5) {
+          if (
+            BOTISTRUE == "true" &&
+            messageBody?.includes(bot_actions.is_true)
+          ) {
+            IsTrue({ msg: messageBody });
+          }
+
+          if (message.type && activeStatistics) {
+            if (message.type == "chat" && messageBody.length > 5) {
+              botStatitics({ msg: message });
+            }
             botStatitics({ msg: message });
           }
-          botStatitics({ msg: message });
+
+          if (
+            BOTSTATISTICSISACTIVE == "true" &&
+            messageBody?.includes(bot_actions.statistics)
+          ) {
+            showStatistics();
+          }
+
+          if (messageBody?.includes(bot_actions.bot_help)) {
+            bothelp({ from: from });
+          }
+
+          if (
+            BOTCOINFLIP == "true" &&
+            messageBody?.includes(bot_actions.coin_flip_string)
+          ) {
+            headsOrTails({ from: from });
+          }
+
+          if (
+            BOTTEXTTOSPEECH == "true" &&
+            (message.type =
+              "chat" && messageBody.length > 250 && !message._data.id.fromMe)
+          ) {
+            await genericSendMessageOrchestrator({
+              type: "text",
+              msg: structuredMessages.preMsgAttempTextToAudio,
+            });
+            await textToSpeech({ msg: messageBody });
+          }
         }
 
-        if (
-          BOTSTATISTICSISACTIVE == "true" &&
-          messageBody?.includes(bot_actions.statistics)
-        ) {
-          showStatistics();
-        }
+        if (url) {
+          if (url.includes(platformsNameURL.tiktok)) {
+            await sendMessageAttemptToDownload();
+            return await downloadVDTiktok({ from: from, url: url });
+          }
 
-        if (messageBody?.includes(bot_actions.bot_help)) {
-          bothelp({ from: from });
-        }
+          if (url.includes(platformsNameURL.instagram)) {
+            await sendMessageAttemptToDownload();
+            return await downloadInstagram({
+              url: url,
+              type: url.includes("/p/") ? "photo" : "video",
+            });
+          }
 
-        if (
-          BOTCOINFLIP == "true" &&
-          messageBody?.includes(bot_actions.coin_flip_string)
-        ) {
-          headsOrTails({ from: from });
-        }
+          if (url.includes(platformsNameURL.facebook)) {
+            await sendMessageAttemptToDownload();
+            return await downloadVDFacebook({ from: from, url: url });
+          }
 
-        if (
-          BOTTEXTTOSPEECH == "true" &&
-          (message.type =
-            "chat" && messageBody.length > 250 && !message._data.id.fromMe)
-        ) {
-          await genericSendMessageOrchestrator({
-            type: "text",
-            msg: structuredMessages.preMsgAttempTextToAudio,
-          });
-          await textToSpeech({ msg: messageBody });
+          if (url.includes(platformsNameURL.x)) {
+            await sendMessageAttemptToDownload();
+            return await downloadVDTwitter({ from: from, url: url });
+          }
+
+          if (
+            platformsNameURL.youtube.filter((yt) => url.includes(yt)).length > 0
+          ) {
+            await sendMessageAttemptToDownload();
+            return await downloadVDYoutube({ url: url });
+          }
         }
+      } catch (error) {
+        console.error(error);
       }
-
-      if (url) {
-        if (url.includes(platformsNameURL.tiktok)) {
-          await sendMessageAttemptToDownload();
-          return await downloadVDTiktok({ from: from, url: url });
-        }
-
-        if (url.includes(platformsNameURL.instagram)) {
-          await sendMessageAttemptToDownload();
-          return await downloadInstagram({
-            url: url,
-            type: url.includes("/p/") ? "photo" : "video",
-          });
-        }
-
-        if (url.includes(platformsNameURL.facebook)) {
-          await sendMessageAttemptToDownload();
-          return await downloadVDFacebook({ from: from, url: url });
-        }
-
-        if (url.includes(platformsNameURL.x)) {
-          await sendMessageAttemptToDownload();
-          return await downloadVDTwitter({ from: from, url: url });
-        }
-
-        if (
-          platformsNameURL.youtube.filter((yt) => url.includes(yt)).length > 0
-        ) {
-          await sendMessageAttemptToDownload();
-          return await downloadVDYoutube({ url: url });
-        }
-      }
-    } catch (error) {
-      console.error(error);
     }
   };
 
