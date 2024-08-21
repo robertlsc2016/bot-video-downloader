@@ -24,7 +24,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
   content = false,
   situation,
 }) {
-  if (shippingAllowed == false) return;
+  if (shippingAllowed == 0) return;
 
   switch (type) {
     case "text":
@@ -49,7 +49,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
           await sendTextMessage({ msg: YTVideoDurationExceeded });
           break;
       }
-      // await sendTextMessage({ msg: `[Bot]\n ${msg}` });
+      await sendTextMessage({ msg: `[Bot]\n ${msg}` });
       break;
     case "media":
       const media = MessageMedia.fromFilePath(filePath);

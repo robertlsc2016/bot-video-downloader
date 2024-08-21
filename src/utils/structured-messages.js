@@ -1,7 +1,7 @@
-const { prefixBot } = require("../settings/necessary-settings");
+const { prefixBot, shippingAllowed } = require("../settings/necessary-settings");
 
 const structuredMessages = {
-  readyMessage: `to online, galera 🤖!\nUse *${prefixBot} help* para ver minhas funcionalidades`,
+  readyMessage: shippingAllowed == 1 ? `to online, galera 🤖!\nUse *${prefixBot} help* para ver minhas funcionalidades` : "Estou online, porém sem permisão para executar minhas funções", 
   failureDownloadMessage:
     "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :(",
   technicalLimitationsMessage:
