@@ -11,3 +11,4 @@ prod.env
 *mp3
 env-presets
 data/statistics.json
+data/states.json

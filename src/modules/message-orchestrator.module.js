@@ -75,20 +75,20 @@ module.exports.runMessageOrchestrator = function () {
 
     if (
       messageBody.includes(`${prefixBot} turn off`) &&
-      ADMINSBOT.includes(message._data.author)
+      ADMINSBOT.includes(message._data.id.participant)
     ) {
-      rootBotActions({ action: "turnoff" });
+      return await rootBotActions({ action: "turnoff" });
     }
 
     if (
       messageBody.includes(`${prefixBot} turn on`) &&
-      ADMINSBOT.includes(message._data.author)
+      ADMINSBOT.includes(message._data.id.participant)
     ) {
-      rootBotActions({ action: "turnon" });
+      return await rootBotActions({ action: "turnon" });
     }
 
     if (
-      messageBody.includes(prefixBot) &&
+      messageBody.includes(`${prefixBot} `) &&
       !(await checkActions({ typeAction: "bot_active" }))
     ) {
       return await client.sendMessage(stringToGroup, "🤖💤💤💤...");

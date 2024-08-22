@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "postinstall": "npm prune",
-    "start": "taskkill /F /IM chrome.exe /T || node src/index.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "@distube/ytdl-core": "^4.14.4",
