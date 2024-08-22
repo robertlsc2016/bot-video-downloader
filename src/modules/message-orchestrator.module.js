@@ -15,9 +15,7 @@ const {
 const {
   stringToGroup,
   prefixBot,
-  openIaApiKey,
   activeStatistics,
-  shippingAllowed,
 } = require("../settings/necessary-settings");
 const {
   genericSendMessageOrchestrator,
@@ -50,6 +48,7 @@ const {
   ADMINSBOT,
 } = require("../settings/feature-enabler");
 const { rootBotActions } = require("./bots-actions/root-bot-actions");
+const { checkActions } = require("../utils/check-actions");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -74,14 +73,28 @@ module.exports.runMessageOrchestrator = function () {
   const messageSteps = async ({ from: from, message: message }) => {
     const messageBody = message.body;
 
-    // if (
-    //   messageBody.includes(`${prefixBot} turn off`) &&
-    //   ADMINSBOT.includes(message._data.author)
-    // ) {
-    //   rootBotActions({ action: "turnoff" });
-    // }
+    if (
+      messageBody.includes(`${prefixBot} turn off`) &&
+      ADMINSBOT.includes(message._data.author)
+    ) {
+      rootBotActions({ action: "turnoff" });
+    }
 
-    if (shippingAllowed == 1) {
+    if (
+      messageBody.includes(`${prefixBot} turn on`) &&
+      ADMINSBOT.includes(message._data.author)
+    ) {
+      rootBotActions({ action: "turnon" });
+    }
+
+    if (
+      messageBody.includes(prefixBot) &&
+      !(await checkActions({ typeAction: "bot_active" }))
+    ) {
+      return await client.sendMessage(stringToGroup, "🤖💤💤💤...");
+    }
+
+    if (await checkActions({ typeAction: "bot_active" })) {
       try {
         if (from !== stringToGroup) {
           throw new Error(

@@ -1,7 +1,27 @@
-const { prefixBot, shippingAllowed } = require("../settings/necessary-settings");
+const fs = require("fs");
+const path = require("path");
+
+const {
+  prefixBot,
+  shippingAllowed,
+} = require("../settings/necessary-settings");
+
+const pathToStatesJson = path.join(
+  __dirname,
+  "..",
+  "..",
+  "data",
+  "states.json"
+);
+
+const rawData = fs.readFileSync(pathToStatesJson, "utf8");
+let rootActions = JSON.parse(rawData);
 
 const structuredMessages = {
-  readyMessage: shippingAllowed == 1 ? `to online, galera 🤖!\nUse *${prefixBot} help* para ver minhas funcionalidades` : "Estou online, porém sem permisão para executar minhas funções", 
+  readyMessage:
+    rootActions.bot_active == 1
+      ? `[Bot]\nEstou online, galera 🤖!\nUse *${prefixBot} help* para ver minhas funcionalidades`
+      : "[Bot]\Estou ativo, porém sem permisão para executar minhas funções",
   failureDownloadMessage:
     "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :(",
   technicalLimitationsMessage:
@@ -26,8 +46,11 @@ const structuredMessages = {
   acusationMessage:
     process.env.acusationMessage || "Na verdade isso é uma verdade sobre você",
 
-  preMsgAttempTextToAudio: process.env.preMsgAttempTextToAudio || "Vou tentar transformar essa mensagem em um áudio",
-  mgsErrorTextToAudio: "Infelizmente, não foi possível transformar seu texto em áudio"
+  preMsgAttempTextToAudio:
+    process.env.preMsgAttempTextToAudio ||
+    "Vou tentar transformar essa mensagem em um áudio",
+  mgsErrorTextToAudio:
+    "Infelizmente, não foi possível transformar seu texto em áudio",
 };
 
 module.exports = {

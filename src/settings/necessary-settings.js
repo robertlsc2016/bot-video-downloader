@@ -3,7 +3,8 @@ require("dotenv").config();
 const browserPath = process.env.PATH_BROWSER;
 const stringToGroup = process.env.STRING_TO_GROUP_WWEBJS;
 const openIaApiKey = process.env.OPENAI_API_KEY || false;
-const shippingAllowed = process.env.SHIPPING_ALLLOWED ?? 1
+// const shippingAllowed = process.env.SHIPPING_ALLLOWED ?? 1;
+
 const prefixBot = process.env.PREFIX_BOT || "/bot";
 const activeStatistics = process.env.activeStatistics || true;
 
@@ -20,7 +21,7 @@ module.exports = {
   activeStatistics,
   maxDurationYTMs,
   browserPath,
-  shippingAllowed,
+  // shippingAllowed,
   openIaApiKey,
   stringToGroup,
   prefixBot,

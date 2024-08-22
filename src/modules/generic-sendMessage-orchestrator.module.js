@@ -1,11 +1,9 @@
 const { MessageMedia } = require("whatsapp-web.js");
 const { client } = require("../settings/settings");
-const {
-  shippingAllowed,
-  stringToGroup,
-} = require("../settings/necessary-settings");
+const { stringToGroup } = require("../settings/necessary-settings");
 
 const { structuredMessages } = require("../utils/structured-messages");
+const { checkActions } = require("../utils/check-actions");
 const {
   successDownloadPhotoMessage,
   successDownloadMessage,
@@ -14,7 +12,7 @@ const {
   attemptToDownloadMessage,
   YTVideoDurationExceeded,
 } = structuredMessages;
-
+let sent = 0;
 module.exports.genericSendMessageOrchestrator = async function ({
   type,
   msg = false,
@@ -23,7 +21,10 @@ module.exports.genericSendMessageOrchestrator = async function ({
   content = false,
   situation,
 }) {
-  if (shippingAllowed == 0) return;
+  if (!(await checkActions({ typeAction: "bot_active" }))) {
+    return await client.sendMessage(stringToGroup, msg);
+  }
+
   switch (type) {
     case "text":
       switch (situation) {
@@ -50,7 +51,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
           break;
 
         default:
-          await sendTextMessage({ msg: `[Bot]\n ${msg}` });
+          await sendTextMessage({ msg: `[Bot]\n${msg}` });
           break;
       }
       break;
