@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "dev": "nodemon src/index.js",
     "postinstall": "npm prune",
-    "start": "node src/index.js"
+    "start": "node src/index.js", 
+    "dev" : "taskkill /F /IM chrome.exe /T || node src/index.js"
   },
   "dependencies": {
     "@distube/ytdl-core": "^4.14.4",
@@ -14,7 +14,7 @@
     "fs": "^0.0.1-security",
     "get-twitter-media": "^2.0.8",
     "gtts": "^0.2.1",
-    "instagram-url-direct": "^1.0.17",
+    "instagram-url-direct": "^1.0.18",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.0.3",
     "openai": "^4.52.2",

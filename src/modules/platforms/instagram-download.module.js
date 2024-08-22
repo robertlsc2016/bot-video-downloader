@@ -18,7 +18,6 @@ const { convertVideo } = require("../../utils/codec-adjuster");
 const { ISDOCUMENT } = require("../../settings/feature-enabler");
 
 module.exports.downloadInstagram = async function ({ url: url, type: type }) {
-
   try {
     const filePath = path.join(
       videosFolderPathBruteCodecs,
@@ -43,7 +42,7 @@ module.exports.downloadInstagram = async function ({ url: url, type: type }) {
 
     await genericSendMessageOrchestrator({
       filePath: type == "photo" ? filePathPhoto : filePath,
-      type: "media", 
+      type: "media",
       isDocument: false,
     });
   } catch (error) {
@@ -67,7 +66,7 @@ const getInstagramURL = async ({ url: rawURL }) => {
       "Problema no retorno do link da API getFbVideoInfo. Talvez o link de entrada esteja incorreto ou inválido."
     );
   } catch (error) {
-    console.error(error.message); // Log do erro para depuração
+    console.error(error.message);
     return false;
   }
 };
