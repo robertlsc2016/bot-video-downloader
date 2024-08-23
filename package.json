@@ -14,7 +14,7 @@
     "fs": "^0.0.1-security",
     "get-twitter-media": "^2.0.8",
     "gtts": "^0.2.1",
-    "instagram-url-direct": "^1.0.18",
+    "instagram-url-direct": "^1.0.19",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.0.3",
     "openai": "^4.52.2",
