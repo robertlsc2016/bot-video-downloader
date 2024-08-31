@@ -38,7 +38,9 @@ const downloadVDYoutube = async ({ url: url }) => {
 
     const mp4Formats = videoInfo.formats.filter(
       (format) =>
-        format.container == "mp4" && format.hasAudio && format.hasVideo
+        format.container == "mp4" &&
+        format.hasAudio &&
+        format.hasVideo 
     );
 
     if (Number(mp4Formats[0].approxDurationMs) > Number(maxDurationYTMs)) {
@@ -62,12 +64,12 @@ const downloadVDYoutube = async ({ url: url }) => {
 
         .on("finish", async () => {
           try {
-            // await convertVideo({
-            //   input: filePath,
-            //   platform: platformsNameDownload.youtube,
-            // });
+            await convertVideo({
+              input: filePath,
+              platform: platformsNameDownload.youtube,
+            });
             await genericSendMessageOrchestrator({
-              filePath: filePath,
+              filePath: outputPath,
               type: "media",
               isDocument: false,
             });
