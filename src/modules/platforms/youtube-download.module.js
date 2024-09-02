@@ -1,5 +1,3 @@
-const { client } = require("../../settings/settings");
-
 const fs = require("fs");
 const path = require("path");
 
@@ -11,7 +9,6 @@ const {
 } = require("../generic-sendMessage-orchestrator.module");
 const {
   platformsNameDownload,
-  failureDownloadMessage,
   videosFolderPathBruteCodecs,
   videosFolderPathAjustedCodecs,
 } = require("../../utils/constants");
@@ -21,6 +18,7 @@ const {
 } = require("../../settings/necessary-settings");
 const { convertVideo } = require("../../utils/codec-adjuster");
 const { structuredMessages } = require("../../utils/structured-messages");
+const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 
 const downloadVDYoutube = async ({ url: url }) => {
   const filePath = path.join(
@@ -38,9 +36,7 @@ const downloadVDYoutube = async ({ url: url }) => {
 
     const mp4Formats = videoInfo.formats.filter(
       (format) =>
-        format.container == "mp4" &&
-        format.hasAudio &&
-        format.hasVideo 
+        format.container == "mp4" && format.hasAudio && format.hasVideo
     );
 
     if (Number(mp4Formats[0].approxDurationMs) > Number(maxDurationYTMs)) {
@@ -51,32 +47,18 @@ const downloadVDYoutube = async ({ url: url }) => {
     if (mp4Formats[0].length == 0) {
       throw new Error(structuredMessages.incompatibleFormat);
     }
+
     if (mp4Formats.length > 0) {
-      const videoReadable = ytdl(url, { mp4Formats });
+      await downloadVideoOrPhoto({
+        url: mp4Formats[0].url,
+        filePath: filePath,
+      });
 
-      const writableStream = fs.createWriteStream(filePath);
-      videoReadable.pipe(writableStream);
-
-      writableStream
-        .on("error", (err) => {
-          throw new Error("erro ao salvar o video");
-        })
-
-        .on("finish", async () => {
-          try {
-            await convertVideo({
-              input: filePath,
-              platform: platformsNameDownload.youtube,
-            });
-            await genericSendMessageOrchestrator({
-              filePath: outputPath,
-              type: "media",
-              isDocument: false,
-            });
-          } catch {
-            throw new Error("erro ao enviar vídeo");
-          }
-        });
+      await genericSendMessageOrchestrator({
+        filePath: filePath,
+        type: "media",
+        isDocument: false,
+      });
     }
   } catch (error) {
     await genericSendMessageOrchestrator({

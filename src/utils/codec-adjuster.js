@@ -18,8 +18,11 @@ module.exports.convertVideo = async function ({
         .videoCodec("libx264") // Codec de vídeo H.264
         .audioCodec("aac") // Codec de áudio AAC
         .format("mp4") // Formato MP4
-        .outputOptions("-preset", "fast") // Ajuste a predefinição para velocidade
+        .outputOptions("-preset", "ultrafast") // Use a predefinição mais rápida para libx264
+        .outputOptions("-crf", "30") // Aumenta o CRF para reduzir o tempo de codificação (pior qualidade)
         .outputOptions("-movflags", "faststart") // Habilita início rápido para streaming
+        .outputOptions("-tune", "zerolatency") // Otimiza para latência mínima, útil para velocidade
+        .output("output.mp4")
         .on("end", () => {
           resolve();
         })

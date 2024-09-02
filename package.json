@@ -1,8 +1,8 @@
 {
   "scripts": {
     "postinstall": "npm prune",
-    "start": "node src/index.js", 
-    "dev" : "taskkill /F /IM chrome.exe /T || node src/index.js"
+    "start": "node src/index.js",
+    "dev": "taskkill /F /IM chrome.exe /T || node src/index.js"
   },
   "dependencies": {
     "@distube/ytdl-core": "^4.14.4",
