@@ -101,9 +101,10 @@ module.exports.runMessageOrchestrator = function () {
     if (await checkActions({ typeAction: "bot_active" })) {
       try {
         if (from !== stringToGroup) {
-          throw new Error(
-            `o envio não foi configurado para esse destinatário: ${message._data.id}`
+          console.error(
+            `Error: o envio não foi configurado para esse destinatário`
           );
+          return;
         }
 
         let url = null;

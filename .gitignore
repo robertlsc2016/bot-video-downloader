@@ -1,7 +1,11 @@
 node_modules
 auth
-.wwebjs_cache
+env-presets
 auth
+data/*.json
+
+.wwebjs_cache
+
 .env
 dev.env
 prod.env
@@ -9,6 +13,4 @@ prod.env
 *png
 *jpg
 *mp3
-env-presets
-data/statistics.json
-data/states.json
+

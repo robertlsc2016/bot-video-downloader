@@ -43,12 +43,15 @@ module.exports.downloadInstagram = async function ({
       filePath: type == "photo" ? filePathPhoto : filePath,
     });
 
-    toSend ??
-      (await genericSendMessageOrchestrator({
-        filePath: type == "photo" ? filePathPhoto : filePath,
+    if (toSend) {
+      const finalFilePath = type === "photo" ? filePathPhoto : filePath;
+
+      await genericSendMessageOrchestrator({
+        filePath: finalFilePath,
         type: "media",
         isDocument: false,
-      }));
+      });
+    }
   } catch (error) {
     console.error("Erro ao baixar o vídeo do instagram:", error);
     await genericSendMessageOrchestrator({

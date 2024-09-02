@@ -12,7 +12,7 @@ const {
   attemptToDownloadMessage,
   YTVideoDurationExceeded,
 } = structuredMessages;
-let sent = 0;
+
 module.exports.genericSendMessageOrchestrator = async function ({
   type,
   msg = false,
