@@ -49,6 +49,10 @@ const {
 } = require("../settings/feature-enabler");
 const { rootBotActions } = require("./bots-actions/root-bot-actions");
 const { checkActions } = require("../utils/check-actions");
+const {
+  downloadVideoOrPhoto: downloadVideo,
+  downloadVideoOrPhoto,
+} = require("../utils/downloadVideo");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -117,10 +121,11 @@ module.exports.runMessageOrchestrator = function () {
         ) {
           if (
             BOTTURNINSTICKER == "true" &&
-            message?._data?.type == "image" &&
-            message?._data?.caption?.includes(bot_actions.bot_sticker)
+            (message?._data?.caption?.includes(bot_actions.bot_sticker) ||
+              messageBody.includes(bot_actions.bot_sticker)) &&
+            (message?._data?.type == "image" || url?.includes("/p/"))
           ) {
-            turnInSticker({ message: message });
+            turnInSticker({ message: message, fromURL: url });
           }
 
           if (
@@ -189,7 +194,7 @@ module.exports.runMessageOrchestrator = function () {
           }
         }
 
-        if (url) {
+        if (url && !messageBody.includes(`${prefixBot}`)) {
           if (url.includes(platformsNameURL.tiktok)) {
             await sendMessageAttemptToDownload();
             return await downloadVDTiktok({ url: url });

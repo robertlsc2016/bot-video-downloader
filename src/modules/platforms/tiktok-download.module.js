@@ -1,5 +1,5 @@
 const path = require("path");
-const { downloadVideo } = require("../../utils/downloadVideo");
+const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
@@ -27,7 +27,7 @@ module.exports.downloadVDTiktok = async function ({ url }) {
     if (URLDownload == false)
       throw new Error("a url de download esta com problemas");
 
-    await downloadVideo({ url: URLDownload, filePath: filePathVideo });
+    await downloadVideoOrPhoto({ url: URLDownload, filePath: filePathVideo });
 
     await genericSendMessageOrchestrator({
       filePath: filePathVideo,

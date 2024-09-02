@@ -33,7 +33,7 @@ const videosFolderPathAjustedCodecs = path.join(
 
 const audiosPathFolder = path.join(__dirname, "..", "..", "audios");
 
-const imagesFolderPath = path.join("..", "..", "images");
+const imagesFolderPath = path.join(__dirname, "..", "..", "images");
 
 const platformsNameURL = {
   facebook: "facebook.com",
@@ -63,7 +63,7 @@ const bot_actions = {
   is_true: `${prefixBot} é verdade`,
   statistics: `${prefixBot} estatisticas`,
   pre_questions_chatgpt_bot_really: `${prefixBot} ??`,
-  pre_questions_chatgpt_bot:  `${prefixBot} ?`,
+  pre_questions_chatgpt_bot: `${prefixBot} ?`,
 };
 
 module.exports = {

@@ -1,15 +1,13 @@
 const path = require("path");
-const { downloadVideo } = require("../../utils/downloadVideo");
+const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
 const {
-  failureDownloadMessage,
   platformsNameDownload,
   videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
 const getTwitterMedia = require("get-twitter-media");
-const { ISDOCUMENT } = require("../../settings/feature-enabler");
 
 module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
   try {
@@ -22,7 +20,7 @@ module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
     if (URLDownload == false)
       throw new Error("a url de download esta com problemas");
 
-    await downloadVideo({ url: URLDownload, filePath: filePath });
+    await downloadVideoOrPhoto({ url: URLDownload, filePath: filePath });
     await genericSendMessageOrchestrator({
       filePath: filePath,
       type: "media",

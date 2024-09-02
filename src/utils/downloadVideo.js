@@ -1,10 +1,11 @@
 const axios = require("axios");
 const fs = require("fs");
 
-module.exports.downloadVideo = async function ({
+module.exports.downloadVideoOrPhoto = async function ({
   url: url,
   filePath: filePath,
 }) {
+
   const response = await axios({
     method: "get",
     url: url,

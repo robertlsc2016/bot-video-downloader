@@ -1,6 +1,6 @@
 const path = require("path");
 const getFbVideoInfo = require("fb-downloader-scrapper");
-const { downloadVideo } = require("../../utils/downloadVideo");
+const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
@@ -11,8 +11,6 @@ const {
   videosFolderPathAjustedCodecs,
   videosFolderPathBruteCodecs,
 } = require("../../utils/constants");
-const { convertVideo } = require("../../utils/codec-adjuster");
-const { ISDOCUMENT } = require("../../settings/feature-enabler");
 
 module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
   try {
@@ -30,7 +28,7 @@ module.exports.downloadVDFacebook = async function ({ from: from, url: url }) {
     if (getFacebookURL == false)
       throw new Error("a url de download esta com problemas");
 
-    await downloadVideo({
+    await downloadVideoOrPhoto({
       url: getFacebookURL.sd,
       filePath: filePath,
     });

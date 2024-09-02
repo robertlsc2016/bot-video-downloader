@@ -9,15 +9,18 @@ const {
   platformsNameDownload,
   videosFolderPathAjustedCodecs,
   videosFolderPathBruteCodecs,
+  imagesFolderPath,
 } = require("../../utils/constants");
 
 const instagramGetUrl = require("instagram-url-direct");
 
-const { downloadVideo } = require("../../utils/downloadVideo");
-const { convertVideo } = require("../../utils/codec-adjuster");
-const { ISDOCUMENT } = require("../../settings/feature-enabler");
+const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 
-module.exports.downloadInstagram = async function ({ url: url, type: type }) {
+module.exports.downloadInstagram = async function ({
+  url: url,
+  type: type,
+  toSend = true,
+}) {
   try {
     const filePath = path.join(
       videosFolderPathBruteCodecs,
@@ -25,7 +28,7 @@ module.exports.downloadInstagram = async function ({ url: url, type: type }) {
     );
 
     const filePathPhoto = path.join(
-      videosFolderPathBruteCodecs,
+      imagesFolderPath,
       platformsNameDownload.instagramPhoto
     );
 
@@ -35,16 +38,17 @@ module.exports.downloadInstagram = async function ({ url: url, type: type }) {
       throw new Error("a url de download esta com problemas");
     }
 
-    await downloadVideo({
+    await downloadVideoOrPhoto({
       url: URLDownload,
       filePath: type == "photo" ? filePathPhoto : filePath,
     });
 
-    await genericSendMessageOrchestrator({
-      filePath: type == "photo" ? filePathPhoto : filePath,
-      type: "media",
-      isDocument: false,
-    });
+    toSend ??
+      (await genericSendMessageOrchestrator({
+        filePath: type == "photo" ? filePathPhoto : filePath,
+        type: "media",
+        isDocument: false,
+      }));
   } catch (error) {
     console.error("Erro ao baixar o vídeo do instagram:", error);
     await genericSendMessageOrchestrator({
