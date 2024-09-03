@@ -195,7 +195,7 @@ module.exports.runMessageOrchestrator = function () {
           }
         }
 
-        if (url && !messageBody.includes(`${prefixBot}`)) {
+        if (url && !messageBody.includes("[Bot]")) {
           if (url.includes(platformsNameURL.tiktok)) {
             await sendMessageAttemptToDownload();
             return await downloadVDTiktok({ url: url });
@@ -224,7 +224,17 @@ module.exports.runMessageOrchestrator = function () {
             platformsNameURL.youtube.filter((yt) => url.includes(yt)).length > 0
           ) {
             await sendMessageAttemptToDownload();
-            return await downloadVDYoutube({ url: url });
+
+            if (messageBody.includes(`${prefixBot} extract audio`)) {
+              return await downloadVDYoutube({
+                url: url,
+                mode: "extractAudio",
+              });
+            }
+
+            return await downloadVDYoutube({
+              url: url,
+            });
           }
         }
       } catch (error) {

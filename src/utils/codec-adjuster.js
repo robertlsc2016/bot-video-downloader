@@ -10,7 +10,10 @@ module.exports.convertVideo = async function ({
   input: input,
   platform: platform,
 }) {
-  const outputPath = path.join(videosFolderPathAjustedCodecs, platform);
+  const outputPath = path.join(
+    videosFolderPathAjustedCodecs,
+    platformsNameDownload.youtubeAudio
+  );
 
   async function convertForWhatsApp() {
     return new Promise(async (resolve, reject) => {

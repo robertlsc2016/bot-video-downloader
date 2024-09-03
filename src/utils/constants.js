@@ -10,6 +10,7 @@ const tiktokRegex = /tiktok\.com/;
 const platformsNameDownload = {
   facebook: "facebook-video.mp4",
   youtube: "youtube-video.mp4",
+  youtubeAudio: "youtube-audio.mp3",
   instagram: "instagram-video.mp4",
   instagramPhoto: "instagram-photo.jpg",
   tiktok: "tiktok-video.mp4",
