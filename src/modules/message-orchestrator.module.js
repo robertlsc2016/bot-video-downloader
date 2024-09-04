@@ -55,6 +55,7 @@ const {
 } = require("../utils/downloadVideo");
 
 const logger = require("../logger");
+const { mentionAll } = require("./bots-actions/mention-all");
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -103,9 +104,7 @@ module.exports.runMessageOrchestrator = function () {
     if (await checkActions({ typeAction: "bot_active" })) {
       try {
         if (from !== stringToGroup) {
-          logger.warn(
-            `o envio não foi configurado para esse destinatário`
-          );
+          logger.warn(`o envio não foi configurado para esse destinatário`);
           return;
         }
 
@@ -122,6 +121,10 @@ module.exports.runMessageOrchestrator = function () {
             messageBody?.includes("[Bot]")
           )
         ) {
+          if (messageBody.includes("@todos")) {
+            return await mentionAll({ message: messageBody });
+          }
+
           if (
             BOTTURNINSTICKER == "true" &&
             (message?._data?.caption?.includes(bot_actions.bot_sticker) ||

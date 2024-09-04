@@ -15,6 +15,7 @@ const {
 const instagramGetUrl = require("instagram-url-direct");
 
 const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
+const logger = require("../../logger");
 
 module.exports.downloadInstagram = async function ({
   url: url,
@@ -53,7 +54,7 @@ module.exports.downloadInstagram = async function ({
       });
     }
   } catch (error) {
-    console.error("Erro ao baixar o vídeo do instagram:", error);
+    logger.error("Erro ao baixar o vídeo do instagram:", error);
     await genericSendMessageOrchestrator({
       type: "text",
       situation: "failureDownload",

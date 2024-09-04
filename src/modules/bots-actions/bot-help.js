@@ -30,6 +30,6 @@ module.exports.bothelp = async function ({ from: from }) {
       bot_actions.pre_questions_chatgpt_bot
     }* || Caso seja um questionamento sério, use o comando *${prefixBot} ??* [ Working: ${
       BOTCHATGPTISACTIVE == "true" ? "Sim🟢" : "Não🔴"
-    } ]\n8. Forneço as estatísticas do número de interações de cada participante do grupo, basta digitar *${prefixBot} estatisticas*\n9. Baixo fotos do instagram também, basta enviar o link da foto no grupo`,
+    } ]\n8. Forneço as estatísticas do número de interações de cada participante do grupo, basta digitar *${prefixBot} estatisticas*\n9. Baixo fotos do instagram também, basta enviar o link da foto no grupo\n10. Baixo apenas o áudio de vídeos do youtube, basta enviar *${prefixBot} extract audio [link]\n11. Posso mencionar todos do grupo, basta digitar *@todos* [sua mensagem]`,
   });
 };

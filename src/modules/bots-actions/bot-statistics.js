@@ -88,6 +88,7 @@ module.exports.showStatistics = async function () {
       participant.number_participations
     }\n`;
   });
+
   const getUsersForMentions = users.participants_structure.map(
     (user) => user.user + "@c.us"
   );
