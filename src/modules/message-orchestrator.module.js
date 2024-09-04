@@ -54,6 +54,8 @@ const {
   downloadVideoOrPhoto,
 } = require("../utils/downloadVideo");
 
+const logger = require("../logger");
+
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
@@ -61,7 +63,7 @@ module.exports.runMessageOrchestrator = function () {
   });
 
   client.on("ready", async () => {
-    console.log("Client is ready!");
+    logger.info("Client is ready!");
     await client.sendMessage(stringToGroup, structuredMessages.readyMessage);
   });
 
@@ -101,8 +103,8 @@ module.exports.runMessageOrchestrator = function () {
     if (await checkActions({ typeAction: "bot_active" })) {
       try {
         if (from !== stringToGroup) {
-          console.error(
-            `Error: o envio não foi configurado para esse destinatário`
+          logger.warn(
+            `o envio não foi configurado para esse destinatário`
           );
           return;
         }
