@@ -10,7 +10,7 @@ data/*.json
 dev.env
 prod.env
 *mp4
-
+*png
 *jpg
 *mp3
 
