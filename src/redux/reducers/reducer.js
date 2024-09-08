@@ -1,6 +1,7 @@
 const initialState = {
   valid_pokemon: "",
-  // EMPTY, STARTED, COMPLETE
+  // EMPTY, STARTED,
+  tip: "",
   status: "EMPTY",
 };
 
@@ -9,8 +10,16 @@ function pokemonReducer(state = initialState, action) {
     case "START":
       return {
         valid_pokemon: action.payload,
+        tip: action.tip,
         status: "STARTED",
       };
+
+    case "TIP": {
+      return {
+        ...state,
+        tip: action.tip,
+      };
+    }
 
     case "COMPLETE":
       return {

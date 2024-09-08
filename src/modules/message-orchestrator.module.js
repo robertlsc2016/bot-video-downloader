@@ -76,6 +76,11 @@ const pathMergedPhotos = path.resolve(
   "merged_normal.png"
 );
 
+const pathMergedPhotosDarkened = path.resolve(
+  rootPathPokemonFiles,
+  "merged_darkened.png"
+);
+
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
@@ -142,7 +147,9 @@ module.exports.runMessageOrchestrator = function () {
         ) {
           if (
             store.getState().pokemon.status == "STARTED" &&
-            messageBody.includes(store.getState().pokemon.valid_pokemon)
+            messageBody
+              .toLowerCase()
+              .includes(store.getState().pokemon.valid_pokemon)
           ) {
             return await sendPhotoPokemon({
               situation: "SOLVED",
@@ -158,11 +165,13 @@ module.exports.runMessageOrchestrator = function () {
                 return await whoIsThisPokemon();
 
               case "STARTED":
-                await genericSendMessageOrchestrator({
-                  type: "text",
+                return await genericSendMessageOrchestrator({
+                  type: "media",
+                  textMedia: false,
+                  filePath: pathMergedPhotosDarkened,
                   msg: "Já existe uma quest de pokemon iniciada! Tente acertar ;)",
                 });
-                return await whoIsThisPokemon();
+              // return await whoIsThisPokemon();
 
               case "COMPLETE":
                 return await whoIsThisPokemon();

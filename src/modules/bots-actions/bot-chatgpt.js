@@ -8,16 +8,31 @@ const {
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
+const store = require("../../redux/store");
+const {
+  start_WhosThatPokemon,
+  tip_WhosThatPokemon,
+} = require("../../redux/actions/actions");
 require("dotenv").config();
 
 const openai = new OpenAI({
   apiKey: openIaApiKey,
 });
 
-module.exports.botChatGpt = async ({ msg: msg, seriousness: seriousness }) => {
-  const instruction =
+module.exports.botChatGpt = async ({
+  msg: msg,
+  seriousness: seriousness,
+  toSend = true,
+  pokemonTip = false,
+}) => {
+  let instruction =
     seriousness == "high" ? instructionChatGPTSeriousness : instructionChatGPT;
-  const clearMessage = msg.replace(`${prefixBot} pergunta`, "");
+  const clearMessage = msg?.replace(`${prefixBot} ??`, "");
+
+  if (pokemonTip) {
+    instruction = `forneca alguma informação curta sobre o pokemon ${msg} sem citar o nome dele usando pouquíssimas palavras`;
+  }
+
   const assistant = await openai.beta.assistants.create({
     name: "bot-video-downloader",
     instructions: instruction,
@@ -43,10 +58,16 @@ module.exports.botChatGpt = async ({ msg: msg, seriousness: seriousness }) => {
       .filter((msg) => msg.role == "assistant");
     const filterText = msgs[0].content[0].text.value;
 
-    await genericSendMessageOrchestrator({
-      type: "text",
-      msg: filterText,
-    });
+    if (pokemonTip) {
+      return store.dispatch(tip_WhosThatPokemon({ tip: filterText }));
+    }
+
+    if (toSend) {
+      return await genericSendMessageOrchestrator({
+        type: "text",
+        msg: filterText,
+      });
+    }
   } else {
     console.log(run.status);
   }

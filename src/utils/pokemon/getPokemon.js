@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const store = require("../../redux/store");
 const { start_WhosThatPokemon } = require("../../redux/actions/actions");
+const logger = require("../../logger");
 
 const rootPathPokemonFiles = path.resolve(
   __dirname,
@@ -48,9 +49,14 @@ module.exports.getPokemon = async function () {
     responseType: "stream",
   });
 
-  console.log(pokemon.data.species.name);
+  logger.info(pokemon.data.species.name);
 
-  await store.dispatch(start_WhosThatPokemon(pokemon.data.species.name));
+  store.dispatch(
+    start_WhosThatPokemon({
+      pokemonName: pokemon.data.species.name,
+      pokemonTip: "",
+    })
+  );
 
   const writer = fs.createWriteStream(pathInput_PokemonPhoto);
   return await new Promise((resolve, reject) => {
