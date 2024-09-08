@@ -15,10 +15,11 @@ const {
 
 module.exports.genericSendMessageOrchestrator = async function ({
   type,
-  msg = false,
+  msg = "",
   filePath = false,
   isDocument = false,
   content = false,
+  textMedia = true,
   situation,
 }) {
   if (!(await checkActions({ typeAction: "bot_active" }))) {
@@ -60,16 +61,19 @@ module.exports.genericSendMessageOrchestrator = async function ({
       try {
         await client.sendMessage(stringToGroup, media, {
           sendMediaAsDocument: isDocument,
+          caption: msg,
         });
 
-        await client.sendMessage(
-          stringToGroup,
-          isDocument
-            ? technicalLimitationsMessage
-            : filePath.includes(".jpg")
-            ? successDownloadPhotoMessage
-            : successDownloadMessage
-        );
+        if (textMedia) {
+          await client.sendMessage(
+            stringToGroup,
+            isDocument
+              ? technicalLimitationsMessage
+              : filePath.includes(".jpg")
+              ? successDownloadPhotoMessage
+              : successDownloadMessage
+          );
+        }
       } catch (err) {
         console.error(err);
         await client.sendMessage(stringToGroup, failureDownloadMessage);

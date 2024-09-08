@@ -54,8 +54,27 @@ const {
   downloadVideoOrPhoto,
 } = require("../utils/downloadVideo");
 
+const path = require("path");
+
 const logger = require("../logger");
 const { mentionAll } = require("./bots-actions/mention-all");
+const { whoIsThisPokemon } = require("./bots-actions/who-is-that-pokemon");
+const store = require("../redux/store");
+const { sendPhotoPokemon } = require("../utils/pokemon/sendPhoto");
+const { complete_WhosThatPokemon } = require("../redux/actions/actions");
+
+const rootPathPokemonFiles = path.resolve(
+  __dirname,
+  "..",
+  "..",
+  "images",
+  "pokemons-media"
+);
+
+const pathMergedPhotos = path.resolve(
+  rootPathPokemonFiles,
+  "merged_normal.png"
+);
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -121,6 +140,35 @@ module.exports.runMessageOrchestrator = function () {
             messageBody?.includes("[Bot]")
           )
         ) {
+          if (
+            store.getState().pokemon.status == "STARTED" &&
+            messageBody.includes(store.getState().pokemon.valid_pokemon)
+          ) {
+            return await sendPhotoPokemon({
+              situation: "SOLVED",
+              path: pathMergedPhotos,
+            });
+          }
+
+          if (messageBody.includes(`${prefixBot} quem é esse pokemon?`)) {
+            const { pokemon } = store.getState();
+
+            switch (pokemon.status) {
+              case "EMPTY":
+                return await whoIsThisPokemon();
+
+              case "STARTED":
+                await genericSendMessageOrchestrator({
+                  type: "text",
+                  msg: "Já existe uma quest de pokemon iniciada! Tente acertar ;)",
+                });
+                return await whoIsThisPokemon();
+
+              case "COMPLETE":
+                return await whoIsThisPokemon();
+            }
+          }
+
           if (messageBody.includes("@todos")) {
             return await mentionAll({ message: messageBody });
           }
