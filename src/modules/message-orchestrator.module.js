@@ -1,4 +1,6 @@
-const { downloadVDFacebook } = require("./platforms/facebook-download.module");
+const {
+  downloadVDFacebook,
+} = require("./platforms/facebook/facebook-download.module");
 const { downloadVDTwitter } = require("./platforms/twitter-download.module");
 const { downloadVDYoutube } = require("./platforms/youtube-download.module");
 
@@ -21,9 +23,8 @@ const {
   genericSendMessageOrchestrator,
 } = require("./generic-sendMessage-orchestrator.module");
 const {
-  downloadVDInstagram,
   downloadInstagram,
-} = require("./platforms/instagram-download.module");
+} = require("./platforms/instagram/instagram-download.module");
 const { downloadVDTiktok } = require("./platforms/tiktok-download.module");
 const { headsOrTails } = require("./bots-actions/coin_flip");
 const { bothelp } = require("./bots-actions/bot-help");
@@ -62,6 +63,9 @@ const { whoIsThisPokemon } = require("./bots-actions/who-is-that-pokemon");
 const store = require("../redux/store");
 const { sendPhotoPokemon } = require("../utils/pokemon/sendPhoto");
 const { complete_WhosThatPokemon } = require("../redux/actions/actions");
+const {
+  downloadPintrest,
+} = require("./platforms/pintrest/pintrest-download.module");
 
 const rootPathPokemonFiles = path.resolve(
   __dirname,
@@ -106,6 +110,7 @@ module.exports.runMessageOrchestrator = function () {
 
     if (
       messageBody.includes(`${prefixBot} turn off`) &&
+      !messageBody.includes("[Bot]") &&
       ADMINSBOT.includes(message._data.id.participant)
     ) {
       return await rootBotActions({ action: "turnoff" });
@@ -113,6 +118,7 @@ module.exports.runMessageOrchestrator = function () {
 
     if (
       messageBody.includes(`${prefixBot} turn on`) &&
+      !messageBody.includes("[Bot]") &&
       ADMINSBOT.includes(message._data.id.participant)
     ) {
       return await rootBotActions({ action: "turnon" });
@@ -186,9 +192,9 @@ module.exports.runMessageOrchestrator = function () {
             BOTTURNINSTICKER == "true" &&
             (message?._data?.caption?.includes(bot_actions.bot_sticker) ||
               messageBody.includes(bot_actions.bot_sticker)) &&
-            (message?._data?.type == "image" || url?.includes("/p/"))
+            message?._data?.type == "image"
           ) {
-            turnInSticker({ message: message, fromURL: url });
+            return turnInSticker({ message: message, fromURL: url });
           }
 
           if (
@@ -258,14 +264,18 @@ module.exports.runMessageOrchestrator = function () {
         }
 
         if (url && !messageBody.includes("[Bot]")) {
+          const makeASticker = messageBody.includes(bot_actions.bot_sticker);
+
           if (url.includes(platformsNameURL.tiktok)) {
+            if (makeASticker) return isTurnSticker({ platform: "tiktok", url });
             await sendMessageAttemptToDownload();
             return await downloadVDTiktok({ url: url });
           }
 
           if (url.includes(platformsNameURL.instagram)) {
+            if (makeASticker)
+              return isTurnSticker({ platform: "instagram", url });
             await sendMessageAttemptToDownload();
-
             return await downloadInstagram({
               url: url,
               type: url.includes("/p/") ? "photo" : "video",
@@ -273,13 +283,32 @@ module.exports.runMessageOrchestrator = function () {
           }
 
           if (url.includes(platformsNameURL.facebook)) {
+            if (makeASticker)
+              return isTurnSticker({ platform: "facebook", url });
             await sendMessageAttemptToDownload();
-            return await downloadVDFacebook({ url: url });
+            return await downloadVDFacebook({
+              url: url,
+              type:
+                url.includes("/p/") || url.includes("/photo")
+                  ? "photo"
+                  : "video",
+            });
           }
 
           if (url.includes(platformsNameURL.x)) {
+            if (makeASticker) return isTurnSticker({ platform: "x", url });
             await sendMessageAttemptToDownload();
             return await downloadVDTwitter({ url: url });
+          }
+
+          if (
+            platformsNameURL.pinterest.filter((pin) => url.includes(pin))
+              .length > 0
+          ) {
+            if (makeASticker)
+              return isTurnSticker({ platform: "pintrest", url });
+            await sendMessageAttemptToDownload();
+            return await downloadPintrest({ url: url });
           }
 
           if (
@@ -310,5 +339,9 @@ module.exports.runMessageOrchestrator = function () {
       type: "text",
       situation: "attemptToDownload",
     });
+  };
+
+  const isTurnSticker = ({ url, message, platform }) => {
+    return turnInSticker({ url: url, platform });
   };
 };

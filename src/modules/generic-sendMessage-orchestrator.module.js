@@ -52,7 +52,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
           break;
 
         default:
-          await sendTextMessage({ msg: `[Bot]\n${msg}` });
+          await sendTextMessage({ msg: msg });
           break;
       }
       break;
@@ -92,5 +92,5 @@ module.exports.genericSendMessageOrchestrator = async function ({
 };
 
 const sendTextMessage = async ({ msg: msg }) => {
-  await client.sendMessage(stringToGroup, msg);
+  await client.sendMessage(stringToGroup, `[Bot]\n${msg}`);
 };

@@ -9,10 +9,12 @@ const tiktokRegex = /tiktok\.com/;
 
 const platformsNameDownload = {
   facebook: "facebook-video.mp4",
+  facebookPhoto: "facebook-photo.jpg",
   youtube: "youtube-video.mp4",
   youtubeAudio: "youtube-audio.mp3",
   instagram: "instagram-video.mp4",
   instagramPhoto: "instagram-photo.jpg",
+  pinterestPhoto: "pintrest-photo.jpg",
   tiktok: "tiktok-video.mp4",
   x: "x-video.mp4",
 };
@@ -39,6 +41,7 @@ const imagesFolderPath = path.join(__dirname, "..", "..", "images");
 const platformsNameURL = {
   facebook: "facebook.com",
   instagram: "instagram.com",
+  pinterest: ["pinterest.com", "pin.it"],
   x: "x.com",
   tiktok: "tiktok.com",
   youtube: [

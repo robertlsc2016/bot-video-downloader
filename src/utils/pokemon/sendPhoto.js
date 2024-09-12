@@ -21,7 +21,7 @@ module.exports.sendPhotoPokemon = async function ({ situation, path }) {
       await genericSendMessageOrchestrator({
         type: "media",
         textMedia: false,
-        msg: `[Bot]\n*${
+        msg: `${
           store.getState().pokemon.valid_pokemon
         }!!!* Você acertou o pokemon!`,
         filePath: path,

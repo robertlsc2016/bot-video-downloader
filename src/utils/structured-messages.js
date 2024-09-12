@@ -21,13 +21,13 @@ const structuredMessages = {
   readyMessage:
     rootActions.bot_active == 1
       ? `[Bot]\nEstou online, galera 🤖!\nUse *${prefixBot} help* para ver minhas funcionalidades`
-      : "[Bot]\Estou ativo, porém sem permisão para executar minhas funções",
+      : "[Bot]Estou ativo, porém sem permisão para executar minhas funções",
   failureDownloadMessage:
-    "infelizmente, não deu pra baixar seu vídeo, querido. Sinto muito :(",
+    "infelizmente, não deu pra baixar seu vídeo/foto, querido. Sinto muito :(",
   technicalLimitationsMessage:
     "Por limitações tecnicas, só conseguirei mandar o vídeo no formato documento",
-  attemptToDownloadMessage: "Tentarei baixar esse vídeo, um momento",
-  successDownloadMessage: "Olha seu vídeo ai!",
+  attemptToDownloadMessage: "Tentarei baixar esse vídeo/foto, um momento",
+  successDownloadMessage: "Olha seu vídeo/foto ai!",
   successDownloadPhotoMessage: "Sua foto!",
   YTVideoDurationExceededMessage:
     process.env.videoTimeExceeded ||

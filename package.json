@@ -7,7 +7,8 @@
   "dependencies": {
     "@distube/ytdl-core": "^4.14.4",
     "@sasmeee/igdl": "^1.0.0",
-    "axios": "^1.7.2",
+    "axios": "^1.7.7",
+    "cheerio": "^1.0.0",
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "fb-downloader-scrapper": "^2.0.0",
