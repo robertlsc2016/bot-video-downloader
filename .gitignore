@@ -9,6 +9,8 @@ data/*.json
 .env
 dev.env
 prod.env
+*png
+*jpg
 *mp4
 *mp3
 
