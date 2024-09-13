@@ -7,38 +7,18 @@ const ytdl = require("@distube/ytdl-core");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
-const {
-  platformsNameDownload,
-  videosFolderPathBruteCodecs,
-  videosFolderPathAjustedCodecs,
-  audiosPathFolder,
-} = require("../../utils/constants");
-const {
-  stringToGroup,
-  maxDurationYTMs,
-} = require("../../settings/necessary-settings");
+
+const { maxDurationYTMs } = require("../../settings/necessary-settings");
 
 const { structuredMessages } = require("../../utils/structured-messages");
 const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 const { convertVideoToAudio } = require("../../utils/convert-video-to-audio");
+const { pathTo } = require("../../utils/path-orchestrator");
 
 const downloadVDYoutube = async ({ url: url, mode }) => {
-  const filePath = path.join(
-    videosFolderPathBruteCodecs,
-    platformsNameDownload.youtube
-  );
+  const filePath = pathTo.medias.videos.bruteCodecsFolder.youtube;
 
-  const filePathAudio = path.join(
-    audiosPathFolder,
-    platformsNameDownload.youtube
-  );
-
-  const outputPath = path.join(
-    videosFolderPathAjustedCodecs,
-    platformsNameDownload.youtube
-  );
-
-  const outputAudioFilePath = path.join(audiosPathFolder, "audio.mp3");
+  const outputAudioFilePath = pathTo.medias.audios.audio;
 
   try {
     const videoInfo = await ytdl.getInfo(url);
@@ -65,7 +45,7 @@ const downloadVDYoutube = async ({ url: url, mode }) => {
 
       if (mode == "extractAudio") {
         await convertVideoToAudio({ path: filePath });
-        console.log("vamos tentar fazer o envio")
+        console.log("vamos tentar fazer o envio");
         return await genericSendMessageOrchestrator({
           filePath: outputAudioFilePath,
           type: "media",

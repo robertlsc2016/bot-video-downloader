@@ -1,16 +1,9 @@
 const fs = require("fs");
-const path = require("path");
 const { client } = require("../../settings/settings");
 const { stringToGroup } = require("../../settings/necessary-settings");
+const { pathTo } = require("../../utils/path-orchestrator");
 
-const pathToStatisticJson = path.join(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "data",
-  "statistics.json"
-);
+const pathToStatisticJson = pathTo.pathToStatisticJson;
 
 module.exports.botStatitics = async function ({ msg: message }) {
   const participant = message._data.id.participant.replace("@c.us", "");

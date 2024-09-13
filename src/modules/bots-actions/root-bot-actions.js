@@ -1,19 +1,11 @@
 const fs = require("fs");
-const path = require("path");
-
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
+const { pathTo } = require("../../utils/path-orchestrator");
 
 module.exports.rootBotActions = async function ({ action }) {
-  const pathToStatesJson = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "data",
-    "states.json"
-  );
+  const pathToStatesJson = pathTo.pathToStatesJson;
 
   const rawData = fs.readFileSync(pathToStatesJson, "utf8");
   let rootActions = JSON.parse(rawData);

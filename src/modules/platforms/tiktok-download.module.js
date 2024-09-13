@@ -1,26 +1,14 @@
-const path = require("path");
 const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
-const {
-  failureDownloadMessage,
-  platformsNameDownload,
-  videosFolderPath,
-  videosFolderPathAjustedCodecs,
-  videosFolderPathBruteCodecs,
-} = require("../../utils/constants");
 
 const TikChan = require("tikchan");
-const { convertVideo } = require("../../utils/codec-adjuster");
-const { ISDOCUMENT } = require("../../settings/feature-enabler");
+const { pathTo } = require("../../utils/path-orchestrator");
 
 module.exports.downloadVDTiktok = async function ({ url }) {
   try {
-    const filePathVideo = path.join(
-      videosFolderPathBruteCodecs,
-      platformsNameDownload.tiktok
-    );
+    const filePathVideo = pathTo.medias.videos.bruteCodecsFolder.tiktok;
 
     const URLDownload = await getXURL({ url: url });
 

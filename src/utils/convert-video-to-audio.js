@@ -1,8 +1,6 @@
 const ffmpeg = require("fluent-ffmpeg");
-const path = require("path");
-const { audiosPathFolder } = require("./constants");
-
-const outputFilePath = path.join(audiosPathFolder, "audio.mp3");
+const { pathTo } = require("./path-orchestrator");
+const outputFilePath = pathTo.medias.audios.audio;
 
 module.exports.convertVideoToAudio = async function ({ path }) {
   async function convertVideoToAudio() {

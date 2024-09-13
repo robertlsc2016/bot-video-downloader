@@ -1,13 +1,7 @@
 const fs = require("fs");
-const path = require("path");
+const { pathTo } = require("./path-orchestrator");
 
-const pathToStatesJson = path.join(
-  __dirname,
-  "..",
-  "..",
-  "data",
-  "states.json"
-);
+const pathToStatesJson = pathTo.pathToStatesJson
 
 module.exports.checkActions = async function ({ typeAction }) {
   const rawData = fs.readFileSync(pathToStatesJson, "utf8");

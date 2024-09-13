@@ -1,20 +1,11 @@
 const ffmpeg = require("fluent-ffmpeg");
-const path = require("path");
-const {
-  videosFolderPath,
-  platformsNameDownload,
-  videosFolderPathAjustedCodecs,
-} = require("./constants");
+const { pathTo } = require("./path-orchestrator");
 
 module.exports.convertVideo = async function ({
   input: input,
   platform: platform,
 }) {
-  const outputPath = path.join(
-    videosFolderPathAjustedCodecs,
-    platformsNameDownload.youtubeAudio
-  );
-
+  const outputPath = pathTo.medias.videos.ajustedCodecsFolder.youtube;
   async function convertForWhatsApp() {
     return new Promise(async (resolve, reject) => {
       ffmpeg(input)

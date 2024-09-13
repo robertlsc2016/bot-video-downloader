@@ -1,21 +1,13 @@
-const axios = require("axios");
-const path = require("path");
-
 const { downloadVideoOrPhoto } = require("../../../utils/downloadVideo");
-const {
-  platformsNameDownload,
-  imagesFolderPath,
-} = require("../../../utils/constants");
+
 const {
   genericSendMessageOrchestrator,
 } = require("../../generic-sendMessage-orchestrator.module");
 const logger = require("../../../logger");
 const { getPintrestURL } = require("./pintrest-getURL.module");
+const { pathTo } = require("../../../utils/path-orchestrator");
 
-const filePathPhoto = path.join(
-  imagesFolderPath,
-  platformsNameDownload.pinterestPhoto
-);
+const filePathPhoto = pathTo.medias.images.pintrest
 
 module.exports.downloadPintrest = async function ({ url }) {
   const urlPhoto = await getPintrestURL({ url });

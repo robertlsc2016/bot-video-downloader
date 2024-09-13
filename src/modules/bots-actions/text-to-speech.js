@@ -1,15 +1,14 @@
 const gTTS = require("gtts");
-const path = require("path");
 const fs = require("fs");
 
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
 const { structuredMessages } = require("../../utils/structured-messages");
-const { audiosPathFolder } = require("../../utils/constants");
+const { pathTo } = require("../../utils/path-orchestrator");
 
 module.exports.textToSpeech = async function ({ msg: msg }) {
-  const audioPath = path.join(audiosPathFolder, "audio.mp3");
+  const audioPath = pathTo.medias.audiosPathFolder;
 
   const speech = msg;
   const gtts = new gTTS(speech, "pt-br");

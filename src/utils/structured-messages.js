@@ -1,18 +1,9 @@
 const fs = require("fs");
-const path = require("path");
 
-const {
-  prefixBot,
-  shippingAllowed,
-} = require("../settings/necessary-settings");
+const { prefixBot } = require("../settings/necessary-settings");
+const { pathTo } = require("./path-orchestrator");
 
-const pathToStatesJson = path.join(
-  __dirname,
-  "..",
-  "..",
-  "data",
-  "states.json"
-);
+const pathToStatesJson = pathTo.pathToStatesJson;
 
 const rawData = fs.readFileSync(pathToStatesJson, "utf8");
 let rootActions = JSON.parse(rawData);

@@ -19,25 +19,6 @@ const platformsNameDownload = {
   x: "x-video.mp4",
 };
 
-const videosFolderPathBruteCodecs = path.join(
-  __dirname,
-  "..",
-  "..",
-  "videos",
-  "brute-codecs"
-);
-const videosFolderPathAjustedCodecs = path.join(
-  __dirname,
-  "..",
-  "..",
-  "videos",
-  "ajusted-codecs"
-);
-
-const audiosPathFolder = path.join(__dirname, "..", "..", "audios");
-
-const imagesFolderPath = path.join(__dirname, "..", "..", "images");
-
 const platformsNameURL = {
   facebook: "facebook.com",
   instagram: "instagram.com",
@@ -73,15 +54,11 @@ const bot_actions = {
 module.exports = {
   tiktokRegex,
   platformsNameDownload,
-  videosFolderPathBruteCodecs,
   regexURL,
   facebookRegex,
   twitterRegex,
   instagramRegex,
   urlsYT,
-  imagesFolderPath,
   bot_actions,
-  videosFolderPathAjustedCodecs,
   platformsNameURL,
-  audiosPathFolder,
 };

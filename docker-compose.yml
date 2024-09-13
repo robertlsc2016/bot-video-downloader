@@ -36,3 +36,4 @@ services:
     volumes:
       - ./auth:/app/auth
       - ./data:/app/data
+      - ./data:/app/medias

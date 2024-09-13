@@ -1,20 +1,14 @@
-const path = require("path");
 const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
-const {
-  platformsNameDownload,
-  videosFolderPathBruteCodecs,
-} = require("../../utils/constants");
+
 const getTwitterMedia = require("get-twitter-media");
+const { pathTo } = require("../../utils/path-orchestrator");
 
 module.exports.downloadVDTwitter = async function ({ from: from, url: url }) {
   try {
-    const filePath = path.join(
-      videosFolderPathBruteCodecs,
-      platformsNameDownload.x
-    );
+    const filePath = pathTo.medias.videos.bruteCodecsFolder.x;
     const URLDownload = await getXURL({ url: url });
 
     if (URLDownload == false)

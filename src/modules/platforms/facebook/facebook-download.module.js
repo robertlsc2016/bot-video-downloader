@@ -1,29 +1,17 @@
-const path = require("path");
-const getFbVideoInfo = require("fb-downloader-scrapper");
+
 const { downloadVideoOrPhoto } = require("../../../utils/downloadVideo");
 const {
   genericSendMessageOrchestrator,
 } = require("../../generic-sendMessage-orchestrator.module");
-const {
-  platformsNameDownload,
 
-  videosFolderPathAjustedCodecs,
-  videosFolderPathBruteCodecs,
-  imagesFolderPath,
-} = require("../../../utils/constants");
 const { url } = require("inspector");
 const { getFacebookURL } = require("./facebook-getURL.module");
 const logger = require("../../../logger");
+const { pathTo } = require("../../../utils/path-orchestrator");
 
-const filePath = path.join(
-  videosFolderPathBruteCodecs,
-  platformsNameDownload.facebook
-);
+const filePath = pathTo.medias.videos.bruteCodecsFolder.facebook;
+const filePathPhoto = pathTo.medias.images.facebook;
 
-const filePathPhoto = path.join(
-  imagesFolderPath,
-  platformsNameDownload.facebookPhoto
-);
 module.exports.downloadVDFacebook = async function ({ url: url, type: type }) {
   try {
     const path = type == "photo" ? filePathPhoto : filePath;
