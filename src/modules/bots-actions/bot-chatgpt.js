@@ -13,6 +13,7 @@ const {
   start_WhosThatPokemon,
   tip_WhosThatPokemon,
 } = require("../../redux/actions/actions");
+const logger = require("../../logger");
 require("dotenv").config();
 
 const openai = new OpenAI({
@@ -69,6 +70,6 @@ module.exports.botChatGpt = async ({
       });
     }
   } else {
-    console.log(run.status);
+    logger.info(run.status);
   }
 };

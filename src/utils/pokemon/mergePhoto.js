@@ -44,11 +44,9 @@ module.exports.mergePhoto = async ({ input, output, background }) => {
           if (err) {
             logger.error("Erro ao mesclar imagens");
             return;
-            // console.error("Erro ao mesclar imagens:", err);
           } else {
             logger.info("Imagem criada com sucesso");
             return;
-            // console.log("Imagem criada com sucesso:", info);
           }
         });
     })

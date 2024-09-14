@@ -6,6 +6,7 @@ const {
 } = require("../generic-sendMessage-orchestrator.module");
 const { structuredMessages } = require("../../utils/structured-messages");
 const { pathTo } = require("../../utils/path-orchestrator");
+const logger = require("../../logger");
 
 module.exports.textToSpeech = async function ({ msg: msg }) {
   const audioPath = pathTo.medias.audiosPathFolder;
@@ -35,9 +36,9 @@ async function deletarArquivo(audioPath) {
   if (fs.existsSync(audioPath)) {
     fs.unlink(audioPath, (err) => {
       if (err) {
-        console.error("Erro ao deletar o arquivo:", err);
+        logger.error("Erro ao deletar o arquivo:", err);
       } else {
-        console.log("Arquivo deletado com sucesso");
+        logger.info("Arquivo deletado com sucesso");
       }
     });
   }

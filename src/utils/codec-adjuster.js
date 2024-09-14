@@ -1,5 +1,6 @@
 const ffmpeg = require("fluent-ffmpeg");
 const { pathTo } = require("./path-orchestrator");
+const logger = require("../logger");
 
 module.exports.convertVideo = async function ({
   input: input,
@@ -30,9 +31,9 @@ module.exports.convertVideo = async function ({
 
   await convertForWhatsApp(input, outputPath)
     .then(() => {
-      console.log("Conversão de vídeo completa!");
+      logger.info("Conversão de vídeo completa!");
     })
     .catch((error) => {
-      console.error("Falha na conversão de vídeo:", error);
+      logger.error("Falha na conversão de vídeo:", error);
     });
 };

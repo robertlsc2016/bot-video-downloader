@@ -16,18 +16,35 @@ const {
   getFacebookURL,
 } = require("../platforms/facebook/facebook-getURL.module");
 
-module.exports.turnInSticker = async function ({ message, url, platform }) {
+module.exports.turnInSticker = async function ({
+  message,
+  url,
+  platform,
+  situation,
+}) {
   let image;
 
-  if (url) {
-    const urlPhoto = await filterPlatform({ url, platform });
-    image = await MessageMedia.fromUrl(urlPhoto);
-  } else {
-    const mediafile = await message.downloadMedia();
-    image = new MessageMedia("image/jpeg", mediafile.data, "image.jpg");
+  switch (situation) {
+    case "image":
+      const mediafile = await message.downloadMedia();
+      image = new MessageMedia("image/jpeg", mediafile.data, "image.jpg");
+      break;
+
+    case "url":
+      const urlPhoto = await filterPlatform({ url, platform });
+      image = await MessageMedia.fromUrl(urlPhoto);
+      break;
+
+    case "answered":
+      image = new MessageMedia(
+        "image/jpeg",
+        message._data?.quotedMsg.body,
+        "image.jpg"
+      );
+      break;
   }
 
-  await genericSendMessageOrchestrator({
+  return await genericSendMessageOrchestrator({
     from: stringToGroup,
     content: image,
     type: "sticker",

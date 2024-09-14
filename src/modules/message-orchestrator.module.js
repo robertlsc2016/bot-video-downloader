@@ -107,7 +107,6 @@ module.exports.runMessageOrchestrator = function () {
 
   const messageSteps = async ({ from: from, message: message }) => {
     const messageBody = message.body;
-
     if (
       messageBody.includes(`${prefixBot} turn off`) &&
       !messageBody.includes("[Bot]") &&
@@ -177,8 +176,6 @@ module.exports.runMessageOrchestrator = function () {
                   filePath: pathMergedPhotosDarkened,
                   msg: "Já existe uma quest de pokemon iniciada! Tente acertar ;)",
                 });
-              // return await whoIsThisPokemon();
-
               case "COMPLETE":
                 return await whoIsThisPokemon();
             }
@@ -192,9 +189,19 @@ module.exports.runMessageOrchestrator = function () {
             BOTTURNINSTICKER == "true" &&
             (message?._data?.caption?.includes(bot_actions.bot_sticker) ||
               messageBody.includes(bot_actions.bot_sticker)) &&
-            message?._data?.type == "image"
+            (message?._data?.type == "image" ||
+              message._data?.quotedMsg.type == "image")
           ) {
-            return turnInSticker({ message: message, fromURL: url });
+            message._data?.quotedMsg && message._data?.quotedMsg.type == "image"
+              ? turnInSticker({
+                  message: message,
+                  situation: "answered",
+                })
+              : turnInSticker({
+                  message: message,
+                  fromURL: url,
+                  situation: "image",
+                });
           }
 
           if (
@@ -267,14 +274,23 @@ module.exports.runMessageOrchestrator = function () {
           const makeASticker = messageBody.includes(bot_actions.bot_sticker);
 
           if (url.includes(platformsNameURL.tiktok)) {
-            if (makeASticker) return isTurnSticker({ platform: "tiktok", url });
+            if (makeASticker)
+              return isTurnSticker({
+                platform: "tiktok",
+                url,
+                situation: "url",
+              });
             await sendMessageAttemptToDownload();
             return await downloadVDTiktok({ url: url });
           }
 
           if (url.includes(platformsNameURL.instagram)) {
             if (makeASticker)
-              return isTurnSticker({ platform: "instagram", url });
+              return isTurnSticker({
+                platform: "instagram",
+                url,
+                situation: "url",
+              });
             await sendMessageAttemptToDownload();
             return await downloadInstagram({
               url: url,
@@ -284,7 +300,11 @@ module.exports.runMessageOrchestrator = function () {
 
           if (url.includes(platformsNameURL.facebook)) {
             if (makeASticker)
-              return isTurnSticker({ platform: "facebook", url });
+              return isTurnSticker({
+                platform: "facebook",
+                url,
+                situation: "url",
+              });
             await sendMessageAttemptToDownload();
             return await downloadVDFacebook({
               url: url,
@@ -296,7 +316,8 @@ module.exports.runMessageOrchestrator = function () {
           }
 
           if (url.includes(platformsNameURL.x)) {
-            if (makeASticker) return isTurnSticker({ platform: "x", url });
+            if (makeASticker)
+              return isTurnSticker({ platform: "x", url, situation: "url" });
             await sendMessageAttemptToDownload();
             return await downloadVDTwitter({ url: url });
           }
@@ -306,7 +327,11 @@ module.exports.runMessageOrchestrator = function () {
               .length > 0
           ) {
             if (makeASticker)
-              return isTurnSticker({ platform: "pintrest", url });
+              return isTurnSticker({
+                platform: "pintrest",
+                url,
+                situation: "url",
+              });
             await sendMessageAttemptToDownload();
             return await downloadPintrest({ url: url });
           }
@@ -341,7 +366,7 @@ module.exports.runMessageOrchestrator = function () {
     });
   };
 
-  const isTurnSticker = ({ url, message, platform }) => {
-    return turnInSticker({ url: url, platform });
+  const isTurnSticker = ({ url, message, platform, situation }) => {
+    return turnInSticker({ url: url, platform, situation });
   };
 };

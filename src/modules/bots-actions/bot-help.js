@@ -16,9 +16,9 @@ const {
 module.exports.bothelp = async function ({ from: from }) {
   await genericSendMessageOrchestrator({
     type: "text",
-    msg: `Minhas funcionalidades atuais são:\n1. Posso baixar videos de Tiktok, Instagram, Facebook, Twitter e X(Ex-Twitter) basta enviar a URL do vídeo\n2. Posso jogar cara ou coroa, basta digita exatamente: *${prefixBot} cara ou coroa* [ Working: ${
+    msg: `Minhas funcionalidades atuais são:\n1. Posso baixar videos de Tiktok, Instagram, Facebook, Pintrest e ~X(Ex-Twitter)~ basta enviar a URL do vídeo\n2. Posso jogar cara ou coroa, basta digita exatamente: *${prefixBot} cara ou coroa* [ Working: ${
       BOTCOINFLIP == "true" ? "Sim🟢" : "Não🔴"
-    } ]\n3. Posso transformar imagem em sticker, basta mandar a imagem (ou link) com a descrição *${prefixBot} sticker* [ Working: ${
+    } ]\n3. Posso transformar imagem em sticker, basta mandar a imagem/link/responder imagem com a descrição *${prefixBot} sticker* [ Working: ${
       BOTTURNINSTICKER == "true" ? "Sim🟢" : "Não🔴"
     } ] \n4. Posso marcar alguém aleatoriamente do grupo, basta digitar *${prefixBot} quem é* ... [ Working: ${
       BOTWHOIS == "true" ? "Sim🟢" : "Não🔴"
