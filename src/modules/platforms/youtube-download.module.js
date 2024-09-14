@@ -45,7 +45,6 @@ const downloadVDYoutube = async ({ url: url, mode }) => {
 
       if (mode == "extractAudio") {
         await convertVideoToAudio({ path: filePath });
-        console.log("vamos tentar fazer o envio");
         return await genericSendMessageOrchestrator({
           filePath: outputAudioFilePath,
           type: "media",
