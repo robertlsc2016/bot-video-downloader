@@ -15,6 +15,7 @@ const {
 const {
   getFacebookURL,
 } = require("../platforms/facebook/facebook-getURL.module");
+const { client } = require("../../settings/settings");
 
 module.exports.turnInSticker = async function ({
   message,
@@ -36,11 +37,19 @@ module.exports.turnInSticker = async function ({
       break;
 
     case "answered":
-      image = new MessageMedia(
-        "image/jpeg",
-        message._data?.quotedMsg.body,
-        "image.jpg"
+      if (!message._data.quotedMsg?.id?._serialized) {
+        return await genericSendMessageOrchestrator({
+          type: "text",
+          msg: "Não tenho as informações desta mensagem. Envie novamente na conversa e tente novamente",
+        });
+      }
+
+      const getImage = await client.getMessageById(
+        message._data.quotedMsg?.id._serialized
       );
+
+      const mediafileAnswed = await getImage.downloadMedia();
+      image = new MessageMedia("image/jpeg", mediafileAnswed.data, "image.jpg");
       break;
   }
 
