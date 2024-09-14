@@ -1,5 +1,8 @@
 const { stringToGroup } = require("../../settings/necessary-settings");
 const { client } = require("../../settings/settings");
+const {
+  genericSendMessageOrchestrator,
+} = require("../generic-sendMessage-orchestrator.module");
 
 module.exports.mentionAll = async function ({ message }) {
   const chat = await client.getChatById(stringToGroup);
@@ -15,7 +18,10 @@ module.exports.mentionAll = async function ({ message }) {
     (user) => user.id.user + "@c.us"
   );
 
-  return await client.sendMessage(stringToGroup, `${clearMessage}`, {
+  return await genericSendMessageOrchestrator({
+    msg: clearMessage,
+    type: "text",
+    situation: "mentions",
     mentions: getUsersForMentions,
   });
 };

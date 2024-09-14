@@ -21,6 +21,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
   content = false,
   textMedia = true,
   situation,
+  mentions = [],
 }) {
   if (!(await checkActions({ typeAction: "bot_active" }))) {
     return await client.sendMessage(stringToGroup, msg);
@@ -29,6 +30,13 @@ module.exports.genericSendMessageOrchestrator = async function ({
   switch (type) {
     case "text":
       switch (situation) {
+        case "mentions":
+          await sendTextMessage({
+            msg: msg,
+            mentions: mentions,
+          });
+          break;
+
         case "successDownload":
           await sendTextMessage({
             msg: successDownloadMessage,
@@ -91,6 +99,8 @@ module.exports.genericSendMessageOrchestrator = async function ({
   }
 };
 
-const sendTextMessage = async ({ msg: msg }) => {
-  await client.sendMessage(stringToGroup, `[Bot]\n${msg}`);
+const sendTextMessage = async ({ msg: msg, mentions: mentions }) => {
+  return await client.sendMessage(stringToGroup, `[Bot]\n${msg}`, {
+    mentions: mentions,
+  });
 };
