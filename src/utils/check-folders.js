@@ -2,9 +2,16 @@ const fs = require("fs");
 const { pathTo } = require("./path-orchestrator");
 
 module.exports.ensureDirectoryExists = async function () {
-  const folderAjustedCodecs = pathTo.medias.videos.ajustedCodecsFolder.pathFolder;
+  const folderAjustedCodecs =
+    pathTo.medias.videos.ajustedCodecsFolder.pathFolder;
   const folderBruteCodecs = pathTo.medias.videos.bruteCodecsFolder.pathFolder;
   const folderAudios = pathTo.medias.audios.pathFolder;
+  const folderImages = pathTo.medias.images.imagesFolder;
+
+  if (!fs.existsSync(folderImages)) {
+    fs.mkdirSync(folderImages, { recursive: true });
+    console.log(`Directory created: ${folderImages}`);
+  }
 
   if (!fs.existsSync(folderAudios)) {
     fs.mkdirSync(folderAudios, { recursive: true });

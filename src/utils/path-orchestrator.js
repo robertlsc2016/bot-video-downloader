@@ -9,7 +9,7 @@ const pathTo = {
 
   medias: {
     audios: {
-      pathFolder: path.join(rooPath, "medias", "audios", "audios"),
+      pathFolder: path.join(rooPath, "medias", "audios"),
       audio: path.join(rooPath, "medias", "audios", "audio.mp3"),
       youtube: path.join(
         rooPath,
