@@ -1,43 +1,23 @@
-const axios = require("axios");
 const path = require("path");
-const sharp = require("sharp");
-const fs = require("fs");
+
 const { getPokemon } = require("../../utils/pokemon/getPokemon");
 const { darkenPhoto } = require("../../utils/pokemon/darkenPhoto");
 const { mergePhoto } = require("../../utils/pokemon/mergePhoto");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
+
 const { sendPhotoPokemon } = require("../../utils/pokemon/sendPhoto");
 const { botChatGpt } = require("./bot-chatgpt");
 const store = require("../../redux/store");
+const { pathTo } = require("../../utils/path-orchestrator");
 
-const rootPathPokemonFiles = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "images",
-  "pokemons-media"
-);
-
-const pathInput_PokemonPhoto = path.resolve(
-  rootPathPokemonFiles,
-  "pokemon.png"
-);
-const pathDarkened_PokemonPhoto = path.resolve(
-  rootPathPokemonFiles,
-  "pokemon_darkened.png"
-);
-const pathMergedPhotos = path.resolve(
-  rootPathPokemonFiles,
-  "merged_normal.png"
-);
-
-const pathMergedPhotosDarkened = path.resolve(
-  rootPathPokemonFiles,
-  "merged_darkened.png"
-);
+const pathInput_PokemonPhoto = pathTo.medias.images.pokemonsMedia.pokemon;
+const pathDarkened_PokemonPhoto =
+  pathTo.medias.images.pokemonsMedia.pokemon_darkened;
+const pathMergedPhotos = pathTo.medias.images.pokemonsMedia.merged_normal;
+const pathMergedPhotosDarkened =
+  pathTo.medias.images.pokemonsMedia.merged_darkened;
 
 module.exports.whoIsThisPokemon = async function () {
   await genericSendMessageOrchestrator({

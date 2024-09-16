@@ -1,31 +1,13 @@
 const sharp = require("sharp");
 const path = require("path");
 const logger = require("../../logger");
+const { pathTo } = require("../path-orchestrator");
 
-const pathBackground_Photo_1 = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "images",
-  "pokemons-media",
-  "background1.png"
-);
-
-const pathBackground_Photo_2 = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "images",
-  "pokemons-media",
-  "background2.png"
-);
+const pathBackground_Photo_1 = pathTo.medias.images.pokemonsMedia.pokemonsBg1;
+const pathBackground_Photo_2 = pathTo.medias.images.pokemonsMedia.pokemonsBg2;
 
 module.exports.mergePhoto = async ({ input, output, background }) => {
   return await sharp(input)
-    // .resize(200, 200)
-
     .resize(background == 1 ? 200 : 250, background == 1 ? 200 : 250)
     .toBuffer()
     .then((resizedOverlayBuffer) => {

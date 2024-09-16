@@ -4,19 +4,11 @@ const path = require("path");
 const store = require("../../redux/store");
 const { start_WhosThatPokemon } = require("../../redux/actions/actions");
 const logger = require("../../logger");
+const { pathTo } = require("../path-orchestrator");
 
-const rootPathPokemonFiles = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "images",
-  "pokemons-media"
-);
-const pathBackground_Photo = path.resolve(
-  rootPathPokemonFiles,
-  "background.png"
-);
+const rootPathPokemonFiles =
+  pathTo.medias.images.pokemonsMedia.pokemonsMediaFolder;
+
 const pathInput_PokemonPhoto = path.resolve(
   rootPathPokemonFiles,
   "pokemon.png"
@@ -64,6 +56,4 @@ module.exports.getPokemon = async function () {
     writer.on("finish", resolve);
     writer.on("error", reject);
   });
-
-  // return pokemon.data.species.name;
 };

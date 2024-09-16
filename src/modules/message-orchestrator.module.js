@@ -50,11 +50,6 @@ const {
 } = require("../settings/feature-enabler");
 const { rootBotActions } = require("./bots-actions/root-bot-actions");
 const { checkActions } = require("../utils/check-actions");
-const {
-  downloadVideoOrPhoto: downloadVideo,
-  downloadVideoOrPhoto,
-} = require("../utils/downloadVideo");
-
 const path = require("path");
 
 const logger = require("../logger");
@@ -62,18 +57,14 @@ const { mentionAll } = require("./bots-actions/mention-all");
 const { whoIsThisPokemon } = require("./bots-actions/who-is-that-pokemon");
 const store = require("../redux/store");
 const { sendPhotoPokemon } = require("../utils/pokemon/sendPhoto");
-const { complete_WhosThatPokemon } = require("../redux/actions/actions");
 const {
   downloadPintrest,
 } = require("./platforms/pintrest/pintrest-download.module");
+const { filterValidator } = require("./filter-validator.module");
+const { pathTo } = require("../utils/path-orchestrator");
 
-const rootPathPokemonFiles = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "images",
-  "pokemons-media"
-);
+const rootPathPokemonFiles =
+  pathTo.medias.images.pokemonsMedia.pokemonsMediaFolder;
 
 const pathMergedPhotos = path.resolve(
   rootPathPokemonFiles,
@@ -107,25 +98,30 @@ module.exports.runMessageOrchestrator = function () {
 
   const messageSteps = async ({ from: from, message: message }) => {
     const messageBody = message.body;
+
     if (
-      messageBody.includes(`${prefixBot} turn off`) &&
-      !messageBody.includes("[Bot]") &&
-      ADMINSBOT.includes(message._data.id.participant)
+      await filterValidator({
+        typeAction: "turnOff",
+        params: { messageBody, message, ADMINSBOT },
+      })
     ) {
       return await rootBotActions({ action: "turnoff" });
     }
 
     if (
-      messageBody.includes(`${prefixBot} turn on`) &&
-      !messageBody.includes("[Bot]") &&
-      ADMINSBOT.includes(message._data.id.participant)
+      await filterValidator({
+        typeAction: "turnOn",
+        params: { messageBody, message, ADMINSBOT },
+      })
     ) {
       return await rootBotActions({ action: "turnon" });
     }
 
     if (
-      messageBody.includes(`${prefixBot} `) &&
-      !(await checkActions({ typeAction: "bot_active" }))
+      await filterValidator({
+        typeAction: "botIsOff",
+        params: { messageBody, message },
+      })
     ) {
       return await client.sendMessage(stringToGroup, "🤖💤💤💤...");
     }
@@ -144,17 +140,16 @@ module.exports.runMessageOrchestrator = function () {
         }
 
         if (
-          !(
-            (message._data.id.fromMe &&
-              messageBody?.includes("funcionalidades")) ||
-            messageBody?.includes("[Bot]")
-          )
+          await filterValidator({
+            typeAction: "ignoreMessageBot",
+            params: { messageBody },
+          })
         ) {
           if (
-            store.getState().pokemon.status == "STARTED" &&
-            messageBody
-              .toLowerCase()
-              .includes(store.getState().pokemon.valid_pokemon)
+            await filterValidator({
+              typeAction: "pokemonIsSolved",
+              params: { messageBody },
+            })
           ) {
             return await sendPhotoPokemon({
               situation: "SOLVED",
@@ -162,7 +157,12 @@ module.exports.runMessageOrchestrator = function () {
             });
           }
 
-          if (messageBody.includes(`${prefixBot} quem é esse pokemon?`)) {
+          if (
+            await filterValidator({
+              typeAction: "whoIsThatPokemon",
+              params: { messageBody },
+            })
+          ) {
             const { pokemon } = store.getState();
 
             switch (pokemon.status) {
@@ -181,16 +181,19 @@ module.exports.runMessageOrchestrator = function () {
             }
           }
 
-          if (messageBody.includes("@todos")) {
+          if (
+            await filterValidator({
+              typeAction: "mentionAll",
+              params: { messageBody },
+            })
+          ) {
             return await mentionAll({ message: messageBody });
           }
-
           if (
-            BOTTURNINSTICKER == "true" &&
-            (message?._data?.caption?.includes(bot_actions.bot_sticker) ||
-              messageBody.includes(bot_actions.bot_sticker)) &&
-            (message?._data?.type == "image" ||
-              message._data?.quotedMsg.type == "image")
+            await filterValidator({
+              typeAction: "turnInStickerImageOrAnswered",
+              params: { message, messageBody },
+            })
           ) {
             message._data?.quotedMsg && message._data?.quotedMsg.type == "image"
               ? turnInSticker({
@@ -358,15 +361,15 @@ module.exports.runMessageOrchestrator = function () {
       }
     }
   };
+};
 
-  const sendMessageAttemptToDownload = async () => {
-    await genericSendMessageOrchestrator({
-      type: "text",
-      situation: "attemptToDownload",
-    });
-  };
+const sendMessageAttemptToDownload = async () => {
+  await genericSendMessageOrchestrator({
+    type: "text",
+    situation: "attemptToDownload",
+  });
+};
 
-  const isTurnSticker = ({ url, message, platform, situation }) => {
-    return turnInSticker({ url: url, platform, situation });
-  };
+const isTurnSticker = ({ url, message, platform, situation }) => {
+  return turnInSticker({ url: url, platform, situation });
 };
