@@ -1,9 +1,18 @@
 const store = require("../redux/store");
-const { BOTTURNINSTICKER } = require("../settings/feature-enabler");
+const {
+  BOTTURNINSTICKER,
+  BOTCHATGPTISACTIVE,
+  BOTWHOIS,
+  BOTISTRUE,
+} = require("../settings/feature-enabler");
 const { prefixBot } = require("../settings/necessary-settings");
 const { checkActions } = require("../utils/check-actions");
+const { bot_actions } = require("../utils/constants");
 
-module.exports.filterValidator = async function ({ typeAction, params = {} }) {
+module.exports.messageFilterValidator = async function ({
+  typeAction,
+  params = {},
+}) {
   const { messageBody, message, ADMINSBOT } = params;
 
   switch (typeAction) {
@@ -57,6 +66,36 @@ module.exports.filterValidator = async function ({ typeAction, params = {} }) {
           messageBody.includes(bot_actions.bot_sticker)) &&
         (message?._data?.type == "image" ||
           message._data?.quotedMsg.type == "image")
+      );
+
+    case "gptReally":
+      return (
+        (BOTCHATGPTISACTIVE == "true" || BOTCHATGPTISACTIVE) &&
+        messageBody.includes(bot_actions.pre_questions_chatgpt_bot_really)
+      );
+
+    case "gptFunny":
+      return (
+        BOTCHATGPTISACTIVE == "true" &&
+        messageBody.includes(bot_actions.pre_questions_chatgpt_bot)
+      );
+
+    case "whoIs": {
+      return (
+        (BOTWHOIS == "true" || BOTWHOIS) &&
+        messageBody?.includes(bot_actions.who_is)
+      );
+    }
+
+    case "isTrue":
+      return(
+        BOTISTRUE == "true" &&
+        messageBody?.includes(bot_actions.is_true)
+      )
+
+    case "imageAnswered":
+      return (
+        message._data?.quotedMsg && message._data?.quotedMsg.type == "image"
       );
   }
 };

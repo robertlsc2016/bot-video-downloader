@@ -60,7 +60,7 @@ const { sendPhotoPokemon } = require("../utils/pokemon/sendPhoto");
 const {
   downloadPintrest,
 } = require("./platforms/pintrest/pintrest-download.module");
-const { filterValidator } = require("./filter-validator.module");
+const { messageFilterValidator } = require("./message-filter-validator.module");
 const { pathTo } = require("../utils/path-orchestrator");
 
 const rootPathPokemonFiles =
@@ -100,7 +100,7 @@ module.exports.runMessageOrchestrator = function () {
     const messageBody = message.body;
 
     if (
-      await filterValidator({
+      await messageFilterValidator({
         typeAction: "turnOff",
         params: { messageBody, message, ADMINSBOT },
       })
@@ -109,7 +109,7 @@ module.exports.runMessageOrchestrator = function () {
     }
 
     if (
-      await filterValidator({
+      await messageFilterValidator({
         typeAction: "turnOn",
         params: { messageBody, message, ADMINSBOT },
       })
@@ -118,7 +118,7 @@ module.exports.runMessageOrchestrator = function () {
     }
 
     if (
-      await filterValidator({
+      await messageFilterValidator({
         typeAction: "botIsOff",
         params: { messageBody, message },
       })
@@ -140,13 +140,13 @@ module.exports.runMessageOrchestrator = function () {
         }
 
         if (
-          await filterValidator({
+          await messageFilterValidator({
             typeAction: "ignoreMessageBot",
             params: { messageBody },
           })
         ) {
           if (
-            await filterValidator({
+            await messageFilterValidator({
               typeAction: "pokemonIsSolved",
               params: { messageBody },
             })
@@ -158,7 +158,7 @@ module.exports.runMessageOrchestrator = function () {
           }
 
           if (
-            await filterValidator({
+            await messageFilterValidator({
               typeAction: "whoIsThatPokemon",
               params: { messageBody },
             })
@@ -182,7 +182,7 @@ module.exports.runMessageOrchestrator = function () {
           }
 
           if (
-            await filterValidator({
+            await messageFilterValidator({
               typeAction: "mentionAll",
               params: { messageBody },
             })
@@ -190,12 +190,15 @@ module.exports.runMessageOrchestrator = function () {
             return await mentionAll({ message: messageBody });
           }
           if (
-            await filterValidator({
+            await messageFilterValidator({
               typeAction: "turnInStickerImageOrAnswered",
               params: { message, messageBody },
             })
           ) {
-            message._data?.quotedMsg && message._data?.quotedMsg.type == "image"
+            (await messageFilterValidator({
+              typeAction: "imageAnswered",
+              params: { message },
+            }))
               ? turnInSticker({
                   message: message,
                   situation: "answered",
@@ -208,29 +211,37 @@ module.exports.runMessageOrchestrator = function () {
           }
 
           if (
-            (BOTCHATGPTISACTIVE == "true" || BOTCHATGPTISACTIVE) &&
-            messageBody.includes(bot_actions.pre_questions_chatgpt_bot_really)
+            await messageFilterValidator({
+              typeAction: "gptReally",
+              params: { messageBody },
+            })
           ) {
             return await botChatGpt({ msg: messageBody, seriousness: "high" });
           }
 
           if (
-            BOTCHATGPTISACTIVE == "true" &&
-            messageBody.includes(bot_actions.pre_questions_chatgpt_bot)
+            await messageFilterValidator({
+              typeAction: "gptFunny",
+              params: { messageBody },
+            })
           ) {
             return await botChatGpt({ msg: messageBody, seriousness: "low" });
           }
 
           if (
-            (BOTWHOIS == "true" || BOTWHOIS) &&
-            messageBody?.includes(bot_actions.who_is)
+            await messageFilterValidator({
+              typeAction: "whoIs",
+              params: { messageBody },
+            })
           ) {
-            whoIs();
+            return await whoIs();
           }
 
           if (
-            BOTISTRUE == "true" &&
-            messageBody?.includes(bot_actions.is_true)
+            await messageFilterValidator({
+              typeAction: "isTrue",
+              params: { messageBody },
+            })
           ) {
             IsTrue({ msg: messageBody });
           }
