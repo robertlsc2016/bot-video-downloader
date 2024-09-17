@@ -25,10 +25,15 @@ module.exports.botChatGpt = async ({
   seriousness: seriousness,
   toSend = true,
   pokemonTip = false,
+  inResponseTo,
 }) => {
   let instruction =
     seriousness == "high" ? instructionChatGPTSeriousness : instructionChatGPT;
-  const clearMessage = msg?.replace(`${prefixBot} ??`, "");
+  let clearMessage = msg?.replace(`${prefixBot} ??`, "").trim();
+
+  inResponseTo
+    ? (clearMessage += `\nEm reposta a mensagem: ${inResponseTo}`)
+    : clearMessage;
 
   if (pokemonTip) {
     instruction = `forneca alguma informação curta sobre o pokemon ${msg} sem citar o nome dele usando pouquíssimas palavras`;

@@ -216,6 +216,17 @@ module.exports.runMessageOrchestrator = function () {
               params: { messageBody },
             })
           ) {
+            if (message._data?.quotedMsg) {
+              return await botChatGpt({
+                msg: messageBody,
+                seriousness: "high",
+                inResponseTo: message._data?.quotedMsg.body.replace(
+                  "[Bot]\n",
+                  ""
+                ),
+              });
+            }
+
             return await botChatGpt({ msg: messageBody, seriousness: "high" });
           }
 
@@ -225,6 +236,16 @@ module.exports.runMessageOrchestrator = function () {
               params: { messageBody },
             })
           ) {
+            if (message._data?.quotedMsg) {
+              return await botChatGpt({
+                msg: messageBody,
+                seriousness: "high",
+                inResponseTo: message._data?.quotedMsg.body.replace(
+                  "[Bot]\n",
+                  ""
+                ),
+              });
+            }
             return await botChatGpt({ msg: messageBody, seriousness: "low" });
           }
 
