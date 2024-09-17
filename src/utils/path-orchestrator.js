@@ -56,6 +56,13 @@ const pathTo = {
           platformsNameDownload.facebook
         ),
 
+        pintrest: path.join(
+          rooPath,
+          "medias",
+          "videos",
+          "brute-codecs",
+          platformsNameDownload.pinterestVideo
+        ),
         instagram: path.join(
           rooPath,
           "medias",
@@ -87,14 +94,8 @@ const pathTo = {
           rooPathPokemonMedia,
           "pokemon_darkened.png"
         ),
-        merged_normal: path.join(
-          rooPathPokemonMedia,
-          "merged_normal.png"
-        ),
-        merged_darkened: path.join(
-          rooPathPokemonMedia,
-          "merged_darkened.png"
-        ),
+        merged_normal: path.join(rooPathPokemonMedia, "merged_normal.png"),
+        merged_darkened: path.join(rooPathPokemonMedia, "merged_darkened.png"),
       },
 
       instagram: path.join(

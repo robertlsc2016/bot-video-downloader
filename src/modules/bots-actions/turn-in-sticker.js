@@ -67,6 +67,6 @@ const filterPlatform = async ({ url, platform }) => {
     case "facebook":
       return await getFacebookURL({ url: url, type: "photo" });
     case "pintrest":
-      return await getPintrestURL({ url: url });
+      return await getPintrestURL({ rawURL: url });
   }
 };
