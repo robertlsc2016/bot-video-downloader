@@ -216,7 +216,11 @@ module.exports.runMessageOrchestrator = function () {
               params: { messageBody },
             })
           ) {
-            if (message._data?.quotedMsg) {
+            console.log(message);
+            if (
+              message._data?.quotedMsg &&
+              message._data?.quotedMsg.type == "chat"
+            ) {
               return await botChatGpt({
                 msg: messageBody,
                 seriousness: "high",
@@ -236,10 +240,13 @@ module.exports.runMessageOrchestrator = function () {
               params: { messageBody },
             })
           ) {
-            if (message._data?.quotedMsg) {
+            if (
+              message._data?.quotedMsg &&
+              message._data?.quotedMsg.type == "chat"
+            ) {
               return await botChatGpt({
                 msg: messageBody,
-                seriousness: "high",
+                seriousness: "low",
                 inResponseTo: message._data?.quotedMsg.body.replace(
                   "[Bot]\n",
                   ""
