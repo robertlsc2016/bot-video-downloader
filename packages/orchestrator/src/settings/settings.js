@@ -1,6 +1,5 @@
 const { Client, LocalAuth } = require("whatsapp-web.js");
-const qrcode = require("qrcode-terminal");
-const { browserPath } = require("../settings/necessary-settings");
+const { browserPath } = require("./necessary-settings");
 const { os } = require("os");
 
 const client = new Client({

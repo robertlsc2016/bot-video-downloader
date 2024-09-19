@@ -1,35 +1,19 @@
 {
-  "scripts": {
-    "postinstall": "npm prune",
-    "start": "node src/index.js",
-    "dev": "taskkill /F /IM chrome.exe /T || node src/index.js"
+  "name": "bot-video-downloader",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
   },
-  "dependencies": {
-    "@distube/ytdl-core": "^4.14.4",
-    "@sasmeee/igdl": "^1.0.0",
-    "axios": "^1.7.7",
-    "cheerio": "^1.0.0",
-    "colors": "^1.4.0",
-    "dotenv": "^16.4.5",
-    "fb-downloader-scrapper": "^2.0.0",
-    "fluent-ffmpeg": "^2.1.3",
-    "fs": "^0.0.1-security",
-    "get-twitter-media": "^2.0.8",
-    "got": "11.8.3",
-    "gtts": "^0.2.1",
-    "instagram-url-direct": "^1.0.19",
-    "node-fetch": "^3.3.2",
-    "nodemon": "^3.0.3",
-    "openai": "^4.52.2",
-    "puppeteer": "^22.10.0",
-    "qrcode-terminal": "^0.12.0",
-    "redux": "^5.0.1",
-    "sharp": "^0.33.5",
-    "tikchan": "^1.0.1",
-    "twitter-downloader": "^1.1.7",
-    "whatsapp-web.js": "pedroslopez/whatsapp-web.js.git#webpack-exodus",
-    "winston": "^3.14.2",
-    "yarn": "^1.22.21",
-    "ytdl-core": "^4.11.5"
-  }
+  "description": "**Um assistente para grupos de WhatsApp** com diversas funções que podem ajudar os membros, sendo a principal baixar vídeos, e com funções divertidas. As funções atuais do bot são:   - Baixar Vídeos e Fotos de redes sociais (Instagram/Tiktok/Facebook/Pintrest/Youtube/~~X(ex-twitter)~~  - Integração com Inteligência Artificial  - Quem é esse pokémon?  - Mencionar todos do grupo - Transformar Foto em Figurinha  - Estatísticas do número de interações de membros do grupo  - Cara  ou Coroa  - Transformar Texto em Áudio",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

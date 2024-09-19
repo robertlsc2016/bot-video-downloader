@@ -34,5 +34,5 @@ services:
       ADMIN_BOT_0: ${ADMIN_BOT_0}
       ADMIN_BOT_1: ${ADMIN_BOT_1}
     volumes:
-      - ./auth:/app/auth
-      - ./data:/app/data
+      - ./auth:/app/packages/orchestrator/auth/auth
+      - ./data:/app/packages/orchestrator/auth/data
