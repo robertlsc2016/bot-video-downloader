@@ -87,6 +87,11 @@ module.exports.messageFilterValidator = async function ({
       );
     }
 
+    case "speedtest":
+      return (
+        messageBody?.includes(`${prefixBot} speedtest`)
+      )
+
     case "isTrue":
       return(
         BOTISTRUE == "true" &&

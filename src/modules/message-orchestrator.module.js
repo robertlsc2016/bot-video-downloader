@@ -62,6 +62,7 @@ const {
 } = require("./platforms/pintrest/pintrest-download.module");
 const { messageFilterValidator } = require("./message-filter-validator.module");
 const { pathTo } = require("../utils/path-orchestrator");
+const { speedTest } = require("./bots-actions/speed-test");
 
 const rootPathPokemonFiles =
   pathTo.medias.images.pokemonsMedia.pokemonsMediaFolder;
@@ -179,6 +180,15 @@ module.exports.runMessageOrchestrator = function () {
               case "COMPLETE":
                 return await whoIsThisPokemon();
             }
+          }
+
+          if (
+            await messageFilterValidator({
+              typeAction: "speedtest",
+              params: { messageBody },
+            })
+          ) {
+            return await speedTest();
           }
 
           if (
@@ -409,6 +419,6 @@ const sendMessageAttemptToDownload = async () => {
   });
 };
 
-const isTurnSticker = ({ url, message, platform, situation }) => {
+const isTurnSticker = ({ url, platform, situation }) => {
   return turnInSticker({ url: url, platform, situation });
 };
