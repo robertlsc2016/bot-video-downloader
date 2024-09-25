@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { pathTo } = require("./path-orchestrator");
+const logger = require("../logger");
 
 module.exports.ensureDirectoryExists = async function () {
   const folderAjustedCodecs =
@@ -10,21 +11,21 @@ module.exports.ensureDirectoryExists = async function () {
 
   if (!fs.existsSync(folderImages)) {
     fs.mkdirSync(folderImages, { recursive: true });
-    console.log(`Directory created: ${folderImages}`);
+    logger.info(`Directory created: ${folderImages}`);
   }
 
   if (!fs.existsSync(folderAudios)) {
     fs.mkdirSync(folderAudios, { recursive: true });
-    console.log(`Directory created: ${folderAudios}`);
+    logger.info(`Directory created: ${folderAudios}`);
   }
 
   if (!fs.existsSync(folderAjustedCodecs)) {
     fs.mkdirSync(folderAjustedCodecs, { recursive: true });
-    console.log(`Directory created: ${folderAjustedCodecs}`);
+    logger.info(`Directory created: ${folderAjustedCodecs}`);
   }
 
   if (!fs.existsSync(folderBruteCodecs)) {
     fs.mkdirSync(folderBruteCodecs, { recursive: true });
-    console.log(`Directory created: ${folderBruteCodecs}`);
+    logger.info(`Directory created: ${folderBruteCodecs}`);
   }
 };

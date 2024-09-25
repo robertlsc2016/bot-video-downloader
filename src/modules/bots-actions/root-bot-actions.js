@@ -4,6 +4,7 @@ const {
 } = require("../generic-sendMessage-orchestrator.module");
 const { pathTo } = require("../../utils/path-orchestrator");
 
+// REFATORAR ISSO, ESTÁ BEM REDUNDANTE E MAL IMPLEMENTADO
 module.exports.rootBotActions = async function ({ action }) {
   const pathToStatesJson = pathTo.pathToStatesJson;
 
@@ -38,6 +39,36 @@ module.exports.rootBotActions = async function ({ action }) {
       await genericSendMessageOrchestrator({
         type: "text",
         msg: "Fui desligado, até mais!",
+      });
+      fs.writeFileSync(pathToStatesJson, JSON.stringify(rootActions, null, 2));
+      break;
+
+    case "turnon_bot_speedtest":
+      if (rootActions.bot_speedtest == 1) {
+        return await genericSendMessageOrchestrator({
+          type: "text",
+          msg: "Esta função já está ativada",
+        });
+      }
+      rootActions.bot_speedtest = 1;
+      await genericSendMessageOrchestrator({
+        type: "text",
+        msg: "função ativada com sucesso",
+      });
+      fs.writeFileSync(pathToStatesJson, JSON.stringify(rootActions, null, 2));
+      break;
+
+    case "turnoff_bot_speedtest":
+      if (rootActions.bot_speedtest == 0) {
+        return await genericSendMessageOrchestrator({
+          type: "text",
+          msg: "Esta função já está desativada",
+        });
+      }
+      rootActions.bot_speedtest = 0;
+      await genericSendMessageOrchestrator({
+        type: "text",
+        msg: "Função desabilitada",
       });
       fs.writeFileSync(pathToStatesJson, JSON.stringify(rootActions, null, 2));
       break;

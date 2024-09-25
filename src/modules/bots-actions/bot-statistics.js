@@ -2,6 +2,7 @@ const fs = require("fs");
 const { client } = require("../../settings/settings");
 const { stringToGroup } = require("../../settings/necessary-settings");
 const { pathTo } = require("../../utils/path-orchestrator");
+const logger = require("../../logger");
 
 const pathToStatisticJson = pathTo.pathToStatisticJson;
 
@@ -31,9 +32,9 @@ const createStructure = async ({ participants }) => {
 
   fs.writeFileSync(pathToStatisticJson, participantsJson, (err) => {
     if (err) {
-      console.error("Erro ao salvar o arquivo JSON:", err);
+      logger.error("Erro ao salvar o arquivo JSON:", err);
     } else {
-      console.log("Arquivo JSON salvo com sucesso!");
+      logger.info("Arquivo JSON salvo com sucesso!");
     }
   });
 };

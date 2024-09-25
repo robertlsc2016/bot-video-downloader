@@ -80,7 +80,7 @@ const pathMergedPhotosDarkened = path.resolve(
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
-    console.log(qr);
+    logger.log(qr);
   });
 
   client.on("ready", async () => {
@@ -146,6 +146,25 @@ module.exports.runMessageOrchestrator = function () {
             params: { messageBody },
           })
         ) {
+          
+          if (
+            await messageFilterValidator({
+              typeAction: "turnoffSpeedTest",
+              params: { messageBody },
+            })
+          ) {
+            return await rootBotActions({ action: "turnoff_bot_speedtest" });
+          }
+
+          if (
+            await messageFilterValidator({
+              typeAction: "turnonSpeedTest",
+              params: { messageBody },
+            })
+          ) {
+            return await rootBotActions({ action: "turnon_bot_speedtest" });
+          }
+
           if (
             await messageFilterValidator({
               typeAction: "pokemonIsSolved",
@@ -169,7 +188,6 @@ module.exports.runMessageOrchestrator = function () {
             switch (pokemon.status) {
               case "EMPTY":
                 return await whoIsThisPokemon();
-
               case "STARTED":
                 return await genericSendMessageOrchestrator({
                   type: "media",
@@ -226,7 +244,6 @@ module.exports.runMessageOrchestrator = function () {
               params: { messageBody },
             })
           ) {
-            console.log(message);
             if (
               message._data?.quotedMsg &&
               message._data?.quotedMsg.type == "chat"
@@ -252,7 +269,7 @@ module.exports.runMessageOrchestrator = function () {
           ) {
             if (
               message._data?.quotedMsg &&
-              message._data?.quotedMsg.type == "chat"
+              message._data?.quotedMsg?.type == "chat"
             ) {
               return await botChatGpt({
                 msg: messageBody,

@@ -29,8 +29,6 @@ const getURLImage = async ({ rawURL }) => {
   if (urlPhoto?.length == 0 || urlPhoto === undefined) {
     throw new Error("não foi possível encontrar o conteúdo dessa url");
   }
-
-  console.log(urlPhoto);
   return urlPhoto;
 };
 
@@ -42,6 +40,5 @@ const getURLVideo = async ({ rawURL }) => {
   const data = $("body").find("script[data-test-id='video-snippet']").html();
   const jsonData = JSON.parse(data);
 
-  console.log(jsonData?.contentUrl);
   return jsonData?.contentUrl;
 };

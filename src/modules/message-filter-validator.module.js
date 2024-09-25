@@ -65,7 +65,7 @@ module.exports.messageFilterValidator = async function ({
         (message?._data?.caption?.includes(bot_actions.bot_sticker) ||
           messageBody.includes(bot_actions.bot_sticker)) &&
         (message?._data?.type == "image" ||
-          message._data?.quotedMsg.type == "image")
+          message._data?.quotedMsg?.type == "image")
       );
 
     case "gptReally":
@@ -87,16 +87,20 @@ module.exports.messageFilterValidator = async function ({
       );
     }
 
+    case "turnonSpeedTest":
+      return messageBody?.includes(`${prefixBot} turn on speedtest`);
+
+    case "turnoffSpeedTest":
+      return messageBody?.includes(`${prefixBot} turn off speedtest`);
+
     case "speedtest":
       return (
+        (await checkActions({ typeAction: "bot_speedtest" })) &&
         messageBody?.includes(`${prefixBot} speedtest`)
-      )
+      );
 
     case "isTrue":
-      return(
-        BOTISTRUE == "true" &&
-        messageBody?.includes(bot_actions.is_true)
-      )
+      return BOTISTRUE == "true" && messageBody?.includes(bot_actions.is_true);
 
     case "imageAnswered":
       return (
