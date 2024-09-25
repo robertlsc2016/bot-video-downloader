@@ -8,11 +8,7 @@ const qrcode = require("qrcode-terminal");
 
 const { client } = require("../settings/settings");
 
-const {
-  attemptToDownload,
-  bot_actions,
-  platformsNameURL,
-} = require("../utils/constants");
+const { bot_actions, platformsNameURL } = require("../utils/constants");
 
 const {
   stringToGroup,
@@ -35,47 +31,33 @@ const { IsTrue } = require("./bots-actions/is-true");
 const { textToSpeech } = require("./bots-actions/text-to-speech");
 const { botChatGpt } = require("./bots-actions/bot-chatgpt");
 const {
-  botStatitics,
   showStatistics,
+  addParticipation,
+  resetStatistics,
 } = require("./bots-actions/bot-statistics");
 const {
-  BOTWHOIS,
-  BOTISTRUE,
-  BOTTURNINSTICKER,
   BOTSTATISTICSISACTIVE,
   BOTCOINFLIP,
   BOTTEXTTOSPEECH,
-  BOTCHATGPTISACTIVE,
   ADMINSBOT,
 } = require("../settings/feature-enabler");
 const { rootBotActions } = require("./bots-actions/root-bot-actions");
 const { checkActions } = require("../utils/check-actions");
-const path = require("path");
 
 const logger = require("../logger");
 const { mentionAll } = require("./bots-actions/mention-all");
-const { whoIsThisPokemon } = require("./bots-actions/who-is-that-pokemon");
+const {
+  whoIsThisPokemon,
+  alreadyPokemon,
+  pokemonSolved,
+} = require("./bots-actions/who-is-that-pokemon");
 const store = require("../redux/store");
-const { sendPhotoPokemon } = require("../utils/pokemon/sendPhoto");
+
 const {
   downloadPintrest,
 } = require("./platforms/pintrest/pintrest-download.module");
 const { messageFilterValidator } = require("./message-filter-validator.module");
-const { pathTo } = require("../utils/path-orchestrator");
 const { speedTest } = require("./bots-actions/speed-test");
-
-const rootPathPokemonFiles =
-  pathTo.medias.images.pokemonsMedia.pokemonsMediaFolder;
-
-const pathMergedPhotos = path.resolve(
-  rootPathPokemonFiles,
-  "merged_normal.png"
-);
-
-const pathMergedPhotosDarkened = path.resolve(
-  rootPathPokemonFiles,
-  "merged_darkened.png"
-);
 
 module.exports.runMessageOrchestrator = function () {
   client.on("qr", (qr) => {
@@ -93,6 +75,7 @@ module.exports.runMessageOrchestrator = function () {
       await messageSteps({ from: stringToGroup, message: message });
     }
   });
+
   client.on("message", async (message) => {
     await messageSteps({ from: message.from, message: message });
   });
@@ -146,7 +129,6 @@ module.exports.runMessageOrchestrator = function () {
             params: { messageBody },
           })
         ) {
-          
           if (
             await messageFilterValidator({
               typeAction: "turnoffSpeedTest",
@@ -171,10 +153,7 @@ module.exports.runMessageOrchestrator = function () {
               params: { messageBody },
             })
           ) {
-            return await sendPhotoPokemon({
-              situation: "SOLVED",
-              path: pathMergedPhotos,
-            });
+            return await pokemonSolved();
           }
 
           if (
@@ -189,12 +168,7 @@ module.exports.runMessageOrchestrator = function () {
               case "EMPTY":
                 return await whoIsThisPokemon();
               case "STARTED":
-                return await genericSendMessageOrchestrator({
-                  type: "media",
-                  textMedia: false,
-                  filePath: pathMergedPhotosDarkened,
-                  msg: "Já existe uma quest de pokemon iniciada! Tente acertar ;)",
-                });
+                return await alreadyPokemon();
               case "COMPLETE":
                 return await whoIsThisPokemon();
             }
@@ -241,7 +215,7 @@ module.exports.runMessageOrchestrator = function () {
           if (
             await messageFilterValidator({
               typeAction: "gptReally",
-              params: { messageBody },
+              params: { messageBody, message },
             })
           ) {
             if (
@@ -251,10 +225,7 @@ module.exports.runMessageOrchestrator = function () {
               return await botChatGpt({
                 msg: messageBody,
                 seriousness: "high",
-                inResponseTo: message._data?.quotedMsg.body.replace(
-                  "[Bot]\n",
-                  ""
-                ),
+                inResponseTo: message._data?.quotedMsg.body,
               });
             }
 
@@ -302,17 +273,31 @@ module.exports.runMessageOrchestrator = function () {
           }
 
           if (message.type && activeStatistics) {
-            if (message.type == "chat" && messageBody.length > 5) {
-              botStatitics({ msg: message });
+            if (
+              message.type == "chat" &&
+              messageBody.length > 5 &&
+              !messageBody?.includes("[Bot]")
+            ) {
+              await addParticipation({ message });
+            } else {
+              await addParticipation({ message });
             }
-            botStatitics({ msg: message });
           }
 
           if (
-            BOTSTATISTICSISACTIVE == "true" &&
+            await messageFilterValidator({
+              typeAction: "resetStatistics",
+              params: { messageBody, ADMINSBOT, message },
+            })
+          ) {
+            return await resetStatistics();
+          }
+
+          if (
+            BOTSTATISTICSISACTIVE &&
             messageBody?.includes(bot_actions.statistics)
           ) {
-            showStatistics();
+            return await showStatistics();
           }
 
           if (messageBody?.includes(bot_actions.bot_help)) {
@@ -344,7 +329,7 @@ module.exports.runMessageOrchestrator = function () {
 
           if (url.includes(platformsNameURL.tiktok)) {
             if (makeASticker)
-              return isTurnSticker({
+              return turnInSticker({
                 platform: "tiktok",
                 url,
                 situation: "url",
@@ -355,7 +340,7 @@ module.exports.runMessageOrchestrator = function () {
 
           if (url.includes(platformsNameURL.instagram)) {
             if (makeASticker)
-              return isTurnSticker({
+              return turnInSticker({
                 platform: "instagram",
                 url,
                 situation: "url",
@@ -369,7 +354,7 @@ module.exports.runMessageOrchestrator = function () {
 
           if (url.includes(platformsNameURL.facebook)) {
             if (makeASticker)
-              return isTurnSticker({
+              return turnInSticker({
                 platform: "facebook",
                 url,
                 situation: "url",
@@ -386,7 +371,7 @@ module.exports.runMessageOrchestrator = function () {
 
           if (url.includes(platformsNameURL.x)) {
             if (makeASticker)
-              return isTurnSticker({ platform: "x", url, situation: "url" });
+              return turnInSticker({ platform: "x", url, situation: "url" });
             await sendMessageAttemptToDownload();
             return await downloadVDTwitter({ url: url });
           }
@@ -396,7 +381,7 @@ module.exports.runMessageOrchestrator = function () {
               .length > 0
           ) {
             if (makeASticker)
-              return isTurnSticker({
+              return turnInSticker({
                 platform: "pintrest",
                 url,
                 situation: "url",
@@ -434,8 +419,4 @@ const sendMessageAttemptToDownload = async () => {
     type: "text",
     situation: "attemptToDownload",
   });
-};
-
-const isTurnSticker = ({ url, platform, situation }) => {
-  return turnInSticker({ url: url, platform, situation });
 };

@@ -19,7 +19,7 @@ const pathMergedPhotos = pathTo.medias.images.pokemonsMedia.merged_normal;
 const pathMergedPhotosDarkened =
   pathTo.medias.images.pokemonsMedia.merged_darkened;
 
-module.exports.whoIsThisPokemon = async function () {
+const whoIsThisPokemon = async () => {
   await genericSendMessageOrchestrator({
     type: "text",
     msg: "Opa! Um momento, vou pegar um Pokemón para você! Aguarde um momento!",
@@ -58,4 +58,26 @@ module.exports.whoIsThisPokemon = async function () {
       path: pathMergedPhotosDarkened,
     });
   }, 2000);
+};
+
+const alreadyPokemon = async () => {
+  return await genericSendMessageOrchestrator({
+    type: "media",
+    textMedia: false,
+    filePath: pathMergedPhotosDarkened,
+    msg: "Já existe uma quest de pokemon iniciada! Tente acertar ;)",
+  });
+};
+
+const pokemonSolved = async () => {
+  return await sendPhotoPokemon({
+    situation: "SOLVED",
+    path: pathMergedPhotos,
+  });
+};
+
+module.exports = {
+  whoIsThisPokemon,
+  alreadyPokemon,
+  pokemonSolved,
 };

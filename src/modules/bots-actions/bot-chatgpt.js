@@ -32,7 +32,10 @@ module.exports.botChatGpt = async ({
   let clearMessage = msg?.replace(`${prefixBot} ??`, "").trim();
 
   inResponseTo
-    ? (clearMessage += `\nEm reposta a mensagem: ${inResponseTo}`)
+    ? (clearMessage += `\nEm reposta a mensagem: ${inResponseTo.replace(
+        "[Bot]\n",
+        ""
+      )}`)
     : clearMessage;
 
   if (pokemonTip) {

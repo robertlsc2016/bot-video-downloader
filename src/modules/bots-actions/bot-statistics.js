@@ -3,22 +3,24 @@ const { client } = require("../../settings/settings");
 const { stringToGroup } = require("../../settings/necessary-settings");
 const { pathTo } = require("../../utils/path-orchestrator");
 const logger = require("../../logger");
+const {
+  genericSendMessageOrchestrator,
+} = require("../generic-sendMessage-orchestrator.module");
 
 const pathToStatisticJson = pathTo.pathToStatisticJson;
 
-module.exports.botStatitics = async function ({ msg: message }) {
-  const participant = message._data.id.participant.replace("@c.us", "");
-
+const checkFileExist = async function () {
   if (!fs.existsSync(pathToStatisticJson)) {
     const chat = await client.getChatById(stringToGroup);
     const participants = chat.participants;
     await createStructure({ participants: participants });
   }
-
-  addParticipation({ participant: participant });
 };
 
-const createStructure = async ({ participants }) => {
+const createStructure = async () => {
+  const chat = await client.getChatById(stringToGroup);
+  const participants = chat.participants;
+
   const participants_structure = [];
 
   participants.map((participant) => {
@@ -39,12 +41,15 @@ const createStructure = async ({ participants }) => {
   });
 };
 
-const addParticipation = async ({ participant: participantNumber }) => {
+const addParticipation = async ({ message }) => {
+  await checkFileExist()
+  const participant = message._data.id.participant.replace("@c.us", "");
+
   const rawData = fs.readFileSync(pathToStatisticJson, "utf8");
   let users = JSON.parse(rawData);
 
   for (let user of users.participants_structure) {
-    if (user.user == participantNumber) {
+    if (user.user == participant) {
       user.number_participations += 1;
       return fs.writeFileSync(
         pathToStatisticJson,
@@ -52,10 +57,12 @@ const addParticipation = async ({ participant: participantNumber }) => {
       );
     }
   }
-  return notFoundParticipant({ participant: participantNumber });
+  return notFoundParticipant({ participant: participant });
 };
 
 const notFoundParticipant = async ({ participant: participantNumber }) => {
+  await checkFileExist()
+
   const rawData = fs.readFileSync(pathToStatisticJson, "utf8");
   let users = JSON.parse(rawData);
 
@@ -68,7 +75,9 @@ const notFoundParticipant = async ({ participant: participantNumber }) => {
   fs.writeFileSync(pathToStatisticJson, JSON.stringify(users, null, 2));
 };
 
-module.exports.showStatistics = async function () {
+const showStatistics = async function () {
+  await checkFileExist()
+
   const rawData = fs.readFileSync(pathToStatisticJson, "utf8");
   let users = JSON.parse(rawData);
 
@@ -87,7 +96,28 @@ module.exports.showStatistics = async function () {
     (user) => user.user + "@c.us"
   );
 
+  return await genericSendMessageOrchestrator({
+    type: "text",
+    situation: "mentions",
+    msg: message,
+    mentions: getUsersForMentions,
+  });
+
   await client.sendMessage(stringToGroup, message, {
     mentions: getUsersForMentions,
   });
+};
+
+const resetStatistics = async () => {
+  genericSendMessageOrchestrator({
+    type: "text",
+    msg: "Resetando todas as estatísticas!",
+  });
+  return await createStructure();
+};
+
+module.exports = {
+  showStatistics,
+  addParticipation,
+  resetStatistics,
 };

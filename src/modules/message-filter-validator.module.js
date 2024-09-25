@@ -37,6 +37,12 @@ module.exports.messageFilterValidator = async function ({
       );
     }
 
+    case "resetStatistics":
+      return (
+        messageBody.includes(`${prefixBot} reset statistics`) &&
+        ADMINSBOT.includes(message._data.id.participant)
+      );
+
     case "ignoreMessageBot": {
       return !(
         (message?._data.id.fromMe &&
