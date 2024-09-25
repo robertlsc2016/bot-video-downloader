@@ -4,6 +4,8 @@ const { stringToGroup } = require("../settings/necessary-settings");
 
 const { structuredMessages } = require("../utils/structured-messages");
 const { checkActions } = require("../utils/check-actions");
+const { getStartValue } = require("../utils/stopwatch");
+
 const {
   successDownloadPhotoMessage,
   successDownloadMessage,
@@ -26,6 +28,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
   if (!(await checkActions({ typeAction: "bot_active" }))) {
     return await client.sendMessage(stringToGroup, msg);
   }
+  const start = await getStartValue();
 
   switch (type) {
     case "text":
@@ -71,6 +74,10 @@ module.exports.genericSendMessageOrchestrator = async function ({
           sendMediaAsDocument: isDocument,
           caption: msg,
         });
+        const [seconds, nanoseconds] = process.hrtime(start); // Calcula a diferença do tempo
+        const timeText = `\n_Levei ${seconds}s e ${(nanoseconds / 1e6).toFixed(
+          0
+        )}ms para baixar essa mídia_`;
 
         if (textMedia) {
           await client.sendMessage(
@@ -78,8 +85,8 @@ module.exports.genericSendMessageOrchestrator = async function ({
             isDocument
               ? technicalLimitationsMessage
               : filePath.includes(".jpg")
-              ? successDownloadPhotoMessage
-              : successDownloadMessage
+              ? `${successDownloadPhotoMessage}${timeText}`
+              : `${successDownloadMessage}${timeText}`
           );
         }
       } catch (err) {

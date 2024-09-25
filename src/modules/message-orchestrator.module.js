@@ -58,8 +58,9 @@ const {
 } = require("./platforms/pintrest/pintrest-download.module");
 const { messageFilterValidator } = require("./message-filter-validator.module");
 const { speedTest } = require("./bots-actions/speed-test");
+const { startTimer } = require("../utils/stopwatch");
 
-module.exports.runMessageOrchestrator = function () {
+const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
     logger.log(qr);
@@ -81,6 +82,7 @@ module.exports.runMessageOrchestrator = function () {
   });
 
   const messageSteps = async ({ from: from, message: message }) => {
+    startTimer();
     const messageBody = message.body;
 
     if (
@@ -419,4 +421,8 @@ const sendMessageAttemptToDownload = async () => {
     type: "text",
     situation: "attemptToDownload",
   });
+};
+
+module.exports = {
+  runMessageOrchestrator,
 };
