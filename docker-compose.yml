@@ -5,34 +5,9 @@ services:
     build: .
     container_name: bot-video-downloader
     restart: always
+    env_file: .env
     environment:
       TZ: America/Cuiaba
-      SHIPPING_ALLOWED: ${SHIPPING_ALLOWED}
-      PATH_BROWSER: ${PATH_BROWSER}
-      STRING_TO_GROUP_WWEBJS: ${STRING_TO_GROUP_WWEBJS}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      INSTRUCTION_GPT: ${INSTRUCTION_GPT}
-      INSTRUCTION_GPT_SERIOUSNESS: ${INSTRUCTION_GPT_SERIOUSNESS}
-      PREFIX_BOT: ${PREFIX_BOT}
-      MAX_DURATION_TY_MS: ${MAX_DURATION_TY_MS}
-      BOTCHATGPTISACTIVE: ${BOTCHATGPTISACTIVE}
-      BOTSTATISTICSISACTIVE: ${BOTSTATISTICSISACTIVE}
-      BOTCOINFLIP: ${BOTCOINFLIP}
-      BOTISTRUE: ${BOTISTRUE}
-      BOTTEXTTOSPEECH: ${BOTTEXTTOSPEECH}
-      BOTTURNINSTICKER: ${BOTTURNINSTICKER}
-      BOTWHOIS: ${BOTWHOIS}
-      activeStatistics: ${activeStatistics}
-      YTVideoDurationExceeded: ${YTVideoDurationExceeded}
-      emptyMessageIstrue: ${emptyMessageIstrue}
-      extremePositiveMessage: ${extremePositiveMessage}
-      positiveMessage: ${positiveMessage}
-      negativeMessage: ${negativeMessage}
-      doubtMessage: ${doubtMessage}
-      acusationMessage: ${acusationMessage}
-      preMsgAttempTextToAudio: ${preMsgAttempTextToAudio}
-      ADMIN_BOT_0: ${ADMIN_BOT_0}
-      ADMIN_BOT_1: ${ADMIN_BOT_1}
     volumes:
       - ./auth:/app/auth
       - ./data:/app/data
