@@ -88,10 +88,10 @@ module.exports.messageFilterValidator = async function ({
     }
 
     case "turnonSpeedTest":
-      return messageBody?.includes(`${prefixBot} turn on speedtest`);
+      return messageBody?.includes(`${prefixBot} speedtest turn on`);
 
     case "turnoffSpeedTest":
-      return messageBody?.includes(`${prefixBot} turn off speedtest`);
+      return messageBody?.includes(`${prefixBot} speedtest turn off`);
 
     case "speedtest":
       return (

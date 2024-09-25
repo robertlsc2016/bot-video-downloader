@@ -53,7 +53,7 @@ module.exports.rootBotActions = async function ({ action }) {
       rootActions.bot_speedtest = 1;
       await genericSendMessageOrchestrator({
         type: "text",
-        msg: "função ativada com sucesso",
+        msg: "Função ativada com sucesso",
       });
       fs.writeFileSync(pathToStatesJson, JSON.stringify(rootActions, null, 2));
       break;
