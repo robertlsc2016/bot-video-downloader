@@ -17,7 +17,6 @@ const { pathTo } = require("../../utils/path-orchestrator");
 
 const downloadVDYoutube = async ({ url: url, mode }) => {
   const filePath = pathTo.medias.videos.bruteCodecsFolder.youtube;
-
   const outputAudioFilePath = pathTo.medias.audios.audio;
 
   try {

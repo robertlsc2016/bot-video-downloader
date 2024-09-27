@@ -337,17 +337,32 @@ const runMessageOrchestrator = async () => {
                 situation: "url",
               });
             await sendMessageAttemptToDownload();
+
+            if (messageBody.includes(`${prefixBot} extract audio`)) {
+              return await downloadVDTiktok({ url: url, mode: "extractAudio" });
+            }
+
             return await downloadVDTiktok({ url: url });
           }
 
           if (url.includes(platformsNameURL.instagram)) {
-            if (makeASticker)
+            if (makeASticker) {
               return turnInSticker({
                 platform: "instagram",
                 url,
                 situation: "url",
               });
+            }
+
             await sendMessageAttemptToDownload();
+            if (messageBody?.includes(`${prefixBot} extract audio`)) {
+              return await downloadInstagram({
+                url: url,
+                mode: "extractAudio",
+                toSend: false,
+              });
+            }
+
             return await downloadInstagram({
               url: url,
               type: url.includes("/p/") ? "photo" : "video",
@@ -362,6 +377,15 @@ const runMessageOrchestrator = async () => {
                 situation: "url",
               });
             await sendMessageAttemptToDownload();
+
+            if (messageBody?.includes(`${prefixBot} extract audio`)) {
+              return await downloadVDFacebook({
+                url: url,
+                mode: "extractAudio",
+                type: "video",
+              });
+            }
+
             return await downloadVDFacebook({
               url: url,
               type:
@@ -389,6 +413,14 @@ const runMessageOrchestrator = async () => {
                 situation: "url",
               });
             await sendMessageAttemptToDownload();
+
+            if (messageBody?.includes(`${prefixBot} extract audio`)) {
+              return await downloadPintrest({
+                url: url,
+                mode: "extractAudio",
+              });
+            }
+
             return await downloadPintrest({ url: url });
           }
 

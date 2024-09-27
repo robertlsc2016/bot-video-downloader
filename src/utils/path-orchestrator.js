@@ -23,6 +23,12 @@ const pathTo = {
         "audios",
         platformsNameDownload.youtubeAudio
       ),
+      tiktok: path.join(
+        rooPath,
+        "medias",
+        "audios",
+        platformsNameDownload.tiktokAudio
+      ),
     },
     videos: {
       bruteCodecsFolder: {

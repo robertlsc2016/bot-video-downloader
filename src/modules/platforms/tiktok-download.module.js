@@ -5,17 +5,28 @@ const {
 
 const TikChan = require("tikchan");
 const { pathTo } = require("../../utils/path-orchestrator");
+const { convertVideoToAudio } = require("../../utils/convert-video-to-audio");
 
-module.exports.downloadVDTiktok = async function ({ url }) {
+const filePathVideo = pathTo.medias.videos.bruteCodecsFolder.tiktok;
+const filePathAudio = pathTo.medias.audios.audio
+
+module.exports.downloadVDTiktok = async function ({ url, mode }) {
   try {
-    const filePathVideo = pathTo.medias.videos.bruteCodecsFolder.tiktok;
-
     const URLDownload = await getXURL({ url: url });
 
     if (URLDownload == false)
       throw new Error("a url de download esta com problemas");
 
     await downloadVideoOrPhoto({ url: URLDownload, filePath: filePathVideo });
+
+    if (mode == "extractAudio") {
+      await convertVideoToAudio({ path: filePathVideo });
+      return await genericSendMessageOrchestrator({
+        filePath: filePathAudio,
+        type: "media",
+        isDocument: false,
+      });
+    }
 
     await genericSendMessageOrchestrator({
       filePath: filePathVideo,

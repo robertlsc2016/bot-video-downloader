@@ -17,6 +17,7 @@ const platformsNameDownload = {
   pinterestPhoto: "pintrest-photo.jpg",
   pinterestVideo: "pintrest-video.mp4",
   tiktok: "tiktok-video.mp4",
+  tiktokAudio: "tiktok-video.mp3",
   x: "x-video.mp4",
 };
 
