@@ -16,11 +16,15 @@ const outputAudioFilePath = pathTo.medias.audios.audio;
 
 module.exports.downloadInstagram = async function ({
   url: url,
-  type: type,
   toSend = true,
   mode,
 }) {
   try {
+    let type = null;
+    const URLDownload = await getInstagramURL({ url: url });
+    URLDownload.includes(".jpg") ? (type = "photo") : (type = "video");
+    const path = type == "photo" ? filePathPhoto : filePath;
+
     type == "photo"
       ? monitorUsageActions({
           action: "instagram_download_photo",
@@ -28,10 +32,6 @@ module.exports.downloadInstagram = async function ({
       : monitorUsageActions({
           action: "instagram_download_video",
         });
-
-    const path = type == "photo" ? filePathPhoto : filePath;
-
-    const URLDownload = await getInstagramURL({ url: url });
 
     if (URLDownload == false) {
       throw new Error("a url de download esta com problemas");

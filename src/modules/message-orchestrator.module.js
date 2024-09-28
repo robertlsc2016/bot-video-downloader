@@ -377,7 +377,6 @@ const runMessageOrchestrator = async () => {
 
             return await downloadInstagram({
               url: url,
-              type: url.includes("/p/") ? "photo" : "video",
             });
           }
 
