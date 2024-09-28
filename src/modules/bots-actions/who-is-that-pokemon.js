@@ -11,6 +11,7 @@ const { sendPhotoPokemon } = require("../../utils/pokemon/sendPhoto");
 const { botChatGpt } = require("./bot-chatgpt");
 const store = require("../../redux/store");
 const { pathTo } = require("../../utils/path-orchestrator");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 
 const pathInput_PokemonPhoto = pathTo.medias.images.pokemonsMedia.pokemon;
 const pathDarkened_PokemonPhoto =
@@ -20,6 +21,9 @@ const pathMergedPhotosDarkened =
   pathTo.medias.images.pokemonsMedia.merged_darkened;
 
 const whoIsThisPokemon = async () => {
+  monitorUsageActions({
+    action: "who_is_that_pokemon",
+  });
   await genericSendMessageOrchestrator({
     type: "text",
     msg: "Opa! Um momento, vou pegar um Pokemón para você! Aguarde um momento!",

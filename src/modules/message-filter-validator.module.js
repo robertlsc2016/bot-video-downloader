@@ -108,6 +108,9 @@ module.exports.messageFilterValidator = async function ({
     case "isTrue":
       return BOTISTRUE == "true" && messageBody?.includes(bot_actions.is_true);
 
+    case "usageMonitor":
+      return messageBody.includes(`${prefixBot} usage monitor`);
+
     case "imageAnswered":
       return (
         message._data?.quotedMsg && message._data?.quotedMsg.type == "image"

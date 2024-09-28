@@ -7,7 +7,10 @@ const { url } = require("inspector");
 const { getFacebookURL } = require("./facebook-getURL.module");
 const logger = require("../../../logger");
 const { pathTo } = require("../../../utils/path-orchestrator");
-const { convertVideoToAudio } = require("../../../utils/convert-video-to-audio");
+const {
+  convertVideoToAudio,
+} = require("../../../utils/convert-video-to-audio");
+const { monitorUsageActions } = require("../../../utils/monitor-usage-actions");
 
 const filePath = pathTo.medias.videos.bruteCodecsFolder.facebook;
 const filePathPhoto = pathTo.medias.images.facebook;
@@ -19,6 +22,14 @@ module.exports.downloadVDFacebook = async function ({
   mode,
 }) {
   try {
+    type == "photo"
+      ? monitorUsageActions({
+          action: "facebook_download_photo",
+        })
+      : monitorUsageActions({
+          action: "facebook_download_video",
+        });
+
     const path = type == "photo" ? filePathPhoto : filePath;
     const facebookURL = await getFacebookURL({ url: url, type: type });
 
@@ -38,11 +49,6 @@ module.exports.downloadVDFacebook = async function ({
         isDocument: false,
       });
     }
-
-    // await convertVideo({
-    //   input: filePath,
-    //   platform: platformsNameDownload.facebook,
-    // });
 
     await genericSendMessageOrchestrator({
       filePath: path,

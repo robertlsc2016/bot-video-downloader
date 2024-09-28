@@ -2,9 +2,13 @@ const FastSpeedtest = require("fast-speedtest-api");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 require("dotenv").config();
 
 const speedTest = async () => {
+  monitorUsageActions({
+    action: "speed_test",
+  });
   let speedtest = new FastSpeedtest({
     token: process.env.TOKEN_FAST, // required
     verbose: false, // default: false

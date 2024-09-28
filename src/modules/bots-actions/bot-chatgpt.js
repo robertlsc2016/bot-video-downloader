@@ -14,6 +14,7 @@ const {
   tip_WhosThatPokemon,
 } = require("../../redux/actions/actions");
 const logger = require("../../logger");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 require("dotenv").config();
 
 const openai = new OpenAI({
@@ -27,9 +28,15 @@ module.exports.botChatGpt = async ({
   pokemonTip = false,
   inResponseTo,
 }) => {
+  monitorUsageActions({
+    action: "bot_chatgpt",
+  });
   let instruction =
     seriousness == "high" ? instructionChatGPTSeriousness : instructionChatGPT;
-  let clearMessage = msg?.replace(`${prefixBot} ??`, "").trim();
+  let clearMessage = msg
+    ?.replace(`${prefixBot} ??`, "")
+    .replace(`${prefixBot} ?`, "")
+    .trim();
 
   inResponseTo
     ? (clearMessage += `\nEm reposta a mensagem: ${inResponseTo.replace(
@@ -40,6 +47,11 @@ module.exports.botChatGpt = async ({
 
   if (pokemonTip) {
     instruction = `forneca alguma informação curta sobre o pokemon ${msg} sem citar o nome dele usando pouquíssimas palavras`;
+  }
+
+
+  if (clearMessage.length == 0) {
+    clearMessage = "oi";
   }
 
   const assistant = await openai.beta.assistants.create({

@@ -14,8 +14,13 @@ const { structuredMessages } = require("../../utils/structured-messages");
 const { downloadVideoOrPhoto } = require("../../utils/downloadVideo");
 const { convertVideoToAudio } = require("../../utils/convert-video-to-audio");
 const { pathTo } = require("../../utils/path-orchestrator");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 
 const downloadVDYoutube = async ({ url: url, mode }) => {
+  monitorUsageActions({
+    action: "youtube_download_video",
+  });
+
   const filePath = pathTo.medias.videos.bruteCodecsFolder.youtube;
   const outputAudioFilePath = pathTo.medias.audios.audio;
 

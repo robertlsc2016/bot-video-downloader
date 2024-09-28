@@ -8,6 +8,7 @@ const { pathTo } = require("../../../utils/path-orchestrator");
 const {
   convertVideoToAudio,
 } = require("../../../utils/convert-video-to-audio");
+const { monitorUsageActions } = require("../../../utils/monitor-usage-actions");
 
 const filePath = pathTo.medias.videos.bruteCodecsFolder.instagram;
 const filePathPhoto = pathTo.medias.images.instagram;
@@ -20,6 +21,14 @@ module.exports.downloadInstagram = async function ({
   mode,
 }) {
   try {
+    type == "photo"
+      ? monitorUsageActions({
+          action: "instagram_download_photo",
+        })
+      : monitorUsageActions({
+          action: "instagram_download_video",
+        });
+
     const path = type == "photo" ? filePathPhoto : filePath;
 
     const URLDownload = await getInstagramURL({ url: url });

@@ -10,11 +10,15 @@ const {
 const { prefixBot } = require("../../settings/necessary-settings");
 const { checkActions } = require("../../utils/check-actions");
 const { bot_actions } = require("../../utils/constants");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
 
 module.exports.bothelp = async function ({ from: from }) {
+  monitorUsageActions({
+    action: "bot_help",
+  });
   return await genericSendMessageOrchestrator({
     type: "text",
     msg: `Minhas funcionalidades atuais são:\n1. Posso baixar videos de Tiktok, Instagram, Facebook, Pintrest e ~X(Ex-Twitter)~ basta enviar a URL do vídeo\n2. Posso jogar cara ou coroa, basta digita exatamente: *${prefixBot} cara ou coroa* [ Working: ${
@@ -39,6 +43,6 @@ module.exports.bothelp = async function ({ from: from }) {
       }))
         ? "Sim🟢"
         : "Não🔴"
-    } ]`,
+    } ]\n14. Posso mostrar os usos de cada função minha minha, basta digitar: *${prefixBot} usage monitor*`,
   });
 };

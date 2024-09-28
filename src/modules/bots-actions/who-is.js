@@ -1,10 +1,15 @@
 const { stringToGroup } = require("../../settings/necessary-settings");
 const { client } = require("../../settings/settings");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
 
 module.exports.whoIs = async function () {
+  monitorUsageActions({
+    action: "who_is",
+  });
+
   const chat = await client.getChatById(stringToGroup);
   const participants = chat.participants;
 
@@ -25,7 +30,5 @@ module.exports.whoIs = async function () {
       mentions: [`${randomParticipant.id.user}@${randomParticipant.id.server}`],
     }
   );
-  await client.sendMessage(
-    stringToGroup, "bot nunca erra 😎"
-  );
+  await client.sendMessage(stringToGroup, "bot nunca erra 😎");
 };

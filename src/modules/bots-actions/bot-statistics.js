@@ -6,6 +6,7 @@ const logger = require("../../logger");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 
 const pathToStatisticJson = pathTo.pathToStatisticJson;
 
@@ -42,7 +43,7 @@ const createStructure = async () => {
 };
 
 const addParticipation = async ({ message }) => {
-  await checkFileExist()
+  await checkFileExist();
   const participant = message._data.id.participant.replace("@c.us", "");
 
   const rawData = fs.readFileSync(pathToStatisticJson, "utf8");
@@ -61,7 +62,7 @@ const addParticipation = async ({ message }) => {
 };
 
 const notFoundParticipant = async ({ participant: participantNumber }) => {
-  await checkFileExist()
+  await checkFileExist();
 
   const rawData = fs.readFileSync(pathToStatisticJson, "utf8");
   let users = JSON.parse(rawData);
@@ -76,7 +77,10 @@ const notFoundParticipant = async ({ participant: participantNumber }) => {
 };
 
 const showStatistics = async function () {
-  await checkFileExist()
+  monitorUsageActions({
+    action: "bot_statistics",
+  });
+  await checkFileExist();
 
   const rawData = fs.readFileSync(pathToStatisticJson, "utf8");
   let users = JSON.parse(rawData);

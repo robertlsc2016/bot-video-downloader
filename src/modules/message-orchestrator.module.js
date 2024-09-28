@@ -21,7 +21,6 @@ const {
 const {
   downloadInstagram,
 } = require("./platforms/instagram/instagram-download.module");
-const { downloadVDTiktok } = require("./platforms/tiktok-download.module");
 const { headsOrTails } = require("./bots-actions/coin_flip");
 const { bothelp } = require("./bots-actions/bot-help");
 const { turnInSticker } = require("./bots-actions/turn-in-sticker");
@@ -59,6 +58,10 @@ const {
 const { messageFilterValidator } = require("./message-filter-validator.module");
 const { speedTest } = require("./bots-actions/speed-test");
 const { startTimer } = require("../utils/stopwatch");
+const {
+  downloadVDTiktok,
+} = require("./platforms/tiktok/tiktok-download.module");
+const { usageMonitor } = require("./bots-actions/bot-usage-monitor");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -156,6 +159,15 @@ const runMessageOrchestrator = async () => {
             })
           ) {
             return await pokemonSolved();
+          }
+
+          if (
+            await messageFilterValidator({
+              typeAction: "usageMonitor",
+              params: { messageBody },
+            })
+          ) {
+            return await usageMonitor();
           }
 
           if (

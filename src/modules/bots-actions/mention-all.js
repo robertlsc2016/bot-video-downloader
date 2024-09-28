@@ -1,10 +1,14 @@
 const { stringToGroup } = require("../../settings/necessary-settings");
 const { client } = require("../../settings/settings");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
 
 module.exports.mentionAll = async function ({ message }) {
+  monitorUsageActions({
+    action: "mention_all",
+  });
   const chat = await client.getChatById(stringToGroup);
   const participants = chat.participants;
 

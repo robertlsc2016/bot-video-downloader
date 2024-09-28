@@ -16,6 +16,7 @@ const {
   getFacebookURL,
 } = require("../platforms/facebook/facebook-getURL.module");
 const { client } = require("../../settings/settings");
+const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 
 module.exports.turnInSticker = async function ({
   message,
@@ -23,8 +24,11 @@ module.exports.turnInSticker = async function ({
   platform,
   situation,
 }) {
-  let image;
+  monitorUsageActions({
+    action: "turn_in_sticker",
+  });
 
+  let image;
   switch (situation) {
     case "image":
       const mediafile = await message.downloadMedia();
