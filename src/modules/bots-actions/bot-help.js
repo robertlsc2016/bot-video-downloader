@@ -43,6 +43,6 @@ module.exports.bothelp = async function ({ from: from }) {
       }))
         ? "Sim🟢"
         : "Não🔴"
-    } ]\n14. Posso mostrar os usos de cada função minha minha, basta digitar: *${prefixBot} usage monitor*`,
+    } ]\n14. Posso mostrar os usos de cada função minha minha, basta digitar: *${prefixBot} usage monitor*\n15. Que tal a foto do céu em algum data? Basta digitar *${prefixBot}  foto do céu em DD/MM/AAAA*`,
   });
 };

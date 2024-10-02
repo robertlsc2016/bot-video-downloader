@@ -51,6 +51,12 @@ module.exports.messageFilterValidator = async function ({
       );
     }
 
+    case "sky-image":
+      return (
+        messageBody.includes(`${prefixBot} foto do ceu em`) ||
+        messageBody.includes(`${prefixBot} foto do céu em`)
+      );
+
     case "whoIsThatPokemon":
       return messageBody.includes(`${prefixBot} quem é esse pokemon?`);
 

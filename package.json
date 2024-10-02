@@ -7,6 +7,7 @@
   "dependencies": {
     "@distube/ytdl-core": "^4.14.4",
     "@sasmeee/igdl": "^1.0.0",
+    "@vitalets/google-translate-api": "^9.2.0",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
     "colors": "^1.4.0",

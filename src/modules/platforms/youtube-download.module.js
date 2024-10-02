@@ -16,14 +16,13 @@ const { convertVideoToAudio } = require("../../utils/convert-video-to-audio");
 const { pathTo } = require("../../utils/path-orchestrator");
 const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 
-const downloadVDYoutube = async ({ url: url, mode }) => {
+const downloadVDYoutube = async ({ url: url, mode, send = true }) => {
   monitorUsageActions({
     action: "youtube_download_video",
   });
 
   const filePath = pathTo.medias.videos.bruteCodecsFolder.youtube;
   const outputAudioFilePath = pathTo.medias.audios.audio;
-
   try {
     const videoInfo = await ytdl.getInfo(url);
 
@@ -48,19 +47,16 @@ const downloadVDYoutube = async ({ url: url, mode }) => {
       });
 
       if (mode == "extractAudio") {
-        await convertVideoToAudio({ path: filePath });
-        return await genericSendMessageOrchestrator({
-          filePath: outputAudioFilePath,
-          type: "media",
-          isDocument: false,
-        });
+        await convertVideoToAudio({ path: outputAudioFilePath });
+
+        if (send) {
+          return await sendMedia({ filePathMedia: filePath });
+        }
       }
 
-      await genericSendMessageOrchestrator({
-        filePath: filePath,
-        type: "media",
-        isDocument: false,
-      });
+      if (send) {
+        return await sendMedia({ filePathMedia: filePath });
+      }
     }
   } catch (error) {
     await genericSendMessageOrchestrator({
@@ -68,6 +64,14 @@ const downloadVDYoutube = async ({ url: url, mode }) => {
       msg: "Não foi possível baixar o vídeo, sinto muito :(",
     });
   }
+};
+
+const sendMedia = async ({ filePathMedia }) => {
+  return await genericSendMessageOrchestrator({
+    filePath: filePathMedia,
+    type: "media",
+    isDocument: false,
+  });
 };
 
 module.exports = { downloadVDYoutube };

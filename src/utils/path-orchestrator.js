@@ -41,6 +41,13 @@ const pathTo = {
           "brute-codecs",
           platformsNameDownload.tiktok
         ),
+        nasa: path.join(
+          rooPath,
+          "medias",
+          "videos",
+          "brute-codecs",
+          platformsNameDownload.nasaVideo
+        ),
         x: path.join(
           rooPath,
           "medias",
@@ -104,7 +111,12 @@ const pathTo = {
         merged_normal: path.join(rooPathPokemonMedia, "merged_normal.png"),
         merged_darkened: path.join(rooPathPokemonMedia, "merged_darkened.png"),
       },
-
+      nasa: path.join(
+        rooPath,
+        "medias",
+        "images",
+        platformsNameDownload.nasaPhoto
+      ),
       instagram: path.join(
         rooPath,
         "medias",

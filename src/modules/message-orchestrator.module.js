@@ -62,6 +62,7 @@ const {
   downloadVDTiktok,
 } = require("./platforms/tiktok/tiktok-download.module");
 const { usageMonitor } = require("./bots-actions/bot-usage-monitor");
+const { botApiNasa } = require("./bots-actions/bot-api-nasa");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -123,6 +124,17 @@ const runMessageOrchestrator = async () => {
         }
 
         let url = null;
+
+        if (
+          await messageFilterValidator({
+            typeAction: "sky-image",
+            params: { messageBody },
+          })
+        ) {
+          return await botApiNasa({
+            message: messageBody,
+          });
+        }
 
         if (message?.links[0]?.link) {
           url = message.links[0].link;

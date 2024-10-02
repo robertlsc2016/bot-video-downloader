@@ -1,4 +1,3 @@
-const path = require("path");
 const { prefixBot } = require("../settings/necessary-settings");
 
 const regexURL = /(https?:\/\/[^\s]+)/;
@@ -19,6 +18,8 @@ const platformsNameDownload = {
   tiktok: "tiktok-video.mp4",
   tiktokAudio: "tiktok-video.mp3",
   x: "x-video.mp4",
+  nasaPhoto: "nasa-photo.jpg",
+  nasaVideo: "nasa-video.mp4",
 };
 
 const platformsNameURL = {
