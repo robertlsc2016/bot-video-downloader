@@ -65,7 +65,9 @@ const botApiNasa = async ({ message }) => {
     pathMediaNasa = pathTo.medias.images.nasa;
   }
 
-  const text = await translateText(getInfosNasaAPI.data.explanation);
+  const text = await translateText({
+    textToTranslation: getInfosNasaAPI.data.explanation,
+  });
 
   return await sendMedia({
     pathMedia: pathMediaNasa,
