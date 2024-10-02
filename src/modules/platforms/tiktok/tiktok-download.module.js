@@ -9,11 +9,12 @@ const {
 } = require("../../../utils/convert-video-to-audio");
 const { getTiktokURL } = require("./tiktok-getURL.module");
 const { monitorUsageActions } = require("../../../utils/monitor-usage-actions");
+const logger = require("../../../logger");
 
 const filePathVideo = pathTo.medias.videos.bruteCodecsFolder.tiktok;
 const filePathAudio = pathTo.medias.audios.audio;
 
-const downloadVDTiktok = async function ({ url, mode }) {
+const downloadVDTiktok = async function ({ url, mode, send = true }) {
   try {
     monitorUsageActions({
       action: "tiktok_download_video",
@@ -35,13 +36,15 @@ const downloadVDTiktok = async function ({ url, mode }) {
       });
     }
 
-    await genericSendMessageOrchestrator({
-      filePath: filePathVideo,
-      type: "media",
-      isDocument: false,
-    });
+    if (send) {
+      return await genericSendMessageOrchestrator({
+        filePath: filePathVideo,
+        type: "media",
+        isDocument: false,
+      });
+    }
   } catch (error) {
-    console.error("Erro ao baixar o vídeo tiktok:", error);
+    logger.error("Erro ao baixar o vídeo tiktok:", error);
     await genericSendMessageOrchestrator({
       type: "text",
       situation: "failureDownload",

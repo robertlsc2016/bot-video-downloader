@@ -9,10 +9,7 @@ const { prefixBot } = require("../settings/necessary-settings");
 const { checkActions } = require("../utils/check-actions");
 const { bot_actions } = require("../utils/constants");
 
-module.exports.messageFilterValidator = async function ({
-  typeAction,
-  params = {},
-}) {
+const messageFilterValidator = async function ({ typeAction, params = {} }) {
   const { messageBody, message, ADMINSBOT } = params;
 
   switch (typeAction) {
@@ -122,4 +119,8 @@ module.exports.messageFilterValidator = async function ({
         message._data?.quotedMsg && message._data?.quotedMsg.type == "image"
       );
   }
+};
+
+module.exports = {
+  messageFilterValidator,
 };

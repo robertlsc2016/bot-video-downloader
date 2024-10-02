@@ -22,8 +22,8 @@ module.exports.downloadInstagram = async function ({
   try {
     let type = null;
     const URLDownload = await getInstagramURL({ url: url });
-    URLDownload.includes(".jpg") ? (type = "photo") : (type = "video");
-    const path = type == "photo" ? filePathPhoto : filePath;
+    URLDownload.includes("jpg") ? (type = "photo") : (type = "video");
+    let path = type == "photo" ? filePathPhoto : filePath;
 
     type == "photo"
       ? monitorUsageActions({
@@ -44,19 +44,12 @@ module.exports.downloadInstagram = async function ({
 
     if (mode == "extractAudio") {
       await convertVideoToAudio({ path: path });
-      return await genericSendMessageOrchestrator({
-        filePath: outputAudioFilePath,
-        type: "media",
-        isDocument: false,
-      });
+      path = outputAudioFilePath;
     }
 
     if (toSend) {
-      const finalFilePath = path;
-      await genericSendMessageOrchestrator({
-        filePath: finalFilePath,
-        type: "media",
-        isDocument: false,
+      return await sendMedia({
+        filepath: path,
       });
     }
 
@@ -68,4 +61,12 @@ module.exports.downloadInstagram = async function ({
       situation: "failureDownload",
     });
   }
+};
+
+const sendMedia = async ({ filepath }) => {
+  return await genericSendMessageOrchestrator({
+    filePath: filepath,
+    type: "media",
+    isDocument: false,
+  });
 };

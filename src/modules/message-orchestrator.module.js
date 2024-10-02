@@ -1,14 +1,9 @@
-const {
-  downloadVDFacebook,
-} = require("./platforms/facebook/facebook-download.module");
-const { downloadVDTwitter } = require("./platforms/twitter-download.module");
-const { downloadVDYoutube } = require("./platforms/youtube-download.module");
-
+const logger = require("../logger");
+const store = require("../redux/store");
 const qrcode = require("qrcode-terminal");
-
 const { client } = require("../settings/settings");
 
-const { bot_actions, platformsNameURL } = require("../utils/constants");
+const { downloadVDTwitter } = require("./platforms/twitter-download.module");
 
 const {
   stringToGroup,
@@ -18,51 +13,44 @@ const {
 const {
   genericSendMessageOrchestrator,
 } = require("./generic-sendMessage-orchestrator.module");
-const {
-  downloadInstagram,
-} = require("./platforms/instagram/instagram-download.module");
-const { headsOrTails } = require("./bots-actions/coin_flip");
-const { bothelp } = require("./bots-actions/bot-help");
-const { turnInSticker } = require("./bots-actions/turn-in-sticker");
-const { whoIs } = require("./bots-actions/who-is");
-const { structuredMessages } = require("../utils/structured-messages");
-const { IsTrue } = require("./bots-actions/is-true");
-const { textToSpeech } = require("./bots-actions/text-to-speech");
-const { botChatGpt } = require("./bots-actions/bot-chatgpt");
-const {
-  showStatistics,
-  addParticipation,
-  resetStatistics,
-} = require("./bots-actions/bot-statistics");
+
 const {
   BOTSTATISTICSISACTIVE,
   BOTCOINFLIP,
   BOTTEXTTOSPEECH,
   ADMINSBOT,
 } = require("../settings/feature-enabler");
-const { rootBotActions } = require("./bots-actions/root-bot-actions");
-const { checkActions } = require("../utils/check-actions");
 
-const logger = require("../logger");
-const { mentionAll } = require("./bots-actions/mention-all");
 const {
+  bot_actions,
+  platformsNameURL,
+  checkActions,
+  structuredMessages,
+  startTimer,
+  executeDownload,
+} = require("../utils/util-unifier");
+
+const {
+  rootBotActions,
+  speedTest,
   whoIsThisPokemon,
   alreadyPokemon,
   pokemonSolved,
-} = require("./bots-actions/who-is-that-pokemon");
-const store = require("../redux/store");
-
-const {
-  downloadPintrest,
-} = require("./platforms/pintrest/pintrest-download.module");
+  botApiNasa,
+  headsOrTails,
+  bothelp,
+  turnInSticker,
+  whoIs,
+  IsTrue,
+  textToSpeech,
+  botChatGpt,
+  showStatistics,
+  addParticipation,
+  resetStatistics,
+  usageMonitor,
+  mentionAll,
+} = require("./bots-actions/bot-actions-unifier");
 const { messageFilterValidator } = require("./message-filter-validator.module");
-const { speedTest } = require("./bots-actions/speed-test");
-const { startTimer } = require("../utils/stopwatch");
-const {
-  downloadVDTiktok,
-} = require("./platforms/tiktok/tiktok-download.module");
-const { usageMonitor } = require("./bots-actions/bot-usage-monitor");
-const { botApiNasa } = require("./bots-actions/bot-api-nasa");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -351,6 +339,7 @@ const runMessageOrchestrator = async () => {
         }
 
         if (url && !messageBody.includes("[Bot]")) {
+          let mode = "";
           const makeASticker = messageBody.includes(bot_actions.bot_sticker);
 
           if (url.includes(platformsNameURL.tiktok)) {
@@ -360,13 +349,16 @@ const runMessageOrchestrator = async () => {
                 url,
                 situation: "url",
               });
-            await sendMessageAttemptToDownload();
 
             if (messageBody.includes(`${prefixBot} extract audio`)) {
-              return await downloadVDTiktok({ url: url, mode: "extractAudio" });
+              mode = "extractAudio";
             }
 
-            return await downloadVDTiktok({ url: url });
+            return await executeDownload({
+              url: url,
+              mode: mode,
+              platformKey: platformsNameURL.tiktok,
+            });
           }
 
           if (url.includes(platformsNameURL.instagram)) {
@@ -378,17 +370,14 @@ const runMessageOrchestrator = async () => {
               });
             }
 
-            await sendMessageAttemptToDownload();
             if (messageBody?.includes(`${prefixBot} extract audio`)) {
-              return await downloadInstagram({
-                url: url,
-                mode: "extractAudio",
-                toSend: false,
-              });
+              mode = "extractAudio";
             }
 
-            return await downloadInstagram({
+            return await executeDownload({
               url: url,
+              mode: mode,
+              platformKey: platformsNameURL.instagram,
             });
           }
 
@@ -399,22 +388,18 @@ const runMessageOrchestrator = async () => {
                 url,
                 situation: "url",
               });
-            await sendMessageAttemptToDownload();
 
-            if (messageBody?.includes(`${prefixBot} extract audio`)) {
-              return await downloadVDFacebook({
-                url: url,
-                mode: "extractAudio",
-                type: "video",
-              });
-            }
+            if (messageBody?.includes(`${prefixBot} extract audio`))
+              mode = "extractAudio";
 
-            return await downloadVDFacebook({
+            return await executeDownload({
               url: url,
+              mode: mode,
               type:
                 url.includes("/p/") || url.includes("/photo")
                   ? "photo"
                   : "video",
+              platformKey: platformsNameURL.facebook,
             });
           }
 
@@ -435,16 +420,16 @@ const runMessageOrchestrator = async () => {
                 url,
                 situation: "url",
               });
-            await sendMessageAttemptToDownload();
 
             if (messageBody?.includes(`${prefixBot} extract audio`)) {
-              return await downloadPintrest({
-                url: url,
-                mode: "extractAudio",
-              });
+              mode = "extractAudio";
             }
 
-            return await downloadPintrest({ url: url });
+            return await executeDownload({
+              url: url,
+              mode: mode,
+              platformKey: platformsNameURL.pinterest,
+            });
           }
 
           if (
@@ -453,14 +438,13 @@ const runMessageOrchestrator = async () => {
             await sendMessageAttemptToDownload();
 
             if (messageBody.includes(`${prefixBot} extract audio`)) {
-              return await downloadVDYoutube({
-                url: url,
-                mode: "extractAudio",
-              });
+              mode = "extractAudio";
             }
 
-            return await downloadVDYoutube({
+            return await executeDownload({
               url: url,
+              mode: mode,
+              platformKey: platformsNameURL.youtube,
             });
           }
         }
@@ -469,13 +453,6 @@ const runMessageOrchestrator = async () => {
       }
     }
   };
-};
-
-const sendMessageAttemptToDownload = async () => {
-  await genericSendMessageOrchestrator({
-    type: "text",
-    situation: "attemptToDownload",
-  });
 };
 
 module.exports = {
