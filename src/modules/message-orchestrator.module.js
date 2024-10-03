@@ -435,8 +435,6 @@ const runMessageOrchestrator = async () => {
           if (
             platformsNameURL.youtube.filter((yt) => url.includes(yt)).length > 0
           ) {
-            await sendMessageAttemptToDownload();
-
             if (messageBody.includes(`${prefixBot} extract audio`)) {
               mode = "extractAudio";
             }
