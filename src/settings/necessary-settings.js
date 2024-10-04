@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const browserPath = process.env.PATH_BROWSER;
-const stringToGroup = process.env.STRING_TO_GROUP_WWEBJS;
+// const await getGroupID() = process.env.STRING_TO_GROUP_WWEBJS;
 const openIaApiKey = process.env.OPENAI_API_KEY || false;
 // const shippingAllowed = process.env.SHIPPING_ALLLOWED ?? 1;
 
@@ -23,7 +23,7 @@ module.exports = {
   browserPath,
   // shippingAllowed,
   openIaApiKey,
-  stringToGroup,
+  // await getGroupID(),
   prefixBot,
   instructionChatGPT,
   instructionChatGPTSeriousness,

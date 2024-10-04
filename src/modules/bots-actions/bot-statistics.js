@@ -1,25 +1,25 @@
 const fs = require("fs");
 const { client } = require("../../settings/settings");
-const { stringToGroup } = require("../../settings/necessary-settings");
 const { pathTo } = require("../../utils/path-orchestrator");
 const logger = require("../../logger");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
 const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
+const { getGroupID } = require("../../settings/select-group");
 
 const pathToStatisticJson = pathTo.pathToStatisticJson;
 
 const checkFileExist = async function () {
   if (!fs.existsSync(pathToStatisticJson)) {
-    const chat = await client.getChatById(stringToGroup);
+    const chat = await client.getChatById(await getGroupID());
     const participants = chat.participants;
     await createStructure({ participants: participants });
   }
 };
 
 const createStructure = async () => {
-  const chat = await client.getChatById(stringToGroup);
+  const chat = await client.getChatById(await getGroupID());
   const participants = chat.participants;
 
   const participants_structure = [];
@@ -107,7 +107,7 @@ const showStatistics = async function () {
     mentions: getUsersForMentions,
   });
 
-  await client.sendMessage(stringToGroup, message, {
+  await client.sendMessage(await getGroupID(), message, {
     mentions: getUsersForMentions,
   });
 };

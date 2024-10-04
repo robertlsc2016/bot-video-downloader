@@ -7,6 +7,7 @@ const client = new Client({
   puppeteer: {
     args: ["--no-sandbox", "--disable-gpu"],
     headless: true,
+    executablePath: browserPath,
   },
   authStrategy: new LocalAuth({
     dataPath: "auth",

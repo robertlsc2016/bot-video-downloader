@@ -1,4 +1,4 @@
-const { stringToGroup } = require("../../settings/necessary-settings");
+const { getGroupID } = require("../../settings/select-group");
 const { client } = require("../../settings/settings");
 const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 const {
@@ -10,7 +10,7 @@ module.exports.whoIs = async function () {
     action: "who_is",
   });
 
-  const chat = await client.getChatById(stringToGroup);
+  const chat = await client.getChatById(await getGroupID());
   const participants = chat.participants;
 
   function chooseRandomParticipant(participants) {
@@ -24,11 +24,11 @@ module.exports.whoIs = async function () {
   const randomParticipant = await chooseRandomParticipant(participants);
 
   await client.sendMessage(
-    stringToGroup,
+    await getGroupID(),
     `essa pessoa: @${randomParticipant.id.user}, com certeza`,
     {
       mentions: [`${randomParticipant.id.user}@${randomParticipant.id.server}`],
     }
   );
-  await client.sendMessage(stringToGroup, "bot nunca erra 😎");
+  await client.sendMessage(await getGroupID(), "bot nunca erra 😎");
 };

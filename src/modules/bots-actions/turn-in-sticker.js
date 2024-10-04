@@ -1,4 +1,3 @@
-const { stringToGroup } = require("../../settings/necessary-settings");
 const path = require("path");
 
 const {
@@ -17,6 +16,7 @@ const {
 } = require("../platforms/facebook/facebook-getURL.module");
 const { client } = require("../../settings/settings");
 const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
+const { getGroupID } = require("../../settings/select-group");
 
 module.exports.turnInSticker = async function ({
   message,
@@ -58,7 +58,7 @@ module.exports.turnInSticker = async function ({
   }
 
   return await genericSendMessageOrchestrator({
-    from: stringToGroup,
+    from: await getGroupID(),
     content: image,
     type: "sticker",
   });

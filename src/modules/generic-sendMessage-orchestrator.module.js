@@ -1,12 +1,12 @@
 const { MessageMedia } = require("whatsapp-web.js");
 const { client } = require("../settings/settings");
-const { stringToGroup } = require("../settings/necessary-settings");
 
 const { structuredMessages } = require("../utils/structured-messages");
 const { checkActions } = require("../utils/check-actions");
 const { getStartValue } = require("../utils/stopwatch");
 const fs = require("fs");
 const { pathTo } = require("../utils/path-orchestrator");
+const { getGroupID } = require("../settings/select-group");
 
 const {
   successDownloadPhotoMessage,
@@ -28,7 +28,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
   mentions = [],
 }) {
   if (!(await checkActions({ typeAction: "bot_active" }))) {
-    return await client.sendMessage(stringToGroup, msg);
+    return await client.sendMessage(await getGroupID(), msg);
   }
   const start = await getStartValue();
 
@@ -72,7 +72,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
     case "media":
       const media = MessageMedia.fromFilePath(filePath);
       try {
-        await client.sendMessage(stringToGroup, media, {
+        await client.sendMessage(await getGroupID(), media, {
           sendMediaAsDocument: isDocument,
           caption: msg,
         });
@@ -83,7 +83,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
 
         if (textMedia) {
           await client.sendMessage(
-            stringToGroup,
+            await getGroupID(),
             isDocument
               ? technicalLimitationsMessage
               : filePath.includes(".jpg")
@@ -93,17 +93,17 @@ module.exports.genericSendMessageOrchestrator = async function ({
         }
       } catch (err) {
         console.error(err);
-        await client.sendMessage(stringToGroup, failureDownloadMessage);
+        await client.sendMessage(await getGroupID(), failureDownloadMessage);
       }
       break;
     case "sticker":
       try {
-        await client.sendMessage(stringToGroup, content, {
+        await client.sendMessage(await getGroupID(), content, {
           sendMediaAsSticker: true,
         });
       } catch (err) {
         console.error(err);
-        await client.sendMessage(stringToGroup, failureDownloadMessage);
+        await client.sendMessage(await getGroupID(), failureDownloadMessage);
       }
   }
 };

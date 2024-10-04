@@ -6,7 +6,6 @@ const { client } = require("../settings/settings");
 const { downloadVDTwitter } = require("./platforms/twitter-download.module");
 
 const {
-  stringToGroup,
   prefixBot,
   activeStatistics,
 } = require("../settings/necessary-settings");
@@ -51,7 +50,7 @@ const {
   mentionAll,
 } = require("./bots-actions/bot-actions-unifier");
 const { messageFilterValidator } = require("./message-filter-validator.module");
-const { selectGroup } = require("../settings/select-group");
+const { selectGroup, getGroupID } = require("../settings/select-group");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -70,8 +69,8 @@ const runMessageOrchestrator = async () => {
   });
 
   client.on("message_create", async (message) => {
-    if (message._data.id.fromMe && message.to == stringToGroup) {
-      await messageSteps({ from: stringToGroup, message: message });
+    if (message._data.id.fromMe && message.to == await getGroupID()) {
+      await messageSteps({ from: await getGroupID(), message: message });
     }
   });
 
@@ -107,12 +106,12 @@ const runMessageOrchestrator = async () => {
         params: { messageBody, message },
       })
     ) {
-      return await client.sendMessage(stringToGroup, "🤖💤💤💤...");
+      return await client.sendMessage(await getGroupID(), "🤖💤💤💤...");
     }
 
     if (await checkActions({ typeAction: "bot_active" })) {
       try {
-        if (from !== stringToGroup) {
+        if (from !== await getGroupID()) {
           logger.warn(`o envio não foi configurado para esse destinatário`);
           return;
         }

@@ -9,7 +9,7 @@ const selectGroup = async () => {
     const rawData = fs.readFileSync(pathTo.pathToSelectGroupJson, "utf8");
     let infos = JSON.parse(rawData);
 
-    if(infos.STRING_TO_GROUP_WWEBJS != ""){
+    if (infos.STRING_TO_GROUP_WWEBJS != "") {
       return;
     }
   }
@@ -89,6 +89,14 @@ const getValue = async () => {
   });
 };
 
+const getGroupID = async () => {
+  const rawData = fs.readFileSync(pathTo.pathToSelectGroupJson, "utf8");
+  let { STRING_TO_GROUP_WWEBJS } = JSON.parse(rawData);
+
+  return STRING_TO_GROUP_WWEBJS;
+};
+
 module.exports = {
   selectGroup,
+  getGroupID,
 };

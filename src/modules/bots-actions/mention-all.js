@@ -1,4 +1,4 @@
-const { stringToGroup } = require("../../settings/necessary-settings");
+const { getGroupID } = require("../../settings/select-group");
 const { client } = require("../../settings/settings");
 const { monitorUsageActions } = require("../../utils/monitor-usage-actions");
 const {
@@ -9,7 +9,7 @@ module.exports.mentionAll = async function ({ message }) {
   monitorUsageActions({
     action: "mention_all",
   });
-  const chat = await client.getChatById(stringToGroup);
+  const chat = await client.getChatById(await getGroupID());
   const participants = chat.participants;
 
   let clearMessage = `${message.replace(/@todos/g, "").trim()}\n\n`;
