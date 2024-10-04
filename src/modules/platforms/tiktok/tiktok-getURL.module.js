@@ -1,5 +1,6 @@
 const axios = require("axios");
 const TikChan = require("tikchan");
+const logger = require("../../../logger");
 
 const getTiktokURL = async ({ url: rawURL }) => {
   try {
@@ -21,7 +22,8 @@ const getTiktokURL = async ({ url: rawURL }) => {
         "problema no retorno do link da api TikChan. Talvez o link de entrada esteja incorreto ou inválido"
       );
     }
-  } catch (error) {
+  } catch (e) {
+    logger.error(e.Error);
     return false;
   }
 };

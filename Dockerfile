@@ -21,6 +21,8 @@ COPY package-lock.json .
 
 RUN npm install
 
+EXPOSE 80
+
 COPY . .
 
 CMD ["npm", "start"]
