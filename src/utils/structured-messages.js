@@ -11,8 +11,8 @@ let rootActions = JSON.parse(rawData);
 const structuredMessages = {
   readyMessage:
     rootActions.bot_active == 1
-      ? `[Bot]\nEstou online, galera 🤖!\nUse *${prefixBot} help* para ver minhas funcionalidades`
-      : "[Bot]Estou ativo, porém sem permisão para executar minhas funções",
+      ? `Estou online, galera 🤖!\nUse *${prefixBot} help* para ver minhas funcionalidades`
+      : "Estou ativo, porém sem permisão para executar minhas funções",
   failureDownloadMessage:
     "infelizmente, não deu pra baixar seu vídeo/foto, querido. Sinto muito :(",
   technicalLimitationsMessage:

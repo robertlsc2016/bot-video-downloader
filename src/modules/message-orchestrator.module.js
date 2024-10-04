@@ -51,6 +51,7 @@ const {
   mentionAll,
 } = require("./bots-actions/bot-actions-unifier");
 const { messageFilterValidator } = require("./message-filter-validator.module");
+const { selectGroup } = require("../settings/select-group");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -60,7 +61,12 @@ const runMessageOrchestrator = async () => {
 
   client.on("ready", async () => {
     logger.info("Client is ready!");
-    await client.sendMessage(stringToGroup, structuredMessages.readyMessage);
+    await selectGroup()
+
+    await genericSendMessageOrchestrator({
+      type: "text",
+      msg: structuredMessages.readyMessage
+    })
   });
 
   client.on("message_create", async (message) => {

@@ -13,6 +13,7 @@ const pathTo = {
   pathToStatesJson: path.join(rooPath, "data", "states.json"),
   pathToStatisticJson: path.join(rooPath, "data", "statistics.json"),
   pathToMonitorJson: path.join(rooPath, "data", "usage-monitor.json"),
+  pathToSelectGroupJson: path.join(rooPath, "data", "select-group.json"),
 
   medias: {
     audios: {

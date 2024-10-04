@@ -5,6 +5,8 @@ const { stringToGroup } = require("../settings/necessary-settings");
 const { structuredMessages } = require("../utils/structured-messages");
 const { checkActions } = require("../utils/check-actions");
 const { getStartValue } = require("../utils/stopwatch");
+const fs = require("fs");
+const { pathTo } = require("../utils/path-orchestrator");
 
 const {
   successDownloadPhotoMessage,
@@ -107,7 +109,10 @@ module.exports.genericSendMessageOrchestrator = async function ({
 };
 
 const sendTextMessage = async ({ msg: msg, mentions: mentions }) => {
-  return await client.sendMessage(stringToGroup, `[Bot]\n${msg}`, {
+  const rawData = fs.readFileSync(pathTo.pathToSelectGroupJson, "utf8");
+  let { STRING_TO_GROUP_WWEBJS } = JSON.parse(rawData);
+
+  return await client.sendMessage(STRING_TO_GROUP_WWEBJS, `[Bot]\n${msg}`, {
     mentions: mentions,
   });
 };
