@@ -5,7 +5,7 @@ const browserPath =
   os.platform().toLocaleLowerCase() == "win32"
     ? "C:/Program Files/Google/Chrome/Application/chrome.exe"
     : os.platform().toLocaleLowerCase() == "linux"
-    ? "/opt/google/chrome/google-chrome"
+    ? "/opt/google/chrome"
     : undefined;
 const openIaApiKey = process.env.OPENAI_API_KEY || false;
 
