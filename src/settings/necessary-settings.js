@@ -2,9 +2,9 @@ require("dotenv").config();
 const os = require("os");
 
 const browserPath =
-  os.platform() == "win32"
+  os.platform().toLocaleLowerCase() == "win32"
     ? "C:/Program Files/Google/Chrome/Application/chrome.exe"
-    : os.platform() == "linux"
+    : os.platform().toLocaleLowerCase() == "linux"
     ? "/usr/bin/google-chrome"
     : undefined;
 const openIaApiKey = process.env.OPENAI_API_KEY || false;
