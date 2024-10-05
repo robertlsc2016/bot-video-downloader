@@ -1,10 +1,8 @@
 const axios = require("axios");
 const fs = require("fs");
+const logger = require("../logger");
 
-module.exports.downloadVideoOrPhoto = async function ({
-  url: url,
-  filePath: filePath,
-}) {
+const downloadVideoOrPhoto = async function ({ url: url, filePath: filePath }) {
   const response = await axios({
     method: "get",
     url: url,
@@ -14,8 +12,14 @@ module.exports.downloadVideoOrPhoto = async function ({
   return new Promise((resolve, reject) => {
     const writer = fs.createWriteStream(filePath);
     response.data.pipe(writer);
-
-    writer.on("finish", resolve);
+    writer.on("finish", () => {
+      logger.info(`arquivo salvo em: ${filePath}`);
+      resolve();
+    });
     writer.on("error", reject);
   });
+};
+
+module.exports = {
+  downloadVideoOrPhoto,
 };
