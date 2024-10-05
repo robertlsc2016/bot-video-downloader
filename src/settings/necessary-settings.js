@@ -1,5 +1,6 @@
 require("dotenv").config();
 const os = require("os");
+const logger = require("../logger");
 
 const browserPath =
   os.platform().toLocaleLowerCase() == "win32"
@@ -7,6 +8,8 @@ const browserPath =
     : os.platform().toLocaleLowerCase() == "linux"
     ? "/usr/bin/google-chrome"
     : undefined;
+
+logger.info(browserPath);
 const openIaApiKey = process.env.OPENAI_API_KEY || false;
 
 const prefixBot = process.env.PREFIX_BOT || "/bot";
