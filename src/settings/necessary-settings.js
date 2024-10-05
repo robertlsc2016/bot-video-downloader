@@ -1,9 +1,13 @@
 require("dotenv").config();
+const os = require("os");
 
-const browserPath = process.env.PATH_BROWSER;
-// const await getGroupID() = process.env.STRING_TO_GROUP_WWEBJS;
+const browserPath =
+  os.platform() == "win32"
+    ? "C:/Program Files/Google/Chrome/Application/chrome.exe"
+    : os.platform() == "linux"
+    ? "/usr/bin/google-chrome"
+    : undefined;
 const openIaApiKey = process.env.OPENAI_API_KEY || false;
-// const shippingAllowed = process.env.SHIPPING_ALLLOWED ?? 1;
 
 const prefixBot = process.env.PREFIX_BOT || "/bot";
 const activeStatistics = process.env.activeStatistics || true;
@@ -21,9 +25,7 @@ module.exports = {
   activeStatistics,
   maxDurationYTMs,
   browserPath,
-  // shippingAllowed,
   openIaApiKey,
-  // await getGroupID(),
   prefixBot,
   instructionChatGPT,
   instructionChatGPTSeriousness,
