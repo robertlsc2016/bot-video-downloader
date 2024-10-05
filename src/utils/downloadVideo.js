@@ -10,13 +10,16 @@ const downloadVideoOrPhoto = async function ({ url: url, filePath: filePath }) {
       responseType: "stream",
     });
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const writer = fs.createWriteStream(filePath);
-      await response.data.pipe(writer);
+      response.data.pipe(writer);
+
       writer.on("finish", () => {
+        writer.close();
         logger.info(`arquivo salvo em: ${filePath}`);
         resolve();
       });
+
       writer.on("error", reject);
     });
   } catch (error) {
