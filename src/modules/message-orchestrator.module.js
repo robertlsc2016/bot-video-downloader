@@ -478,8 +478,15 @@ const runMessageOrchestrator = async () => {
           if (url.includes(platformsNameURL.x)) {
             if (makeASticker)
               return turnInSticker({ platform: "x", url, situation: "url" });
-            await sendMessageAttemptToDownload();
-            return await downloadVDTwitter({ url: url });
+            if (messageBody?.includes(`${prefixBot} extract audio`)) {
+              mode = "extractAudio";
+            }
+
+            return await executeDownload({
+              url: url,
+              mode: mode,
+              platformKey: platformsNameURL.x,
+            });
           }
 
           if (

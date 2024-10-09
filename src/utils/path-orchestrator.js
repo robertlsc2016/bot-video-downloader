@@ -136,6 +136,12 @@ const pathTo = {
         "images",
         platformsNameDownload.pinterestPhoto
       ),
+      x: path.join(
+        rooPath,
+        "medias",
+        "images",
+        platformsNameDownload.xPhoto
+      ),
     },
   },
 };

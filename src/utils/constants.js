@@ -18,6 +18,7 @@ const platformsNameDownload = {
   tiktok: "tiktok-video.mp4",
   tiktokAudio: "tiktok-video.mp3",
   x: "x-video.mp4",
+  xPhoto: "x-video.jpg",
   nasaPhoto: "nasa-photo.jpg",
   nasaVideo: "nasa-video.mp4",
 };
