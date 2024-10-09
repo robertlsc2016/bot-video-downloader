@@ -89,31 +89,36 @@ const runMessageOrchestrator = async () => {
     startTimer();
     const messageBody = message.body;
 
-    if (
-      await messageFilterValidator({
-        typeAction: "turnOff",
-        params: { messageBody, message, ADMINSBOT },
-      })
-    ) {
-      return await rootBotActions({ action: "turnoff" });
-    }
+    console.log(message._data.id.remote)
+    console.log(await getGroupID());
 
-    if (
-      await messageFilterValidator({
-        typeAction: "turnOn",
-        params: { messageBody, message, ADMINSBOT },
-      })
-    ) {
-      return await rootBotActions({ action: "turnon" });
-    }
+    if (message._data.id.remote == (await getGroupID())) {
+      if (
+        await messageFilterValidator({
+          typeAction: "turnOff",
+          params: { messageBody, message, ADMINSBOT },
+        })
+      ) {
+        return await rootBotActions({ action: "turnoff" });
+      }
 
-    if (
-      await messageFilterValidator({
-        typeAction: "botIsOff",
-        params: { messageBody, message },
-      })
-    ) {
-      return await client.sendMessage(await getGroupID(), "🤖💤💤💤...");
+      if (
+        await messageFilterValidator({
+          typeAction: "turnOn",
+          params: { messageBody, message, ADMINSBOT },
+        })
+      ) {
+        return await rootBotActions({ action: "turnon" });
+      }
+
+      if (
+        await messageFilterValidator({
+          typeAction: "botIsOff",
+          params: { messageBody, message },
+        })
+      ) {
+        return await client.sendMessage(await getGroupID(), "🤖💤💤💤...");
+      }
     }
 
     if (await checkActions({ typeAction: "bot_active" })) {
@@ -135,7 +140,10 @@ const runMessageOrchestrator = async () => {
             params: { messageBody },
           })
         ) {
-          if (await isOnBlockList({ user: message._data.id.participant })) {
+          if (
+            messageBody.includes(`${prefixBot}`) &&
+            (await isOnBlockList({ user: message._data.id.participant }))
+          ) {
             return await genericSendMessageOrchestrator({
               type: "text",
               msg: "Você está na blocklist. Não posso executar funções para você!",
