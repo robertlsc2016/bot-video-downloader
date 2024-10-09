@@ -88,10 +88,6 @@ const runMessageOrchestrator = async () => {
   const messageSteps = async ({ from: from, message: message }) => {
     startTimer();
     const messageBody = message.body;
-
-    console.log(message._data.id.remote)
-    console.log(await getGroupID());
-
     if (message._data.id.remote == (await getGroupID())) {
       if (
         await messageFilterValidator({
