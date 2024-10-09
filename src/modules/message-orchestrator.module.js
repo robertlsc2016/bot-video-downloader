@@ -51,6 +51,13 @@ const {
 } = require("./bots-actions/bot-actions-unifier");
 const { messageFilterValidator } = require("./message-filter-validator.module");
 const { selectGroup, getGroupID } = require("../settings/select-group");
+const {
+  addUserBlockList,
+  removeUserBlockList,
+  showBlockList,
+  resetBlockList,
+  isOnBlockList,
+} = require("../utils/block-list");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -60,16 +67,16 @@ const runMessageOrchestrator = async () => {
 
   client.on("ready", async () => {
     logger.info("Client is ready!");
-    await selectGroup()
+    await selectGroup();
 
     await genericSendMessageOrchestrator({
       type: "text",
-      msg: structuredMessages.readyMessage
-    })
+      msg: structuredMessages.readyMessage,
+    });
   });
 
   client.on("message_create", async (message) => {
-    if (message._data.id.fromMe && message.to == await getGroupID()) {
+    if (message._data.id.fromMe && message.to == (await getGroupID())) {
       await messageSteps({ from: await getGroupID(), message: message });
     }
   });
@@ -111,23 +118,12 @@ const runMessageOrchestrator = async () => {
 
     if (await checkActions({ typeAction: "bot_active" })) {
       try {
-        if (from !== await getGroupID()) {
+        if (from !== (await getGroupID())) {
           logger.warn(`o envio não foi configurado para esse destinatário`);
           return;
         }
 
         let url = null;
-
-        if (
-          await messageFilterValidator({
-            typeAction: "sky-image",
-            params: { messageBody },
-          })
-        ) {
-          return await botApiNasa({
-            message: messageBody,
-          });
-        }
 
         if (message?.links[0]?.link) {
           url = message.links[0].link;
@@ -139,6 +135,13 @@ const runMessageOrchestrator = async () => {
             params: { messageBody },
           })
         ) {
+          if (await isOnBlockList({ user: message._data.id.participant })) {
+            return await genericSendMessageOrchestrator({
+              type: "text",
+              msg: "Você está na blocklist. Não posso executar funções para você!",
+            });
+          }
+
           if (
             await messageFilterValidator({
               typeAction: "turnoffSpeedTest",
@@ -195,11 +198,71 @@ const runMessageOrchestrator = async () => {
 
           if (
             await messageFilterValidator({
+              typeAction: "sky-image",
+              params: { messageBody },
+            })
+          ) {
+            return await botApiNasa({
+              message: messageBody,
+            });
+          }
+
+          if (
+            await messageFilterValidator({
               typeAction: "speedtest",
               params: { messageBody },
             })
           ) {
             return await speedTest();
+          }
+
+          if (
+            await messageFilterValidator({
+              typeAction: "blocklist",
+              params: { messageBody },
+            })
+          ) {
+            if (
+              await messageFilterValidator({
+                typeAction: "blocklistAdd",
+                params: { messageBody, message, ADMINSBOT },
+              })
+            ) {
+              return await addUserBlockList({
+                msg: messageBody,
+              });
+            }
+
+            if (
+              await messageFilterValidator({
+                typeAction: "blocklistRemove",
+                params: { messageBody, message, ADMINSBOT },
+              })
+            ) {
+              return await removeUserBlockList({
+                msg: messageBody,
+              });
+            }
+
+            if (
+              await messageFilterValidator({
+                typeAction: "blocklistShow",
+                params: { messageBody, message },
+              })
+            ) {
+              return await showBlockList({
+                msg: messageBody,
+              });
+            }
+
+            if (
+              await messageFilterValidator({
+                typeAction: "blocklistReset",
+                params: { messageBody, message, ADMINSBOT },
+              })
+            ) {
+              return await resetBlockList();
+            }
           }
 
           if (

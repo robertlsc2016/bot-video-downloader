@@ -106,10 +106,6 @@ const showStatistics = async function () {
     msg: message,
     mentions: getUsersForMentions,
   });
-
-  await client.sendMessage(await getGroupID(), message, {
-    mentions: getUsersForMentions,
-  });
 };
 
 const resetStatistics = async () => {

@@ -14,7 +14,7 @@ const pathTo = {
   pathToStatisticJson: path.join(rooPath, "data", "statistics.json"),
   pathToMonitorJson: path.join(rooPath, "data", "usage-monitor.json"),
   pathToSelectGroupJson: path.join(rooPath, "data", "select-group.json"),
-
+  pathToBlockListJson: path.join(rooPath, "data", "block-list.json"),
   medias: {
     audios: {
       pathFolder: path.join(rooPath, "medias", "audios"),

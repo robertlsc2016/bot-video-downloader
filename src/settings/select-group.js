@@ -36,11 +36,11 @@ const selectGroup = async () => {
   const chats = await client.getChats();
   const groups = chats.filter((chat) => chat.isGroup);
 
-  console.log(`Grupos disponíveis: `);
+  logger.info(`Grupos disponíveis: `);
 
   while (!groupSelected) {
     groups.forEach((group, index) => {
-      console.log(
+      logger.info(
         `[${index + 1}] Grupo: ${group.name} - ID: ${group.id._serialized}`
       );
     });

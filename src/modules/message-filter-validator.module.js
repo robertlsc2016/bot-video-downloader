@@ -11,6 +11,7 @@ const { bot_actions } = require("../utils/constants");
 
 const messageFilterValidator = async function ({ typeAction, params = {} }) {
   const { messageBody, message, ADMINSBOT } = params;
+  const regexNumber = /@\d{12,13}(?!\d)/;
 
   switch (typeAction) {
     case "turnOff":
@@ -117,6 +118,31 @@ const messageFilterValidator = async function ({ typeAction, params = {} }) {
     case "imageAnswered":
       return (
         message._data?.quotedMsg && message._data?.quotedMsg.type == "image"
+      );
+
+    case "blocklist":
+      return messageBody.includes(`${prefixBot} blocklist`);
+
+    case "blocklistAdd":
+      return (
+        messageBody.includes("blocklist add ") &&
+        regexNumber.test(messageBody) &&
+        ADMINSBOT.includes(message._data.id.participant)
+      );
+
+    case "blocklistRemove":
+      return (
+        messageBody.includes("blocklist remove ") &&
+        regexNumber.test(messageBody) &&
+        ADMINSBOT.includes(message._data.id.participant)
+      );
+
+    case "blocklistShow":
+      return messageBody.includes("blocklist show");
+    case "blocklistReset":
+      return (
+        messageBody.includes("blocklist reset") &&
+        ADMINSBOT.includes(message._data.id.participant)
       );
   }
 };
