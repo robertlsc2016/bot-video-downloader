@@ -48,6 +48,7 @@ const {
   resetStatistics,
   usageMonitor,
   mentionAll,
+  fortuneBot
 } = require("./bots-actions/bot-actions-unifier");
 const { messageFilterValidator } = require("./message-filter-validator.module");
 const { selectGroup, getGroupID } = require("../settings/select-group");
@@ -62,6 +63,7 @@ const {
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
+    logger.info(qr);
     logger.log(qr);
   });
 
@@ -143,6 +145,13 @@ const runMessageOrchestrator = async () => {
             return await genericSendMessageOrchestrator({
               type: "text",
               msg: "Você está na blocklist. Não posso executar funções para você!",
+            });
+          }
+
+          if (messageBody.includes(`${prefixBot} fortune`)) {
+            return await fortuneBot({
+              betterId: message._data.id.participant,
+              msgBody: messageBody,
             });
           }
 
