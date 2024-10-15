@@ -52,8 +52,7 @@ const fortuneBot = async ({ betterId, msgBody }) => {
     amount = 1;
   }
 
-
-  if(amount == '0'){
+  if (amount == "0") {
     return await genericSendMessageOrchestrator({
       type: "text",
       msg: `Você não pode apostar R$ 0`,
@@ -120,13 +119,13 @@ const fortuneBot = async ({ betterId, msgBody }) => {
       check_win
         ? `\n🎉🎉🎉 Parabéns! Você venceu! 🎉🎉🎉🎉`
         : `\nNão foi desta vez! Tente novamente. 🙁`
-    }\n---- ---- ---- ----\nValor da Aposta: *R$ ${
-      amount ? amount : "1,00"
-    }*\nSeus Ganhos: *R$ ${winnings}*
-    \nSaldo Anterior: *R$ ${previousBalance}*
-    \nSaldo Atual: *R$ ${await getBalance({
-      betterId: formattedId,
-    })}*\nUsuário: ${formattedId}`,
+    }
+    \n---- ---- ---- ----
+    \nSeus Ganhos: *R$ ${winnings}*
+    \nSaldo Atual: *R$ ${await getBalance({ betterId: formattedId })}*
+    \nValor da Aposta: *R$ ${amount ? amount : "1,00"}*
+    \n---- ---- ---- ----
+    \nUsuário: ${formattedId}`,
   });
 };
 
@@ -166,7 +165,7 @@ const addBetter = async ({ betterId }) => {
 const betFactor = async ({ amount, factor }) => {
   switch (factor) {
     case "🐅":
-      return amount * 5;
+      return amount * 50;
     case "⭐":
       return amount * 2;
     case "💰":
@@ -238,7 +237,7 @@ const addBalance = async ({ betterId, amount = 1 }) => {
   const updateData = {
     betters_structure: bettersJson.betters_structure.map((better) => {
       if (better.betterId == formattedId) {
-        return { ...better, balance: better.balance + amount }; // Incrementa balance
+        return { ...better, balance: Number(better.balance) + Number(amount) }; // Incrementa balance
       }
       return better;
     }),
@@ -250,7 +249,7 @@ const addBalance = async ({ betterId, amount = 1 }) => {
   );
 };
 
-const getBalance = async ({ betterId }) => {
+const getBalance = async ({ betterId, amount }) => {
   await checkFileExist();
   const rawData = fs.readFileSync(pathToFortuneBotJson, "utf8");
   let { betters_structure } = JSON.parse(rawData);
@@ -264,6 +263,94 @@ const getBalance = async ({ betterId }) => {
   return batterbalance[0].balance;
 };
 
+const addFunds = async ({ msgBody }) => {
+  const match = msgBody.match(/add (\d+) @(\d+)/);
+
+  const addAmount = match?.[1]; // Captura o número 100 (ou qualquer valor após "add")
+  const betterId = match?.[2]; // Captura o número 556599606121 (após "@")
+
+  if (!addAmount) {
+    return await genericSendMessageOrchestrator({
+      type: "text",
+      msg: `Erro ao adicionar fundos. Tente executar um comando assim\n [Exemplo]\n*${prefixBot} fortune add 100 @1111111111111*`,
+    });
+  }
+
+  if (!betterId) {
+    return await genericSendMessageOrchestrator({
+      type: "text",
+      msg: `Erro ao adicionar fundos. Tente executar um comando assim\n [Exemplo]\n*${prefixBot} fortune add 100 @1111111111111*`,
+    });
+  }
+
+  if (addAmount > 999) {
+    return await genericSendMessageOrchestrator({
+      type: "text",
+      msg: `Posso adicionar no máximo R$ 999`,
+    });
+  }
+
+  if (addAmount <= 0) {
+    return await genericSendMessageOrchestrator({
+      type: "text",
+      msg: `Não faz sentido adicionar R$ 0!`,
+    });
+  }
+
+  if (betterId.length < 12 || betterId.length > 13) {
+    return await genericSendMessageOrchestrator({
+      type: "text",
+      msg: `Erro ao adicionar fundos, *talvez o usuário esteja errado*. Tente executar um comando assim\n [Exemplo]\n*${prefixBot} fortune add 100 @999999999999*`,
+    });
+  }
+
+  await addBalance({
+    betterId: betterId,
+    amount: addAmount,
+  });
+
+  return await genericSendMessageOrchestrator({
+    type: "text",
+    situation: "mentions",
+    msg: `Saldo de R$ ${addAmount} adicionado para @${betterId}`,
+    mentions: [`${betterId}@c.us`],
+  });
+};
+
+const resetFunds = async () => {
+  await createStructure();
+  return await genericSendMessageOrchestrator({
+    type: "text",
+    msg: "Saldos de todos os betters foi restaurado para R$ 100",
+  });
+};
+
+const showBalance = async ({ betterId }) => {
+  await checkFileExist();
+  const formattedId = betterId.replace("@c.us", "");
+
+  const rawData = fs.readFileSync(pathToFortuneBotJson, "utf8");
+  let { betters_structure } = JSON.parse(rawData);
+
+  const betterInfos = betters_structure.filter((better) => {
+    if (better.betterId == formattedId) {
+      return better;
+    }
+  });
+
+  return await genericSendMessageOrchestrator({
+    type: "text",
+    situation: "mentions",
+    msg: `@${formattedId}\nSeu saldo atual no fortune bot é de: *R$ ${betterInfos[0].balance}*`,
+    mentions: [`${formattedId}@c.us`],
+  });
+
+  console.log(betterInfos);
+};
+
 module.exports = {
+  showBalance,
+  resetFunds,
   fortuneBot,
+  addFunds,
 };

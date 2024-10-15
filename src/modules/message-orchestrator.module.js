@@ -48,7 +48,7 @@ const {
   resetStatistics,
   usageMonitor,
   mentionAll,
-  fortuneBot
+  fortuneBot,
 } = require("./bots-actions/bot-actions-unifier");
 const { messageFilterValidator } = require("./message-filter-validator.module");
 const { selectGroup, getGroupID } = require("../settings/select-group");
@@ -59,6 +59,11 @@ const {
   resetBlockList,
   isOnBlockList,
 } = require("../utils/block-list");
+const {
+  addFunds,
+  resetFunds,
+  showBalance,
+} = require("./bots-actions/fortune-bot");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -148,7 +153,33 @@ const runMessageOrchestrator = async () => {
             });
           }
 
-          if (messageBody.includes(`${prefixBot} fortune`)) {
+          if (
+            messageBody.toLowerCase().includes(`${prefixBot} fortune add`) &&
+            ADMINSBOT.includes(message._data.id.participant)
+          ) {
+            return await addFunds({
+              msgBody: messageBody,
+            });
+          }
+
+          if (
+            messageBody.toLowerCase().includes(`${prefixBot} fortune balance`)
+          ) {
+            return await showBalance({
+              betterId: message._data.id.participant,
+            });
+          }
+
+          if (
+            messageBody
+              .toLowerCase()
+              .includes(`${prefixBot} fortune reset funds`) &&
+            ADMINSBOT.includes(message._data.id.participant)
+          ) {
+            return await resetFunds();
+          }
+
+          if (messageBody.toLowerCase().includes(`${prefixBot} fortune`)) {
             return await fortuneBot({
               betterId: message._data.id.participant,
               msgBody: messageBody,
