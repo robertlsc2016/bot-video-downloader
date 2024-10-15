@@ -113,19 +113,17 @@ const fortuneBot = async ({ betterId, msgBody }) => {
 
   await genericSendMessageOrchestrator({
     type: "text",
-    msg: `*Fortune Bot [ID: ${Math.floor(
+    msg: `*Fortune Bot 🐅🤖💲 [ID: ${Math.floor(
       100000 + Math.random() * 900000
     )}]*\n\n${textMatriz}\n${
       check_win
         ? `\n🎉🎉🎉 Parabéns! Você venceu! 🎉🎉🎉🎉`
         : `\nNão foi desta vez! Tente novamente. 🙁`
-    }
-    \n---- ---- ---- ----
-    \nSeus Ganhos: *R$ ${winnings}*
-    \nSaldo Atual: *R$ ${await getBalance({ betterId: formattedId })}*
-    \nValor da Aposta: *R$ ${amount ? amount : "1,00"}*
-    \n---- ---- ---- ----
-    \nUsuário: ${formattedId}`,
+    }\n---- ---- ---- ---- ----\nSeus Ganhos: *R$ ${winnings}*\nSaldo Atual: *R$ ${await getBalance(
+      { betterId: formattedId }
+    )}*\nValor da Aposta: *R$ ${
+      amount ? amount : "1,00"
+    }*\n---- ---- ---- ---- ----\nUsuário: ${formattedId}`,
   });
 };
 
@@ -167,9 +165,9 @@ const betFactor = async ({ amount, factor }) => {
     case "🐅":
       return amount * 50;
     case "⭐":
-      return amount * 2;
+      return amount * 20;
     case "💰":
-      return amount * 1.25;
+      return amount * 5;
 
     case "🍀":
       return amount * 0.75;
@@ -344,8 +342,6 @@ const showBalance = async ({ betterId }) => {
     msg: `@${formattedId}\nSeu saldo atual no fortune bot é de: *R$ ${betterInfos[0].balance}*`,
     mentions: [`${formattedId}@c.us`],
   });
-
-  console.log(betterInfos);
 };
 
 module.exports = {
