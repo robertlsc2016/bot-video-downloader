@@ -94,6 +94,12 @@ const runMessageOrchestrator = async () => {
 
   const messageSteps = async ({ from: from, message: message }) => {
     startTimer();
+    const timezone = "America/Sao_Paulo";
+    const currentDate = new Date().toLocaleString("en-US", {
+      timeZone: timezone,
+    });
+    const currentHour = new Date(currentDate).getHours();
+
     const messageBody = message.body;
     if (message._data.id.remote == (await getGroupID())) {
       if (
@@ -153,6 +159,29 @@ const runMessageOrchestrator = async () => {
             });
           }
 
+          const start_betting = 19;
+          const end_bettings = 7;
+
+          if (currentHour < end_bettings || currentHour >= start_betting) {
+            if (messageBody.toLowerCase().includes(`${prefixBot} fortune`)) {
+              return await fortuneBot({
+                betterId: message._data.id.participant,
+                msgBody: messageBody,
+              });
+            }
+          }
+
+          if (
+            (messageBody.toLowerCase().includes(`${prefixBot} fortune`) &&
+              currentHour >= end_bettings) ||
+            currentHour < start_betting
+          ) {
+            return await genericSendMessageOrchestrator({
+              type: "text",
+              msg: "Fora do horário de aposta. O horário de apostar é das 19h às 7h",
+            });
+          }
+
           if (
             messageBody.toLowerCase().includes(`${prefixBot} fortune add`) &&
             ADMINSBOT.includes(message._data.id.participant)
@@ -177,13 +206,6 @@ const runMessageOrchestrator = async () => {
             ADMINSBOT.includes(message._data.id.participant)
           ) {
             return await resetFunds();
-          }
-
-          if (messageBody.toLowerCase().includes(`${prefixBot} fortune`)) {
-            return await fortuneBot({
-              betterId: message._data.id.participant,
-              msgBody: messageBody,
-            });
           }
 
           if (
