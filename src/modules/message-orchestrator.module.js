@@ -172,9 +172,8 @@ const runMessageOrchestrator = async () => {
           }
 
           if (
-            (messageBody.toLowerCase().includes(`${prefixBot} fortune`) &&
-              currentHour >= end_bettings) ||
-            currentHour < start_betting
+            messageBody.toLowerCase().includes(`${prefixBot} fortune`) &&
+            (currentHour >= end_bettings || currentHour < start_betting)
           ) {
             return await genericSendMessageOrchestrator({
               type: "text",
