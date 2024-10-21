@@ -16,7 +16,7 @@ module.exports.convertVideoToAudio = async function ({ path }) {
           resolve();
         })
         .on("error", (err) => {
-          console.error("Ocorreu um erro:", err);
+          logger.error("Ocorreu um erro:", err);
           reject(err);
         })
         .save(outputFilePath);

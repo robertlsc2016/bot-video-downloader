@@ -5,6 +5,7 @@ const { pathTo } = require("../../utils/path-orchestrator");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
+const logger = require("../../logger");
 
 const pathToFortuneBotJson = pathTo.pathToFortuneBot;
 const fs = require("fs");

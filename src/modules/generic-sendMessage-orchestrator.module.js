@@ -1,5 +1,6 @@
 const { MessageMedia } = require("whatsapp-web.js");
 const { client } = require("../settings/settings");
+const logger = require("../logger");
 
 const { structuredMessages } = require("../utils/structured-messages");
 const { checkActions } = require("../utils/check-actions");
@@ -92,7 +93,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
           );
         }
       } catch (err) {
-        console.error(err);
+        logger.error(err);
         await client.sendMessage(await getGroupID(), failureDownloadMessage);
       }
       break;
@@ -102,7 +103,7 @@ module.exports.genericSendMessageOrchestrator = async function ({
           sendMediaAsSticker: true,
         });
       } catch (err) {
-        console.error(err);
+        logger.error(err);
         await client.sendMessage(await getGroupID(), failureDownloadMessage);
       }
   }

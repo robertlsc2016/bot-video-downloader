@@ -587,7 +587,7 @@ const runMessageOrchestrator = async () => {
           }
         }
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
     }
   };
