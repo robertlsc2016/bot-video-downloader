@@ -7,6 +7,7 @@ const ytdl = require("@distube/ytdl-core");
 const {
   genericSendMessageOrchestrator,
 } = require("../generic-sendMessage-orchestrator.module");
+const logger = require("../../logger");
 
 const { maxDurationYTMs } = require("../../settings/necessary-settings");
 
@@ -32,7 +33,7 @@ const downloadVDYoutube = async ({ url: url, mode, send = true }) => {
     );
 
     if (Number(mp4Formats[0].approxDurationMs) > Number(maxDurationYTMs)) {
-      console.error("a duração do video/audio é maior que 5 minutos");
+      logger.error("a duração do video/audio é maior que 5 minutos");
       throw new Error(structuredMessages.YTVideoDurationExceededMessage);
     }
 

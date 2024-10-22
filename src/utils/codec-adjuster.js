@@ -22,7 +22,7 @@ module.exports.convertVideo = async function ({
           resolve();
         })
         .on("error", (err) => {
-          console.error("Erro na conversão:", err);
+          logger.error("Erro na conversão:", err);
           reject(err);
         })
         .save(outputPath);

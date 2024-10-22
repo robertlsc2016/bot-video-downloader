@@ -5,6 +5,7 @@ const {
 } = require("../modules/generic-sendMessage-orchestrator.module");
 const { ADMINSBOT } = require("../settings/feature-enabler");
 const { pathTo } = require("./path-orchestrator");
+const logger = require("../logger");
 const fs = require("fs");
 
 const regexNumber = /@\d{12,13}(?!\d)/;
