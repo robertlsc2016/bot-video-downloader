@@ -23,9 +23,6 @@ const {
 const { whoIs } = require("./who-is");
 
 module.exports = {
-  resetFunds,
-  showBalance,
-  addFunds,
   rootBotActions,
   speedTest,
   whoIsThisPokemon,
