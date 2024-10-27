@@ -21,12 +21,10 @@ const {
   pokemonSolved,
 } = require("./who-is-that-pokemon");
 const { whoIs } = require("./who-is");
-const { fortuneBot, addFunds, resetFunds, showBalance } = require("./fortune-bot");
 
 module.exports = {
   resetFunds,
   showBalance,
-  fortuneBot,
   addFunds,
   rootBotActions,
   speedTest,
