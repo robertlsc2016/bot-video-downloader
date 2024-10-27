@@ -33,6 +33,6 @@ module.exports.mergePhoto = async ({ input, output, background }) => {
         });
     })
     .catch((error) => {
-      console.error("Erro durante o processamento:", error);
+      logger.error("Erro durante o processamento:", error);
     });
 };

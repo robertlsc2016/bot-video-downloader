@@ -1,5 +1,6 @@
 const { pathTo } = require("./path-orchestrator");
 const fs = require("fs");
+const logger = require("../logger");
 
 const pathToUsageMonitorJson = pathTo.pathToMonitorJson;
 
