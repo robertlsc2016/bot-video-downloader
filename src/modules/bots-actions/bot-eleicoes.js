@@ -8,17 +8,12 @@ const { pathTo } = require("../../utils/path-orchestrator");
 const logger = require("../../logger");
 
 const eleicoes = async (messageBody) => {
-  console.log(messageBody);
-  console.log(messageBody.replace(`/bot eleições `, "").split(","));
-
-  console.log(messageBody.replace(`/bot eleições `, "").split(",")[0]);
-  console.log(messageBody.replace(`/bot eleições `, "").split(",")[1]);
-
   const cidade = messageBody.replace(`/bot eleições `, "").split(",")[0];
   const estado = messageBody.replace(`/bot eleições `, "").split(",")[1];
 
   const browser = await puppeteer.launch({
     headless: true,
+    executablePath: "/usr/bin/google-chrome",
   });
   const page = await browser.newPage();
   await page.setViewport({ width: 300, height: 600 });
