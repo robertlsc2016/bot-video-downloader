@@ -58,6 +58,7 @@ const {
   resetBlockList,
   isOnBlockList,
 } = require("../utils/block-list");
+const { eleicoes } = require("./bots-actions/bot-eleicoes");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -151,6 +152,10 @@ const runMessageOrchestrator = async () => {
               type: "text",
               msg: "Você está na blocklist. Não posso executar funções para você!",
             });
+          }
+
+          if(messageBody.includes(`${prefixBot} eleições`)){
+            return await eleicoes(messageBody)
           }
 
           if (

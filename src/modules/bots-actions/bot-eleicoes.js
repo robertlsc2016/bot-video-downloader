@@ -5,8 +5,15 @@ const {
 } = require("../generic-sendMessage-orchestrator.module");
 const { prefixBot } = require("../../settings/necessary-settings");
 const { pathTo } = require("../../utils/path-orchestrator");
+const logger = require("../../logger");
 
 const eleicoes = async (messageBody) => {
+  console.log(messageBody);
+  console.log(messageBody.replace(`/bot eleições `, "").split(","));
+
+  console.log(messageBody.replace(`/bot eleições `, "").split(",")[0]);
+  console.log(messageBody.replace(`/bot eleições `, "").split(",")[1]);
+
   const cidade = messageBody.replace(`/bot eleições `, "").split(",")[0];
   const estado = messageBody.replace(`/bot eleições `, "").split(",")[1];
 
@@ -23,10 +30,7 @@ const eleicoes = async (messageBody) => {
   const n_eleicao = await pegar_n_eleicao({ cidade, estado });
 
   if (!n_eleicao) {
-    return await genericSendMessageOrchestrator({
-      type: "text",
-      msg: `Não encontrei! Tente executar o comando assim: /bot eleições cidade,UF\n[EXEMPLO]\n/${prefixBot} eleições Cuiabá,MT`,
-    });
+    return;
   }
 
   const URL = `https://resultados.tse.jus.br/oficial/app/index.html#/m/eleicao;e=e620;uf=${estado};mu=${n_eleicao};ufbu=mt;mubu=${n_eleicao};tipo=3/resultados`;
@@ -41,24 +45,36 @@ const eleicoes = async (messageBody) => {
   };
   // Acesse a URL desejada
   await page.goto(URL);
-  await page.screenshot({ path: "medias\\images\\screenshot.jpg", clip });
-  await browser.close();
-
-  return await genericSendMessageOrchestrator({
-    type: "media",
-    filePath: "medias\\images\\screenshot.jpg",
-    textMedia: false,
-    msg: "Eleições 2024! Globo a gente se liga em você!",
-  });
+  setTimeout(async () => {
+    await page.screenshot({ path: "medias\\images\\screenshot.jpg", clip });
+    logger.info("arquivo salvo em medias\\images\\screenshot.jpg");
+    await browser.close();
+    return await genericSendMessageOrchestrator({
+      type: "media",
+      filePath: "medias\\images\\screenshot.jpg",
+      textMedia: false,
+      msg: "Eleições 2024! Globo a gente se liga em você!",
+    });
+  }, 800);
 };
 
 const pegar_n_eleicao = async ({ estado, cidade }) => {
   const data = fs.readFileSync("data\\cod-mu.json", "utf8");
   const jsonData = JSON.parse(data);
 
-  const cidades_estado = jsonData.abr.filter((state) => state.cd == estado);
+  const cidades_estado = jsonData.abr.filter(
+    (state) => state.cd.toLowerCase() == estado.toLowerCase()
+  );
 
-  const selectCity = cidades_estado[0]?.mu.filter((city) => {
+  if (cidades_estado.length == 0) {
+    await genericSendMessageOrchestrator({
+      type: "text",
+      msg: `Possívelmente, UF inválida!\nTente o comando assim:\n[Exemplo] ${prefixBot} eleições Cuiabá,MT`,
+    });
+    return false;
+  }
+
+  const selectCity = cidades_estado[0]?.mu?.filter((city) => {
     if (
       city.nm
         .toLowerCase()
@@ -73,7 +89,15 @@ const pegar_n_eleicao = async ({ estado, cidade }) => {
     }
   });
 
-  return selectCity[0]?.cd;
+  if (selectCity.length == 0) {
+    await genericSendMessageOrchestrator({
+      type: "text",
+      msg: `Possívelmente, Cidade inválida!\nTente o comando assim:\n[Exemplo] ${prefixBot} eleições Cuiabá,MT`,
+    });
+    return false;
+  }
+
+  return selectCity ? selectCity[0].cd : [];
 };
 
 module.exports = {
