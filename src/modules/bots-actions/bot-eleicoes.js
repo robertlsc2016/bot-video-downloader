@@ -13,7 +13,7 @@ const eleicoes = async (messageBody) => {
 
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: "/usr/bin/google-chrome",
+    executablePath: "/usr/bin/google-chrome-stable",
   });
   const page = await browser.newPage();
   await page.setViewport({ width: 300, height: 600 });
