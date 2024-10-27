@@ -1,7 +1,7 @@
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const { browserPath } = require("./necessary-settings");
 
-const puppeteer = require('puppeteer-extra');
+const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 puppeteer.use(StealthPlugin());
 
@@ -20,15 +20,14 @@ const client = new Client({
       // "--disable-backgrounding-occluded-windows",
       // "--disable-ipc-flooding-protection",
     ],
-    puppeteer: puppeteer
-
+    puppeteer: puppeteer,
   },
   authStrategy: new LocalAuth({
     dataPath: "auth",
   }),
 });
 
-const initializeClient = () => {
+const initializeClient = async () => {
   client.initialize();
 };
 
