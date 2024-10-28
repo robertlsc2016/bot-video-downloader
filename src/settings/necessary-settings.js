@@ -6,7 +6,7 @@ const browserPath =
   os.platform().toLocaleLowerCase() == "win32"
     ? "C:/Program Files/Google/Chrome/Application/chrome.exe"
     : os.platform().toLocaleLowerCase() == "linux"
-    ? "/usr/bin/google-chrome"
+    ? "/usr/bin/google-chrome-stable"
     : undefined;
 
 logger.info(browserPath);
