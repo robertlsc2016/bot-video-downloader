@@ -2,7 +2,7 @@ node_modules
 auth
 env-presets
 auth
-# data/*.json
+data/*.json
 
 .wwebjs_cache
 
