@@ -8,13 +8,20 @@ RUN apt update \
     && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt update \
     && apt install -y google-chrome-stable \ 
-    install \libxss1 \libappindicator1 \libindicator7\
+    install \
+    libxss1 \
+    libappindicator1 \
+    libindicator7 \
     fonts-ipafont-gothic \
     fonts-wqy-zenhei \
     fonts-thai-tlwg \
     fonts-khmeros \
     fonts-kacst \
-    libcairo2-dev \libpango1.0-dev \libjpeg-dev \libgif-dev \librsvg2-dev\
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev\
     fonts-freefont-ttf \ 
     libxss1 \
     --no-install-recommends \
