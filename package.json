@@ -31,7 +31,7 @@
     "sharp": "^0.33.5",
     "tikchan": "^1.0.1",
     "twitter-downloader": "^1.1.7",
-    "whatsapp-web.js": "^1.26.0",
+    "whatsapp-web.js": "^1.26.1-alpha.3",
     "winston": "^3.14.2",
     "yarn": "^1.22.21",
     "ytdl-core": "^4.11.5"
