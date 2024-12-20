@@ -3,8 +3,6 @@ const store = require("../redux/store");
 const qrcode = require("qrcode-terminal");
 const { client } = require("../settings/settings");
 
-const { downloadVDTwitter } = require("./platforms/twitter-download.module");
-
 const {
   prefixBot,
   activeStatistics,
@@ -58,6 +56,7 @@ const {
   resetBlockList,
   isOnBlockList,
 } = require("../utils/block-list");
+const { downloadInstagramStory } = require("./platforms/instagram/instagram-story-download-getURL.module");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -92,7 +91,6 @@ const runMessageOrchestrator = async () => {
     const currentDate = new Date().toLocaleString("en-US", {
       timeZone: timezone,
     });
-    const currentHour = new Date(currentDate).getHours();
 
     const messageBody = message.body;
     if (message._data.id.remote == (await getGroupID())) {
@@ -402,6 +400,10 @@ const runMessageOrchestrator = async () => {
             messageBody?.includes(bot_actions.coin_flip_string)
           ) {
             headsOrTails({ from: from });
+          }
+
+          if (messageBody.includes("story/@")) {
+            return await downloadInstagramStory({ msg: messageBody });
           }
 
           if (

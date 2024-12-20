@@ -15,3 +15,7 @@ module.exports.getInstagramURL = async function ({ url: rawURL }) {
     return false;
   }
 };
+
+module.exports.getInstagramStoryURL = async function ({ url: rawURL }) {
+
+};

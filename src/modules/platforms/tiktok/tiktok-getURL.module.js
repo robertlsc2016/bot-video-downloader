@@ -26,12 +26,6 @@ const getTiktokURL = async ({ url }) => {
 
   const video = host + res.data.data.play;
   return video;
-  // return {
-  //   status: true,
-  //   wm: host + res.data.data.wmplay,
-  //   music: host + res.data.data.music,
-  //   video: host + res.data.data.play,
-  // };
 };
 module.exports = {
   getTiktokURL,
