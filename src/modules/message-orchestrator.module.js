@@ -56,7 +56,9 @@ const {
   resetBlockList,
   isOnBlockList,
 } = require("../utils/block-list");
-const { downloadInstagramStory } = require("./platforms/instagram/instagram-story-download-getURL.module");
+const {
+  downloadInstagramStory,
+} = require("./platforms/instagram/instagram-story-download-getURL.module");
 
 const runMessageOrchestrator = async () => {
   client.on("qr", (qr) => {
@@ -456,6 +458,7 @@ const runMessageOrchestrator = async () => {
             }
 
             return await executeDownload({
+              msg: messageBody,
               url: url,
               mode: mode,
               platformKey: platformsNameURL.instagram,

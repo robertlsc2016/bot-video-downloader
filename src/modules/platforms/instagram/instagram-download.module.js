@@ -18,10 +18,21 @@ module.exports.downloadInstagram = async function ({
   url: url,
   toSend = true,
   mode,
+  msg,
 }) {
+  let index_filter = Number(msg.split(" ")[1]) - 1 || 0;
+
   try {
     let type = null;
-    const URLDownload = await getInstagramURL({ url: url });
+    const URLDownload = await getInstagramURL({
+      url: url,
+      index: index_filter,
+    });
+
+    if (URLDownload == false) {
+      throw new Error("a url de download esta com problemas");
+    }
+
     URLDownload.includes("jpg") ? (type = "photo") : (type = "video");
     let path = type == "photo" ? filePathPhoto : filePath;
 
@@ -32,10 +43,6 @@ module.exports.downloadInstagram = async function ({
       : monitorUsageActions({
           action: "instagram_download_video",
         });
-
-    if (URLDownload == false) {
-      throw new Error("a url de download esta com problemas");
-    }
 
     await downloadVideoOrPhoto({
       url: URLDownload,
@@ -55,10 +62,11 @@ module.exports.downloadInstagram = async function ({
 
     return path;
   } catch (error) {
-    logger.error("Erro ao baixar o vídeo do instagram:", error);
-    await genericSendMessageOrchestrator({
+    return await genericSendMessageOrchestrator({
       type: "text",
-      situation: "failureDownload",
+      msg: error.message || "failureDownload",
+    }).then(() => {
+      logger.error(error);
     });
   }
 };

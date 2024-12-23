@@ -1,4 +1,6 @@
-const { genericSendMessageOrchestrator } = require("../modules/generic-sendMessage-orchestrator.module");
+const {
+  genericSendMessageOrchestrator,
+} = require("../modules/generic-sendMessage-orchestrator.module");
 const {
   downloadVDFacebook,
 } = require("../modules/platforms/facebook/facebook-download.module");
@@ -28,11 +30,11 @@ const platformActions = {
   [platformsNameURL.x]: downloadVDTwitter,
 };
 
-const executeDownload = async ({ url, mode, send, type, platformKey }) => {
+const executeDownload = async ({ url, mode, send, type, platformKey, msg }) => {
   const action = platformActions[platformKey];
   if (action) {
     await sendMessageAttemptToDownload();
-    return await action({ url, mode, send, type });
+    return await action({ url, mode, send, type, msg });
   }
 };
 

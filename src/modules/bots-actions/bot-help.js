@@ -43,6 +43,6 @@ module.exports.bothelp = async function ({ from: from }) {
       }))
         ? "Sim🟢"
         : "Não🔴"
-    } ]\n14. Posso mostrar os usos de cada função minha minha, basta digitar: *${prefixBot} usage monitor*\n15. Que tal a foto do céu em algum data? Basta digitar *${prefixBot}  foto do céu em DD/MM/AAAA*\n15. Posso baixar story do Instagram, basta enviar: story/@username/número do story - Exemplo: *story/@anitta/1*`,
+    } ]\n14. Posso mostrar os usos de cada função minha minha, basta digitar: *${prefixBot} usage monitor*\n15. Que tal a foto do céu em algum data? Basta digitar *${prefixBot}  foto do céu em DD/MM/AAAA*\n15. Posso baixar story do Instagram, basta enviar: story/@username/número do story - Exemplo: *story/@anitta/1*\n16. Posso baixar um post específico de um carrossel do instagram, bastante manda o link um espaço e o número do post no carrossel - *Exemplo: <link_do_post> <2>*`,
   });
 };
