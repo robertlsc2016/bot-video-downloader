@@ -17,7 +17,7 @@ const structuredMessages = {
     "infelizmente, não deu pra baixar seu vídeo/foto, querido. Sinto muito :(",
   technicalLimitationsMessage:
     "Por limitações tecnicas, só conseguirei mandar o vídeo no formato documento",
-  attemptToDownloadMessage: "Tentarei baixar esse vídeo/foto, um momento",
+  attemptToDownloadMessage: "baixando mídia...",
   successDownloadMessage: "Olha seu vídeo/foto ai!",
   successDownloadPhotoMessage: "Sua foto!",
   YTVideoDurationExceededMessage:
