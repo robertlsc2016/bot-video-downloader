@@ -1,8 +1,4 @@
 const instagramGetUrl = require("instagram-url-direct");
-const logger = require("../../../logger");
-const {
-  genericSendMessageOrchestrator,
-} = require("../../generic-sendMessage-orchestrator.module");
 
 module.exports.getInstagramURL = async function ({ url: rawURL, index = 0 }) {
   try {
@@ -20,6 +16,8 @@ module.exports.getInstagramURL = async function ({ url: rawURL, index = 0 }) {
 
     return url_list[index];
   } catch (error) {
-    throw new Error(error.message);
+    if (error.status == 404) {
+      throw new Error("Erro desconhecido ao baixar mídia");
+    }
   }
 };

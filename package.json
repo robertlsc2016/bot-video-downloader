@@ -19,7 +19,7 @@
     "get-twitter-media": "^2.0.8",
     "got": "11.8.3",
     "gtts": "^0.2.1",
-    "instagram-url-direct": "^1.0.23",
+    "instagram-url-direct": "^1.1.1",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.0.3",
     "openai": "^4.52.2",
