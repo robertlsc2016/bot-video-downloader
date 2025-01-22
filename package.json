@@ -5,7 +5,7 @@
     "dev": "taskkill /F /IM chrome.exe /T || node src/index.js"
   },
   "dependencies": {
-    "@distube/ytdl-core": "^4.14.4",
+    "@distube/ytdl-core": "^4.15.8",
     "@sasmeee/igdl": "^1.0.0",
     "@vitalets/google-translate-api": "^9.2.0",
     "axios": "^1.7.7",
