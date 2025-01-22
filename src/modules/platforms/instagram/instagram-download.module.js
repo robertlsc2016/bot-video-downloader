@@ -29,8 +29,8 @@ module.exports.downloadInstagram = async function ({
       index: index_filter,
     });
 
-    if (URLDownload == false) {
-      throw new Error("a url de download esta com problemas");
+    if (URLDownload == false || URLDownload === undefined) {
+      throw new Error("A url de download esta com problemas");
     }
 
     URLDownload.includes("jpg") ? (type = "photo") : (type = "video");

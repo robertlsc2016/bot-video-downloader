@@ -24,7 +24,7 @@ module.exports.downloadInstagramStory = async function ({ msg: message }) {
   }
 
   const { data: instaInfos } = await axios.get(
-    `https://gram-story-viewer.com/_next/data/aXx9ESbwK7IltezIKI9Oy/stories/${username}.json?username=${username}`
+    `https://gram-story-viewer.com/_next/data/LzWTuh4YlaSI4mQG_zY4E/stories/${username}.json?username=${username}`
   );
 
   const { userInfo, initialmasonryfeed } = instaInfos.pageProps;
