@@ -1,6 +1,13 @@
-FROM node:latest
+FROM debian:stable-slim
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y curl wget && rm -rf /var/lib/apt/lists/*
+
+# Instalar Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN apt update \
     && apt install -y wget gnupg ffmpeg libxss1 libappindicator1 \
@@ -28,13 +35,9 @@ RUN apt update \
 
 RUN npm cache clean --force
 
-RUN rm -rf node_modules package-lock.json
+COPY package.json package-lock.json ./
 
-COPY package.json . 
-COPY package-lock.json . 
 RUN npm install
-
-EXPOSE 80
 
 COPY . .
 
