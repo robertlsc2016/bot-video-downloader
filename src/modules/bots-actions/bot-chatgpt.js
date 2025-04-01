@@ -55,9 +55,9 @@ module.exports.botChatGpt = async ({
   }
 
   const assistant = await openai.beta.assistants.create({
-    name: "bot-video-downloader",
+    name: "botVD",
     instructions: instruction,
-    model: "gpt-4o",
+    model: "gpt-4o-mini",
   });
 
   const thread = await openai.beta.threads.create();
