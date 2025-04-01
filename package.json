@@ -1,4 +1,7 @@
 {
+  "name": "botvd",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "postinstall": "npm prune",
     "start": "node src/index.js",
