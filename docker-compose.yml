@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  botVD:
+  botvd:
     build: .
-    container_name: botVD
+    container_name: botvd
     restart: always
     env_file: .env
     environment:
