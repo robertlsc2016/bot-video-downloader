@@ -5,6 +5,7 @@ auth
 data/*.json
 
 .wwebjs_cache
+.vscode
 
 .env
 dev.env

@@ -3,7 +3,7 @@ version: "3"
 services:
   bot-video-downloader:
     build: .
-    container_name: bot-video-downloader
+    container_name: botVD
     restart: always
     env_file: .env
     environment:
