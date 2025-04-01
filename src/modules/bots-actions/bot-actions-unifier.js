@@ -15,19 +15,21 @@ const { rootBotActions } = require("./root-bot-actions");
 const { speedTest } = require("./speed-test");
 const { textToSpeech } = require("./text-to-speech");
 const { turnInSticker } = require("./turn-in-sticker");
-const {
-  whoIsThisPokemon,
-  alreadyPokemon,
-  pokemonSolved,
-} = require("./who-is-that-pokemon");
+
+// const {
+//   whoIsThisPokemon,
+//   alreadyPokemon,
+//   pokemonSolved,
+// } = require("./who-is-that-pokemon");
+
 const { whoIs } = require("./who-is");
 
 module.exports = {
   rootBotActions,
   speedTest,
-  whoIsThisPokemon,
-  alreadyPokemon,
-  pokemonSolved,
+  // whoIsThisPokemon,
+  // alreadyPokemon,
+  // pokemonSolved,
   botApiNasa,
   headsOrTails,
   bothelp,

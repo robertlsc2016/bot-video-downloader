@@ -30,9 +30,9 @@ const {
 const {
   rootBotActions,
   speedTest,
-  whoIsThisPokemon,
-  alreadyPokemon,
-  pokemonSolved,
+  // whoIsThisPokemon,
+  // alreadyPokemon,
+  // pokemonSolved,
   botApiNasa,
   headsOrTails,
   bothelp,
@@ -171,14 +171,14 @@ const runMessageOrchestrator = async () => {
             return await rootBotActions({ action: "turnon_bot_speedtest" });
           }
 
-          if (
-            await messageFilterValidator({
-              typeAction: "pokemonIsSolved",
-              params: { messageBody },
-            })
-          ) {
-            return await pokemonSolved();
-          }
+          // if (
+          //   await messageFilterValidator({
+          //     typeAction: "pokemonIsSolved",
+          //     params: { messageBody },
+          //   })
+          // ) {
+          //   return await pokemonSolved();
+          // }
 
           if (
             await messageFilterValidator({
@@ -189,23 +189,23 @@ const runMessageOrchestrator = async () => {
             return await usageMonitor();
           }
 
-          if (
-            await messageFilterValidator({
-              typeAction: "whoIsThatPokemon",
-              params: { messageBody },
-            })
-          ) {
-            const { pokemon } = store.getState();
+          // if (
+          //   await messageFilterValidator({
+          //     typeAction: "whoIsThatPokemon",
+          //     params: { messageBody },
+          //   })
+          // ) {
+          //   const { pokemon } = store.getState();
 
-            switch (pokemon.status) {
-              case "EMPTY":
-                return await whoIsThisPokemon();
-              case "STARTED":
-                return await alreadyPokemon();
-              case "COMPLETE":
-                return await whoIsThisPokemon();
-            }
-          }
+          //   switch (pokemon.status) {
+          //     case "EMPTY":
+          //       return await whoIsThisPokemon();
+          //     case "STARTED":
+          //       return await alreadyPokemon();
+          //     case "COMPLETE":
+          //       return await whoIsThisPokemon();
+          //   }
+          // }
 
           if (
             await messageFilterValidator({
