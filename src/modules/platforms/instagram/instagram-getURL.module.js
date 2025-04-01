@@ -1,4 +1,8 @@
-const instagramGetUrl = require("instagram-url-direct");
+// import { instagramGetUrl } from "instagram-url-direct";
+
+const { instagramGetUrl } = require("instagram-url-direct");
+const logger = require("../../../logger");
+// const logger = require("../../../logger");
 
 module.exports.getInstagramURL = async function ({ url: rawURL, index = 0 }) {
   try {
@@ -14,10 +18,11 @@ module.exports.getInstagramURL = async function ({ url: rawURL, index = 0 }) {
       );
     }
 
+    logger.info(url_list[index]);
     return url_list[index];
   } catch (error) {
     if (error.status == 404) {
-      throw new Error("Erro desconhecido ao baixar mídia");
+      throw new Error("Erro desconhecido ao baixar mídia: ", error);
     }
   }
 };
